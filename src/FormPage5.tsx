@@ -17,7 +17,7 @@ function FormPage5() {
           You must select a payment mode first.
           <br />
           <NavButton
-            mode="outline"
+            outline={true}
             action={() => navigate("/form_page4")}
             label="Select Payment Mode"
             fullWidth="false"
@@ -131,7 +131,7 @@ function FormPage5() {
               </div>
               <div className="pf:text-right pf:mb-4">
                 <NavButton
-                  mode="outline"
+                  outline={true}
                   fullWidth="false"
                   action={() =>
                     dispatch(
@@ -151,7 +151,6 @@ function FormPage5() {
 
       <div className="pf:flex pf:gap-2">
         <NavButton
-          mode="regular"
           action={() => navigate("/form_page6")}
           label={"Save and Continue"}
           currentPage="page5"

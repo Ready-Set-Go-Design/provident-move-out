@@ -25,7 +25,7 @@ function FormPage9() {
 
       <div className="pf:flex pf:gap-2">
         <NavButton
-          mode="outline"
+          outline={true}
           action={() => {
             dispatch(clearForm());
             navigate("/");

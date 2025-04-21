@@ -56,7 +56,6 @@ function FormPage6() {
 
       <div className="pf:flex pf:gap-2">
         <NavButton
-          mode="regular"
           action={() => navigate("/form_page7")}
           label={"Save and Continue"}
           currentPage="page6"

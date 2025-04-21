@@ -21,7 +21,7 @@ function FormPage6() {
         </div>
 
         <NavButton
-          mode="outline"
+          outline={true}
           action={() => navigate("/")}
           label={"Edit"}
           fullWidth="false"
@@ -30,7 +30,6 @@ function FormPage6() {
 
       <div className="pf:flex pf:gap-2">
         <NavButton
-          mode="regular"
           action={() => navigate("/form_page8")}
           label={"Save and Continue"}
           currentPage="page7"

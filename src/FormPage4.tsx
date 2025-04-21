@@ -84,14 +84,13 @@ function FormPage3() {
       <div className="pf:flex pf:gap-2">
         {formData.payment_mode === "" && (
           <NavButton
-            mode="outline"
+            outline={true}
             action={() => navigate("/form_page6")}
             label={"Skip this step"}
           />
         )}
 
         <NavButton
-          mode="regular"
           action={() => navigate("/form_page5")}
           label={"Save and Continue"}
           currentPage="page4"

@@ -65,7 +65,7 @@ function FormPage8() {
             ref={sigCanvas}
           />
           <NavButton
-            mode="outline"
+            outline={true}
             action={clearForm}
             label={"Clear"}
             fullWidth="false"

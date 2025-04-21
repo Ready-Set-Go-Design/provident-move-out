@@ -6,8 +6,9 @@ import { AppDispatch } from "../store/store";
 import { RootState } from "../store/store";
 import ShowSearchResultsByType from "./ShowSearchResultsByType";
 import { updateField } from "../store/formSlice";
-import { update } from "lodash";
+import { TrashIcon } from "@heroicons/react/16/solid";
 import ShowUnitResults from "./ShowUnitResults";
+import { Button } from "./button";
 
 function AddressSearch() {
   const [unitQuery, setUnitQuery] = useState<string>("");
@@ -112,8 +113,8 @@ function AddressSearch() {
               You've selected: <strong>{formData.selected_address}</strong>
             </div>
           )}
-          <button
-            className="pf:bg-red-500 pf:p-2 pf:text-white pf:rounded"
+          <Button
+            color="red"
             onClick={() => {
               setUnitQuery("");
               setSearchQuery("");
@@ -121,8 +122,8 @@ function AddressSearch() {
               setShowResults(false);
             }}
           >
-            X
-          </button>
+            <TrashIcon />
+          </Button>
         </div>
         {searchResults.length > 0 &&
           showResults === true &&
@@ -162,8 +163,8 @@ function AddressSearch() {
                 You've selected: <strong>{formData.selected_unit}</strong>
               </div>
             )}
-            <button
-              className="pf:bg-red-500 pf:p-2 pf:text-white pf:rounded"
+            <Button
+              color="red"
               onClick={() => {
                 console.log("whee");
                 setUnitQuery("");
@@ -173,8 +174,8 @@ function AddressSearch() {
                 setShowResults(true);
               }}
             >
-              X
-            </button>
+              <TrashIcon />
+            </Button>
           </div>
           {searchResults.length > 0 &&
             showResults === true &&
