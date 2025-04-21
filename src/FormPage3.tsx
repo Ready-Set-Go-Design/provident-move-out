@@ -10,7 +10,7 @@ function FormPage3() {
   const formData = useSelector((state: RootState) => state.form);
 
   return (
-    <div className="p-4">
+    <div className="pf:p-4">
       <div></div>
       <h2>Primary Account Holder</h2>
 
@@ -18,7 +18,7 @@ function FormPage3() {
         type="text"
         name="first_name"
         placeholder="First Name"
-        className="p-2 border border-gray-300 rounded"
+        className="pf:p-2 pf:border pf:border-gray-300 pf:rounded"
         value={formData.first_name}
         onChange={(e) => {
           dispatch(
@@ -30,7 +30,7 @@ function FormPage3() {
         type="text"
         name="last_name"
         placeholder="Last Name"
-        className="p-2 border border-gray-300 rounded"
+        className="pf:p-2 pf:border pf:border-gray-300 pf:rounded"
         value={formData.last_name}
         onChange={(e) => {
           dispatch(
@@ -42,7 +42,7 @@ function FormPage3() {
         type="text"
         name="business_name"
         placeholder="Business Name"
-        className="p-2 border border-gray-300 rounded"
+        className="pf:p-2 pf:border pf:border-gray-300 pf:rounded"
         value={formData.business_name}
         onChange={(e) => {
           dispatch(
@@ -57,7 +57,7 @@ function FormPage3() {
         type="email"
         name="email"
         placeholder="Email"
-        className="p-2 border border-gray-300 rounded"
+        className="pf:p-2 pf:border pf:border-gray-300 pf:rounded"
         value={formData.email}
         onChange={(e) => {
           dispatch(

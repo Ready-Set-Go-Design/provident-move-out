@@ -11,9 +11,9 @@ function FormPage5() {
   const formData = useSelector((state: RootState) => state.form);
 
   return (
-    <div className="p-4">
+    <div className="pf:p-4">
       {formData.payment_mode === "" && (
-        <div className="mb-4">
+        <div className="pf:mb-4">
           You must select a payment mode first.
           <br />
           <NavButton
@@ -28,15 +28,15 @@ function FormPage5() {
         <div>
           <h1>Provide Banking Information</h1>
 
-          <div className="mb-2">
-            <div className="font-bold">Branch Transit Number</div>
+          <div className="pf:mb-2">
+            <div className="pf:font-bold">Branch Transit Number</div>
             <div>A 5-digit number</div>
 
             <input
               type="number"
               name="branch_transit_number"
               placeholder="12345"
-              className="p-2 border border-gray-300 rounded"
+              className="pf:p-2 pf:border pf:border-gray-300 pf:rounded"
               value={formData.branch_transit_number}
               onChange={(e) => {
                 dispatch(
@@ -48,15 +48,15 @@ function FormPage5() {
               }}
             />
           </div>
-          <div className="mb-2">
-            <div className="font-bold">Financial Institution Number</div>
+          <div className="pf:mb-2">
+            <div className="pf:font-bold">Financial Institution Number</div>
             <div>A number</div>
 
             <input
               type="text"
               name="financial_institution_number"
               placeholder="Financial Institution Number"
-              className="p-2 border border-gray-300 rounded"
+              className="pf:p-2 pf:border pf:border-gray-300 pf:rounded"
               value={formData.financial_institution_number}
               onChange={(e) => {
                 dispatch(
@@ -68,15 +68,15 @@ function FormPage5() {
               }}
             />
           </div>
-          <div className="mb-2">
-            <div className="font-bold">Bank Account Number</div>
+          <div className="pf:mb-2">
+            <div className="pf:font-bold">Bank Account Number</div>
             <div>Another number</div>
 
             <input
               type="text"
               name="bank_account_number"
               placeholder="Bank Account Number"
-              className="p-2 border border-gray-300 rounded"
+              className="pf:p-2 pf:border pf:border-gray-300 pf:rounded"
               value={formData.bank_account_number}
               onChange={(e) => {
                 dispatch(
@@ -99,7 +99,7 @@ function FormPage5() {
             type="file"
             name="void_cheque"
             placeholder="Email"
-            className="p-2 border border-gray-300 rounded"
+            className="pf:p-2 pf:border pf:border-gray-300 pf:rounded"
             onChange={(e) => {
               const file = e.target.files?.[0];
               if (file) {
@@ -125,11 +125,11 @@ function FormPage5() {
             <div>
               <div className="max-w-[200px] max-h-[200px]">
                 <img
-                  className="object-contain"
+                  className="pf:object-contain"
                   src={formData.void_cheque_image}
                 />
               </div>
-              <div className="text-right mb-4">
+              <div className="pf:text-right pf:mb-4">
                 <NavButton
                   mode="outline"
                   fullWidth="false"
@@ -149,7 +149,7 @@ function FormPage5() {
         </div>
       )}
 
-      <div className="flex gap-2">
+      <div className="pf:flex pf:gap-2">
         <NavButton
           mode="regular"
           action={() => navigate("/form_page6")}

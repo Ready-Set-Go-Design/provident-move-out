@@ -86,7 +86,7 @@ function AddressSearch() {
 
   return (
     <div>
-      <div className="mt-4 mb-4">
+      <div className="pf:mt-4 pf:mb-4">
         {formData.selected_address === "" && (
           <div>
             <strong>Enter Address</strong>
@@ -97,23 +97,23 @@ function AddressSearch() {
             </span>
           </div>
         )}
-        <div className="flex gap-2">
+        <div className="pf:flex pf:gap-2">
           {formData.selected_address === "" && (
             <input
               type="text"
               placeholder="Enter address"
-              className="w-full p-2 border-2 border-solid rounded-md border-gray-300"
+              className="pf:w-full pf:p-2 pf:border-2 pf:border-solid pf:rounded-md pf:border-gray-300"
               value={searchQuery}
               onChange={(e) => searchForAddresses(e.target.value)}
             />
           )}
           {formData.selected_address !== "" && (
-            <div className="">
+            <div>
               You've selected: <strong>{formData.selected_address}</strong>
             </div>
           )}
           <button
-            className="bg-red-500 p-2 text-white rounded"
+            className="pf:bg-red-500 pf:p-2 pf:text-white pf:rounded"
             onClick={() => {
               setUnitQuery("");
               setSearchQuery("");
@@ -139,7 +139,7 @@ function AddressSearch() {
         )}
       </div>
       {formData.selected_address && formData.selected_address > "" && (
-        <div className="mt-4 mb-4">
+        <div className="pf:mt-4 pf:mb-4">
           {formData.selected_unit === "" && (
             <div>
               <strong>Suite or Unit Number</strong>
@@ -147,12 +147,12 @@ function AddressSearch() {
               eg., 1507, 1001B, PH10
             </div>
           )}
-          <div className="flex gap-2">
+          <div className="pf:flex pf:gap-2">
             {formData.selected_unit === "" && (
               <input
                 type="text"
                 placeholder=""
-                className="w-full p-2 border-2 border-solid rounded-md border-gray-300"
+                className="pf:w-full pf:p-2 pf:border-2 pf:border-solid pf:rounded-md pf:border-gray-300"
                 value={unitQuery}
                 onChange={(e) => searchForUnits(e.target.value)}
               />
@@ -163,7 +163,7 @@ function AddressSearch() {
               </div>
             )}
             <button
-              className="bg-red-500 p-2 text-white rounded"
+              className="pf:bg-red-500 pf:p-2 pf:text-white pf:rounded"
               onClick={() => {
                 console.log("whee");
                 setUnitQuery("");

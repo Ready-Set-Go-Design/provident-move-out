@@ -5,7 +5,9 @@ export const isFormDataValid = (formData: any) => {
     "business_name",
     "email",
     "occupancy_type",
-    "occupancy_date",
+    "occupancy_day",
+    "occupancy_month",
+    "occupancy_year",
     "service_address",
     "signature_image",
   ];

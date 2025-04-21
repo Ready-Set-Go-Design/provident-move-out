@@ -1,5 +1,13 @@
 export const validationRequirements = [
-  { id: "/", fields: ["occupancy_type", "occupancy_date"] },
+  {
+    id: "/",
+    fields: [
+      "occupancy_type",
+      "occupancy_day",
+      "occupancy_month",
+      "occupancy_year",
+    ],
+  },
   { id: "/page2", fields: ["selected_address", "selected_unit"] },
   {
     id: "/page3",

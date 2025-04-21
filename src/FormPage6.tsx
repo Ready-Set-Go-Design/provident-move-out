@@ -10,7 +10,7 @@ function FormPage6() {
   const formData = useSelector((state: RootState) => state.form);
 
   return (
-    <div className="p-4">
+    <div className="pf:p-4">
       <div>
         <h1>Terms and Conditions</h1>
 
@@ -35,7 +35,7 @@ function FormPage6() {
           acknowledged by Customer, Customer acknowledges and agrees as follows:
         </p>
 
-        <div className="mb-4 mt-4">
+        <div className="pf:mb-4 pf:mt-4">
           <input
             type="checkbox"
             name="accept_terms_and_conditions"
@@ -54,7 +54,7 @@ function FormPage6() {
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div className="pf:flex pf:gap-2">
         <NavButton
           mode="regular"
           action={() => navigate("/form_page7")}

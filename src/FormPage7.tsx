@@ -10,12 +10,15 @@ function FormPage6() {
   const formData = useSelector((state: RootState) => state.form);
 
   return (
-    <div className="p-4">
-      <div className="mb-4">
+    <div className="pf:p-4">
+      <div className="pf:mb-4">
         <h1>Summary and confirmation</h1>
 
         <div>Occupancy Type: {formData.occupancy_type} </div>
-        <div>Occupancy Date: {formData.occupancy_date}</div>
+        <div>
+          Occupancy Date: {formData.occupancy_day}/{formData.occupancy_month}/
+          {formData.occupancy_year}
+        </div>
 
         <NavButton
           mode="outline"
@@ -25,7 +28,7 @@ function FormPage6() {
         />
       </div>
 
-      <div className="flex gap-2">
+      <div className="pf:flex pf:gap-2">
         <NavButton
           mode="regular"
           action={() => navigate("/form_page8")}

@@ -11,9 +11,8 @@ function FormPage3() {
   const navigate = useNavigate();
   const formData = useSelector((state: RootState) => state.form);
 
-  console.log(formData.accept_preauth_terms_and_conditions);
   return (
-    <div className="p-4">
+    <div className="pf:p-4">
       <div></div>
       <h2>Pre-Authorized Payments</h2>
 
@@ -23,7 +22,7 @@ function FormPage3() {
           <input
             type="radio"
             name="payment_mode"
-            className="m-2"
+            className="pf:m-2"
             value="provide_banking_information"
             onClick={(e) => {
               dispatch(
@@ -45,7 +44,7 @@ function FormPage3() {
             type="radio"
             name="payment_mode"
             value="provide_void_cheque"
-            className="m-2"
+            className="pf:m-2"
             onClick={(e) => {
               console.log(formData.payment_mode);
               dispatch(
@@ -82,7 +81,7 @@ function FormPage3() {
         I accept the terms and conditions of pre-auth payments
       </div>
 
-      <div className="flex gap-2">
+      <div className="pf:flex pf:gap-2">
         {formData.payment_mode === "" && (
           <NavButton
             mode="outline"

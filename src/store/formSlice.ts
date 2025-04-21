@@ -3,7 +3,9 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export interface FormState {
   [key: string]: string | string[] | undefined;
   occupancy_type: "TENANT" | "HOME_OWNER" | "";
-  occupancy_date: string;
+  occupancy_day: string;
+  occupancy_month: string;
+  occupancy_year: string;
   selected_address: string;
   selected_unit: string;
   first_name: string;
@@ -26,7 +28,9 @@ export const emptyForm: FormState = {
   selected_address: "",
   selected_unit: "",
   occupancy_type: "",
-  occupancy_date: "",
+  occupancy_day: "",
+  occupancy_month: "",
+  occupancy_year: "",
   first_name: "",
   last_name: "",
   business_name: "",

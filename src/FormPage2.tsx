@@ -12,14 +12,14 @@ function FormPage2() {
   const formData = useSelector((state: RootState) => state.form);
 
   return (
-    <div className="p-4">
+    <div className="pf:p-4">
       <div></div>
       <h2>Your service address</h2>
 
       <div>This is the address you're moving to.</div>
       <AddressSearch />
 
-      <p className="mt-4">
+      <p className="pf:mt-4">
         <NavButton
           label="Save and Continue"
           action={() => navigate("/form_page3")}

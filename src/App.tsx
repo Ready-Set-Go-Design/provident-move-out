@@ -16,6 +16,13 @@ import FormPage6 from "./FormPage6";
 import FormPage7 from "./FormPage7";
 import FormPage8 from "./FormPage8";
 import FormPage9 from "./FormPage9";
+import {
+  Alert,
+  AlertActions,
+  AlertDescription,
+  AlertTitle,
+} from "./components/alert";
+import { Button } from "./components/button";
 
 function App() {
   const [currentFormPage, setCurrentFormPage] = useState<string>("");
@@ -69,32 +76,24 @@ function App() {
     navigate("/");
   };
 
+  console.log(showResetMessage);
   return (
     <>
-      <h1 className="p-4 text-2xl">Form Test</h1>
+      <h1 className="pf:p-4 pf:text-2xl">Form Test</h1>
 
-      {showResetMessage && (
-        <div className="m-4 p-4 bg-yellow-100 border border-yellow-400 rounded">
-          <p className="mb-3">
-            You appear to be mid-way through an application; would you like to
-            start over?
-          </p>
-          <div className="flex gap-2">
-            <button
-              onClick={handleStartOver}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Start Over
-            </button>
-            <button
-              onClick={() => setShowResetMessage(false)}
-              className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
+      <Alert open={showResetMessage} onClose={() => setShowResetMessage(false)}>
+        <AlertTitle>You have an application in-progress</AlertTitle>
+        <AlertDescription>
+          If you start a new application, all your progress will be lost. Are
+          you sure you want to start over?
+        </AlertDescription>
+        <AlertActions>
+          <Button plain onClick={() => setShowResetMessage(false)}>
+            Close
+          </Button>
+          <Button onClick={() => handleStartOver()}>Start Over</Button>
+        </AlertActions>
+      </Alert>
 
       <FormStatus currentFormPage={currentFormPage} />
       <Routes>

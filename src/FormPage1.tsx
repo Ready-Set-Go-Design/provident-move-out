@@ -1,9 +1,13 @@
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { updateField } from "./store/formSlice";
+import { Input } from "./components/input";
 
 import { RootState } from "./store/store";
 import NavButton from "./components/NavButton";
+import { useEffect, useState } from "react";
+import { set } from "lodash";
+import { Select } from "./components/select";
 
 const ServiceType = ({
   label,
@@ -23,7 +27,7 @@ const ServiceType = ({
 
   return (
     <div
-      className="bg-gray-200 p-2 rounded cursor-pointer hover:bg-gray-400"
+      className="pf:bg-gray-200 pf:p-2 pf:rounded pf:cursor-pointer pf:hover:bg-gray-400"
       onClick={setServiceType}
     >
       <div>{formData.occupancy_type === value ? "●" : "○"}</div>
@@ -39,7 +43,7 @@ function FormPage1() {
   const formData = useSelector((state: RootState) => state.form);
 
   return (
-    <div className="p-4">
+    <div className="pf:p-4">
       <div></div>
       <h2>Customer Service Agreement</h2>
 
@@ -47,7 +51,7 @@ function FormPage1() {
         Please answer a few questions to better help us prepare your move in.
       </div>
 
-      <div className="flex w-full">
+      <div className="pf:flex pf:w-full">
         <ServiceType label="Tenant" value="TENANT" dispatch={dispatch} />
         <ServiceType
           label="Home Owner"
@@ -56,20 +60,61 @@ function FormPage1() {
         />
       </div>
 
-      <div>
-        <input
-          type="date"
-          placeholder="Enter occupancy date"
-          value={formData.occupancy_date}
-          onChange={(e) =>
-            dispatch(
-              updateField({ field: "occupancy_date", value: e.target.value })
-            )
-          }
-        />
+      <div className="pf:mb-8 pf:mt-8">
+        <strong>Occupancy Date</strong>
+
+        <div className="pf:flex pf:gap-2">
+          <Select
+            value={formData.occupancy_day}
+            onChange={(e) => {
+              dispatch(
+                updateField({ field: "occupancy_day", value: e.target.value })
+              );
+            }}
+          >
+            <option value="">Select Day</option>
+            {Array.from({ length: 31 }, (_, i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
+          </Select>
+          <Select
+            value={formData.occupancy_month}
+            onChange={(e) => {
+              dispatch(
+                updateField({ field: "occupancy_month", value: e.target.value })
+              );
+            }}
+          >
+            <option value="">Select Month</option>
+            {Array.from({ length: 12 }, (_, i) => (
+              <option key={i + 1} value={i + 1}>
+                {new Date(0, i).toLocaleString("default", {
+                  month: "long",
+                })}
+              </option>
+            ))}
+          </Select>
+          <Select
+            value={formData.occupancy_year}
+            onChange={(e) => {
+              dispatch(
+                updateField({ field: "occupancy_year", value: e.target.value })
+              );
+            }}
+          >
+            <option value="">Select Year</option>
+            {Array.from({ length: 5 }, (_, i) => (
+              <option key={i + 2025} value={i + 2025}>
+                {i + 2025}
+              </option>
+            ))}
+          </Select>
+        </div>
       </div>
 
-      <p className="mt-4">
+      <p className="pf:mt-4">
         <NavButton
           label="Save and Continue"
           action={() => navigate("/form_page2")}

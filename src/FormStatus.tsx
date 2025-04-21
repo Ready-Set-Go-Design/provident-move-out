@@ -33,17 +33,17 @@ function FormStatus({ currentFormPage }: FormStatusProps) {
   };
 
   return (
-    <div className="m-4 flex">
+    <div className="pf:m-4 pf:flex">
       {pageValidations.map((requirement: any, index: number) => {
         return (
           <span
             key={requirement.id}
-            className={`cursor-pointer p-2 rounded-[30px] mr-4 ${
+            className={`cursor-pointer pf:p-2 rounded-[30px] pf:mr-4 ${
               currentFormPage ===
               (requirement.id === "/"
                 ? requirement.id
                 : `/form_${requirement.id.replace("/", "")}`)
-                ? "bg-gray-200"
+                ? "pf:bg-gray-200"
                 : ""
             }`}
             onClick={() => {
@@ -57,18 +57,18 @@ function FormStatus({ currentFormPage }: FormStatusProps) {
           >
             <span
               key={`stepper-status-${requirement.id}`}
-              className="text-gray-600"
+              className="pf:text-gray-600"
             >
               {requirement.valid &&
                 (formData.pageVisited ?? []).includes(`page${index + 1}`) && (
-                  <span className="text-green-600">✓</span>
+                  <span className="pf:text-green-600">✓</span>
                 )}
               {!requirement.valid &&
                 (formData.pageVisited ?? []).includes(`page${index + 1}`) && (
-                  <span className="text-red-600">✗</span>
+                  <span className="pf:text-red-600">✗</span>
                 )}
               {!(formData.pageVisited ?? []).includes(`page${index + 1}`) && (
-                <span className="text-gray-400">•</span>
+                <span className="pf:text-gray-400">•</span>
               )}
             </span>
           </span>

@@ -1,6 +1,10 @@
-@import "tailwindcss";
+@import "tailwindcss" prefix(pf);
+/* @import "tailwindcss"; */
+
 
 @theme {
     --color-main-button: #399571;
     --font-sans: Inter, sans-serif;
+    --font-sans--font-feature-settings: 'cv11';
+    
 }

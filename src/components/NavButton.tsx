@@ -23,12 +23,14 @@ function NavButton({
       className={`${
         disabled
           ? mode === "outline"
-            ? "border-gray-300"
-            : "bg-gray-300 text-black"
+            ? "pf:border-gray-300"
+            : "pf:bg-gray-300 pf:text-black"
           : mode === "outline"
-          ? "border-main-button border-2"
-          : "bg-main-button text-white"
-      }  py-2 px-4 rounded ${fullWidth !== "false" ? "w-full" : ""}`}
+          ? "pf:border-main-button pf:border-2"
+          : "pf:bg-main-button pf:text-white"
+      }  pf:py-2 pf:px-4 pf:rounded ${
+        fullWidth !== "false" ? "pf:w-full" : ""
+      }`}
       onClick={() => {
         action();
 
