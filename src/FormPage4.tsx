@@ -4,84 +4,76 @@ import { RootState } from "./store/store";
 import NavButton from "./components/NavButton";
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import { Input } from "./components/input";
+import { Radio, RadioField, RadioGroup } from "./components/radio";
+import { Description, Label } from "./components/fieldset";
+import clsx from "clsx";
+import { withPrefix } from "./utils/withPrefix";
+import { Checkbox, CheckboxField } from "./components/checkbox";
 
-function FormPage3() {
+function FormPage4() {
   const [mode, setMode] = useState<string>("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const formData = useSelector((state: RootState) => state.form);
 
   return (
-    <div className="pf:p-4">
+    <div className={withPrefix("p-4")}>
       <div></div>
       <h2>Pre-Authorized Payments</h2>
 
-      {mode}
       <div>
-        <div>
-          <input
-            type="radio"
-            name="payment_mode"
-            className="pf:m-2"
-            value="provide_banking_information"
-            onClick={(e) => {
-              dispatch(
-                updateField({
-                  field: "payment_mode",
-                  value:
-                    formData.payment_mode !== "provide_banking_information"
-                      ? e.currentTarget.value
-                      : "",
-                })
-              );
-            }}
-            checked={formData.payment_mode === "provide_banking_information"}
-          />
-          Provide banking information
-        </div>
-        <div>
-          <input
-            type="radio"
-            name="payment_mode"
-            value="provide_void_cheque"
-            className="pf:m-2"
-            onClick={(e) => {
-              console.log(formData.payment_mode);
-              dispatch(
-                updateField({
-                  field: "payment_mode",
-                  value:
-                    formData.payment_mode !== "provide_void_cheque"
-                      ? e.currentTarget.value
-                      : "",
-                })
-              );
-            }}
-            checked={formData.payment_mode === "provide_void_cheque"}
-          />
-          Provide a void cheque
-        </div>
-      </div>
-
-      <div>
-        <input
-          type="checkbox"
-          name="accept_preauth_terms_and_conditions"
-          value=""
-          checked={formData.accept_preauth_terms_and_conditions == "true"}
+        <RadioGroup
+          name="payment_mode"
+          defaultValue="provide_banking_information"
+          value={formData.payment_mode}
           onChange={(e) => {
+            console.log(e);
             dispatch(
               updateField({
-                field: "accept_preauth_terms_and_conditions",
-                value: e.currentTarget.checked ? "true" : "",
+                field: "payment_mode",
+                value: e,
               })
             );
           }}
-        />{" "}
-        I accept the terms and conditions of pre-auth payments
+        >
+          <RadioField>
+            <Radio value="provide_banking_information" color="green" />
+            <Label>Provide banking information</Label>
+            <Description>
+              Customers can provide their banking information for payments.
+            </Description>
+          </RadioField>
+          <RadioField>
+            <Radio value="provide_void_cheque" color="green" />
+            <Label>Provide a void cheque</Label>
+            <Description>
+              Customers can provide a void cheque for payments.
+            </Description>
+          </RadioField>
+        </RadioGroup>
       </div>
 
-      <div className="pf:flex pf:gap-2">
+      <div>
+        <CheckboxField>
+          <Checkbox
+            color="green"
+            name="accept_preauth_terms_and_conditions"
+            value={formData.accept_preauth_terms_and_conditions}
+            onChange={(checked) => {
+              dispatch(
+                updateField({
+                  field: "accept_preauth_terms_and_conditions",
+                  value: checked ? "true" : "",
+                })
+              );
+            }}
+          />
+          <Label>I accept the terms and conditions of pre-auth payments</Label>
+        </CheckboxField>
+      </div>
+
+      <div className={withPrefix("flex gap-2")}>
         {formData.payment_mode === "" && (
           <NavButton
             outline={true}
@@ -100,4 +92,4 @@ function FormPage3() {
   );
 }
 
-export default FormPage3;
+export default FormPage4;

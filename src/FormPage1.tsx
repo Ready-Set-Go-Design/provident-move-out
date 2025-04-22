@@ -8,6 +8,7 @@ import NavButton from "./components/NavButton";
 import { useEffect, useState } from "react";
 import { set } from "lodash";
 import { Select } from "./components/select";
+import { withPrefix } from "./utils/withPrefix";
 
 const ServiceType = ({
   label,
@@ -27,7 +28,9 @@ const ServiceType = ({
 
   return (
     <div
-      className="pf:bg-gray-200 pf:p-2 pf:rounded pf:cursor-pointer pf:hover:bg-gray-400"
+      className={withPrefix(
+        "bg-gray-200 p-2 rounded cursor-pointer hover:bg-gray-400"
+      )}
       onClick={setServiceType}
     >
       <div>{formData.occupancy_type === value ? "●" : "○"}</div>
@@ -43,7 +46,7 @@ function FormPage1() {
   const formData = useSelector((state: RootState) => state.form);
 
   return (
-    <div className="pf:p-4">
+    <div className={withPrefix("p-4")}>
       <div></div>
       <h2>Customer Service Agreement</h2>
 
@@ -51,7 +54,7 @@ function FormPage1() {
         Please answer a few questions to better help us prepare your move in.
       </div>
 
-      <div className="pf:flex pf:w-full">
+      <div className={withPrefix("flex w-full")}>
         <ServiceType label="Tenant" value="TENANT" dispatch={dispatch} />
         <ServiceType
           label="Home Owner"
@@ -60,10 +63,10 @@ function FormPage1() {
         />
       </div>
 
-      <div className="pf:mb-8 pf:mt-8">
+      <div className={withPrefix("mb-8 mt-8")}>
         <strong>Occupancy Date</strong>
 
-        <div className="pf:flex pf:gap-2">
+        <div className={withPrefix("flex gap-2")}>
           <Select
             value={formData.occupancy_day}
             onChange={(e) => {
@@ -114,7 +117,7 @@ function FormPage1() {
         </div>
       </div>
 
-      <p className="pf:mt-4">
+      <p className={withPrefix("mt-4")}>
         <NavButton
           label="Save and Continue"
           action={() => navigate("/form_page2")}

@@ -1,17 +1,16 @@
-import { useDispatch, useSelector } from "react-redux";
-import { updateField } from "./store/formSlice";
+import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import NavButton from "./components/NavButton";
 import { useNavigate } from "react-router";
+import { withPrefix } from "./utils/withPrefix";
 
 function FormPage6() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const formData = useSelector((state: RootState) => state.form);
 
   return (
-    <div className="pf:p-4">
-      <div className="pf:mb-4">
+    <div className={withPrefix("p-4")}>
+      <div className={withPrefix("mb-4")}>
         <h1>Summary and confirmation</h1>
 
         <div>Occupancy Type: {formData.occupancy_type} </div>
@@ -28,7 +27,7 @@ function FormPage6() {
         />
       </div>
 
-      <div className="pf:flex pf:gap-2">
+      <div className={withPrefix("flex gap-2")}>
         <NavButton
           action={() => navigate("/form_page8")}
           label={"Save and Continue"}

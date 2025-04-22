@@ -1,18 +1,18 @@
 import * as Headless from "@headlessui/react";
-import clsx from "clsx";
 import type React from "react";
 import { Text } from "./text";
+import { withPrefix } from "../utils/withPrefix";
 
 const sizes = {
-  xs: "pf:sm:max-w-xs",
-  sm: "pf:sm:max-w-sm",
-  md: "pf:max-w-md",
-  lg: "pf:max-w-lg",
-  xl: "pf:max-w-xl",
-  "2xl": "pf:max-w-2xl",
-  "3xl": "pf:max-w-3xl",
-  "4xl": "pf:max-w-4xl",
-  "5xl": "pf:max-w-5xl",
+  xs: "sm:max-w-xs",
+  sm: "sm:max-w-sm",
+  md: "max-w-md",
+  lg: "max-w-lg",
+  xl: "max-w-xl",
+  "2xl": "max-w-2xl",
+  "3xl": "max-w-3xl",
+  "4xl": "max-w-4xl",
+  "5xl": "max-w-5xl",
 };
 
 export function Alert({
@@ -29,18 +29,28 @@ export function Alert({
     <Headless.Dialog {...props}>
       <Headless.DialogBackdrop
         transition
-        className="pf:fixed pf:inset-0 pf:flex pf:w-screen pf:justify-center pf:overflow-y-auto bg-zinc-950/15 pf:px-2 pf:py-2 pf:transition pf:duration-100 pf:focus:outline-0 pf:data-closed:pf:opacity-0 pf:data-enter:pf:ease-out pf:data-leave:pf:ease-in pf:sm:px-6 pf:sm:py-8 pf:lg:px-8 pf:lg:py-16 pf:dark:bg-zinc-950/50"
+        className={withPrefix(
+          "fixed inset-0 flex w-screen justify-center overflow-y-auto bg-zinc-950/15 px-2 py-2 transition duration-100 focus:outline-0 data-closed:opacity-0 data-enter:ease-out data-leave:ease-in sm:px-6 sm:py-8 lg:px-8 lg:py-16 dark:bg-zinc-950/50"
+        )}
       />
 
-      <div className="pf:fixed pf:inset-0 pf:w-screen pf:overflow-y-auto pf:pt-6 pf:sm:pt-0">
-        <div className="pf:grid pf:min-h-full pf:grid-rows-[1fr_auto_1fr] pf:justify-items-center pf:p-8 pf:sm:grid-rows-[1fr_auto_3fr] pf:sm:p-4">
+      <div
+        className={withPrefix(
+          "fixed inset-0 w-screen overflow-y-auto pt-6 sm:pt-0"
+        )}
+      >
+        <div
+          className={withPrefix(
+            "grid min-h-full grid-rows-[1fr_auto_1fr] justify-items-center p-8 sm:grid-rows-[1fr_auto_3fr] sm:p-4"
+          )}
+        >
           <Headless.DialogPanel
             transition
-            className={clsx(
+            className={withPrefix(
               className,
               sizes[size],
-              "pf:row-start-2 pf:w-full pf:rounded-2xl pf:bg-white pf:p-8 pf:ring-1 pf:shadow-lg pf:ring-zinc-950/10 pf:sm:rounded-2xl pf:sm:p-6 pf:dark:bg-zinc-900 pf:dark:ring-white/10 pf:forced-colors:outline",
-              "pf:transition pf:duration-100 pf:will-change-transform pf:data-closed:opacity-0 pf:data-enter:ease-out pf:data-closed:data-enter:scale-95 pf:data-leave:ease-in"
+              "row-start-2 w-full rounded-2xl bg-white p-8 ring-1 shadow-lg ring-zinc-950/10 sm:rounded-2xl sm:p-6 dark:bg-zinc-900 dark:ring-white/10 forced-colors:outline",
+              "transition duration-100 will-change-transform data-closed:opacity-0 data-enter:ease-out data-closed:data-enter:scale-95 data-leave:ease-in"
             )}
           >
             {children}
@@ -61,9 +71,9 @@ export function AlertTitle({
   return (
     <Headless.DialogTitle
       {...props}
-      className={clsx(
+      className={withPrefix(
         className,
-        "pf:text-center pf:text-base/6 pf:font-semibold pf:text-balance pf:text-zinc-950 pf:sm:text-left pf:sm:text-sm/6 pf:sm:text-wrap pf:dark:text-white"
+        "text-center text-base/6 font-semibold text-balance text-zinc-950 sm:text-left sm:text-sm/6 sm:text-wrap dark:text-white"
       )}
     />
   );
@@ -80,9 +90,9 @@ export function AlertDescription({
     <Headless.Description
       as={Text}
       {...props}
-      className={clsx(
+      className={withPrefix(
         className,
-        "pf:mt-2 pf:text-center pf:text-pretty pf:sm:text-left"
+        "mt-2 text-center text-pretty sm:text-left"
       )}
     />
   );
@@ -92,7 +102,7 @@ export function AlertBody({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
-  return <div {...props} className={clsx(className, "pf:mt-4")} />;
+  return <div {...props} className={withPrefix(className, "mt-4")} />;
 }
 
 export function AlertActions({
@@ -102,9 +112,9 @@ export function AlertActions({
   return (
     <div
       {...props}
-      className={clsx(
+      className={withPrefix(
         className,
-        "pf:mt-6 pf:flex pf:flex-col-reverse pf:items-center pf:justify-end pf:gap-3 pf:*:w-full pf:sm:mt-4 pf:sm:flex-row pf:sm:*:w-auto"
+        "mt-6 flex flex-col-reverse items-center justify-end gap-3 *:w-full sm:mt-4 sm:flex-row sm:*:w-auto"
       )}
     />
   );

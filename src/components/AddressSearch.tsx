@@ -9,6 +9,7 @@ import { updateField } from "../store/formSlice";
 import { TrashIcon } from "@heroicons/react/16/solid";
 import ShowUnitResults from "./ShowUnitResults";
 import { Button } from "./button";
+import { withPrefix } from "../utils/withPrefix";
 
 function AddressSearch() {
   const [unitQuery, setUnitQuery] = useState<string>("");
@@ -87,7 +88,7 @@ function AddressSearch() {
 
   return (
     <div>
-      <div className="pf:mt-4 pf:mb-4">
+      <div className={withPrefix("mt-4 mb-4")}>
         {formData.selected_address === "" && (
           <div>
             <strong>Enter Address</strong>
@@ -98,12 +99,14 @@ function AddressSearch() {
             </span>
           </div>
         )}
-        <div className="pf:flex pf:gap-2">
+        <div className={withPrefix("flex gap-2")}>
           {formData.selected_address === "" && (
             <input
               type="text"
               placeholder="Enter address"
-              className="pf:w-full pf:p-2 pf:border-2 pf:border-solid pf:rounded-md pf:border-gray-300"
+              className={withPrefix(
+                "w-full p-2 border-2 border-solid rounded-md border-gray-300"
+              )}
               value={searchQuery}
               onChange={(e) => searchForAddresses(e.target.value)}
             />
@@ -140,7 +143,7 @@ function AddressSearch() {
         )}
       </div>
       {formData.selected_address && formData.selected_address > "" && (
-        <div className="pf:mt-4 pf:mb-4">
+        <div className={withPrefix("mt-4 mb-4")}>
           {formData.selected_unit === "" && (
             <div>
               <strong>Suite or Unit Number</strong>
@@ -148,12 +151,14 @@ function AddressSearch() {
               eg., 1507, 1001B, PH10
             </div>
           )}
-          <div className="pf:flex pf:gap-2">
+          <div className={withPrefix("flex gap-2")}>
             {formData.selected_unit === "" && (
               <input
                 type="text"
                 placeholder=""
-                className="pf:w-full pf:p-2 pf:border-2 pf:border-solid pf:rounded-md pf:border-gray-300"
+                className={withPrefix(
+                  "w-full p-2 border-2 border-solid rounded-md border-gray-300"
+                )}
                 value={unitQuery}
                 onChange={(e) => searchForUnits(e.target.value)}
               />
@@ -166,9 +171,7 @@ function AddressSearch() {
             <Button
               color="red"
               onClick={() => {
-                console.log("whee");
                 setUnitQuery("");
-                console.log(formData.selected_address);
                 setSearchQuery(formData.selected_address);
                 dispatch(updateField({ field: "selected_unit", value: "" }));
                 setShowResults(true);

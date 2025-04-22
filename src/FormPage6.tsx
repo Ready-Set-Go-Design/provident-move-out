@@ -3,6 +3,7 @@ import { updateField } from "./store/formSlice";
 import { RootState } from "./store/store";
 import NavButton from "./components/NavButton";
 import { useNavigate } from "react-router";
+import { withPrefix } from "./utils/withPrefix";
 
 function FormPage6() {
   const dispatch = useDispatch();
@@ -10,7 +11,7 @@ function FormPage6() {
   const formData = useSelector((state: RootState) => state.form);
 
   return (
-    <div className="pf:p-4">
+    <div className={withPrefix("p-4")}>
       <div>
         <h1>Terms and Conditions</h1>
 
@@ -35,7 +36,7 @@ function FormPage6() {
           acknowledged by Customer, Customer acknowledges and agrees as follows:
         </p>
 
-        <div className="pf:mb-4 pf:mt-4">
+        <div className={withPrefix("mb-4 mt-4")}>
           <input
             type="checkbox"
             name="accept_terms_and_conditions"
@@ -54,7 +55,7 @@ function FormPage6() {
         </div>
       </div>
 
-      <div className="pf:flex pf:gap-2">
+      <div className={withPrefix("flex gap-2")}>
         <NavButton
           action={() => navigate("/form_page7")}
           label={"Save and Continue"}

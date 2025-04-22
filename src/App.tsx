@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+// import "./Webflow.css";
 import "./App.css";
 import { Routes, Route } from "react-router";
 import { useLocation } from "react-router-dom";
@@ -23,6 +24,7 @@ import {
   AlertTitle,
 } from "./components/alert";
 import { Button } from "./components/button";
+import { withPrefix } from "./utils/withPrefix";
 
 function App() {
   const [currentFormPage, setCurrentFormPage] = useState<string>("");
@@ -76,10 +78,9 @@ function App() {
     navigate("/");
   };
 
-  console.log(showResetMessage);
   return (
     <>
-      <h1 className="pf:p-4 pf:text-2xl">Form Test</h1>
+      <h1 className={withPrefix("p-4 text-2xl")}>Form Test</h1>
 
       <Alert open={showResetMessage} onClose={() => setShowResetMessage(false)}>
         <AlertTitle>You have an application in-progress</AlertTitle>

@@ -21,9 +21,6 @@ export const validateForm = (formData: FormState) => {
           formData[field.conditional] !== field.value &&
           field.value !== ""
         ) {
-          console.log(field);
-          console.log(formData[field.conditional]);
-          console.log("thi sone?");
           return true;
         } else {
           return false;
