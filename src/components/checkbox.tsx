@@ -130,20 +130,24 @@ export function Checkbox({
     <Headless.Checkbox
       data-slot="control"
       {...props}
-      className={withPrefix(
+      className={withPrefix([
         className,
-        "group inline-flex focus:outline-hidden"
-      )}
+        "group inline-flex focus:outline-hidden",
+      ])}
     >
       <span className={withPrefix([base, colors[color]])}>
         <svg
-          className="size-4 stroke-(--checkbox-check) opacity-0 group-data-checked:opacity-100 sm:h-3.5 sm:w-3.5"
+          className={withPrefix(
+            "size-4 stroke-(--checkbox-check) opacity-0 group-data-checked:opacity-100 sm:h-3.5 sm:w-3.5"
+          )}
           viewBox="0 0 14 14"
           fill="none"
         >
           {/* Checkmark icon */}
           <path
-            className="opacity-100 group-data-indeterminate:opacity-0"
+            className={withPrefix(
+              "opacity-100 group-data-indeterminate:opacity-0"
+            )}
             d="M3 8L6 11L11 3.5"
             strokeWidth={2}
             strokeLinecap="round"
@@ -151,7 +155,9 @@ export function Checkbox({
           />
           {/* Indeterminate icon */}
           <path
-            className="opacity-0 group-data-indeterminate::opacity-100"
+            className={withPrefix(
+              "opacity-0 group-data-indeterminate:opacity-100"
+            )}
             d="M3 7H11"
             strokeWidth={2}
             strokeLinecap="round"

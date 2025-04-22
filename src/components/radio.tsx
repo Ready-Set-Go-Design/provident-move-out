@@ -132,10 +132,10 @@ export function Radio({
     <Headless.Radio
       data-slot="control"
       {...props}
-      className={withPrefix(
+      className={withPrefix([
         className,
-        "group inline-flex focus:outline-hidden"
-      )}
+        "group inline-flex focus:outline-hidden",
+      ])}
     >
       <span className={withPrefix([base, colors[color]])}>
         <span

@@ -1,9 +1,9 @@
 import clsx from "clsx";
 
-export const prefix = "";
+export const prefix = "pf";
 
 export const withPrefix = (...inputs: clsx.ClassValue[]): string => {
-  return clsx(...inputs)
+  const classes = clsx(...inputs)
     .split(" ")
     .map((item) => {
       if (item) {
@@ -17,4 +17,7 @@ export const withPrefix = (...inputs: clsx.ClassValue[]): string => {
       return item;
     })
     .join(" ");
+
+  // console.log(classes);
+  return classes;
 };
