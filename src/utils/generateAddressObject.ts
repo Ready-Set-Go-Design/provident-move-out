@@ -128,7 +128,6 @@ const generateAddressObject = async ({
       break;
   }
 
-  console.log(addressObj);
   // determine search type based on fields that are defined
   // if only street address is defined
   addressObj.search_mode = "ALL";

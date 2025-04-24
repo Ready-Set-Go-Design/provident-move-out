@@ -2,24 +2,41 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateField } from "./store/formSlice";
 import { RootState } from "./store/store";
 import NavButton from "./components/NavButton";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { Input } from "./components/input";
 import { withPrefix } from "./utils/withPrefix";
+import { isPageValid } from "./utils/isPageValid";
+import { AllFieldsRequiredMessage } from "./components/AllFieldsRequiredMessage";
+import { useState } from "react";
+import { validateForm } from "./utils/validateForm";
+import { Field, Label } from "./components/fieldset";
 
 function FormPage3() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const formData = useSelector((state: RootState) => state.form);
+  const [showValidationError, setShowValidationError] =
+    useState<boolean>(false);
+  const pageIsValid = isPageValid("/page3");
+  const validatedForm = validateForm(formData).find(
+    (requirement: any) => requirement.id === "/page3"
+  );
+
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
+  const from = urlParams.get("from");
 
   return (
     <div className={withPrefix("p-4")}>
       <div></div>
       <h2>Primary Account Holder</h2>
-      <div className={withPrefix("flex gap-2 mb-4")}>
+      <Field className={withPrefix("mb-4")}>
+        <Label>First Name</Label>
+
         <Input
+          invalid={showValidationError && formData.first_name === ""}
           type="text"
           name="first_name"
-          placeholder="First Name"
           value={formData.first_name}
           onChange={(e) => {
             dispatch(
@@ -27,10 +44,13 @@ function FormPage3() {
             );
           }}
         />
+      </Field>
+      <Field className={withPrefix("mb-4")}>
+        <Label>Last Name</Label>
         <Input
+          invalid={showValidationError && formData.last_name === ""}
           type="text"
           name="last_name"
-          placeholder="Last Name"
           value={formData.last_name}
           onChange={(e) => {
             dispatch(
@@ -38,10 +58,14 @@ function FormPage3() {
             );
           }}
         />
+      </Field>
+
+      <Field className={withPrefix("mb-4")}>
+        <Label>Business Name</Label>
         <Input
+          invalid={showValidationError && formData.business_name === ""}
           type="text"
           name="business_name"
-          placeholder="Business Name"
           value={formData.business_name}
           onChange={(e) => {
             dispatch(
@@ -52,10 +76,15 @@ function FormPage3() {
             );
           }}
         />
+      </Field>
+      <Field className={withPrefix("mb-4")}>
+        <Label>Email Address</Label>
         <Input
+          invalid={
+            showValidationError && validatedForm?.errors.includes("Email")
+          }
           type="email"
           name="email"
-          placeholder="Email"
           value={formData.email}
           onChange={(e) => {
             dispatch(
@@ -63,12 +92,21 @@ function FormPage3() {
             );
           }}
         />
+      </Field>
+      <div className={withPrefix("mt-4")}>
+        <AllFieldsRequiredMessage show={showValidationError} id="/page3" />
+        <NavButton
+          label="Save and Continue"
+          action={() => {
+            if (pageIsValid) {
+              navigate(from ? `/form_${from}` : "/form_page4");
+            } else {
+              setShowValidationError(true);
+            }
+          }}
+          currentPage="page3"
+        />
       </div>
-      <NavButton
-        action={() => navigate("/form_page4")}
-        label={"Save and Continue"}
-        currentPage="page3"
-      />
     </div>
   );
 }

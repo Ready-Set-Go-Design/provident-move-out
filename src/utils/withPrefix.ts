@@ -18,6 +18,5 @@ export const withPrefix = (...inputs: clsx.ClassValue[]): string => {
     })
     .join(" ");
 
-  // console.log(classes);
   return classes;
 };

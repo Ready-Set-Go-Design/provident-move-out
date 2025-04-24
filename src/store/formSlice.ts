@@ -67,7 +67,9 @@ const formSlice = createSlice({
       if (field !== "pageVisited") {
         state[field] = value;
       }
-      localStorage.setItem("customerFormData", JSON.stringify(state));
+      try {
+        localStorage.setItem("customerFormData", JSON.stringify(state));
+      } catch (error) {}
     },
     clearForm: (state) => {
       const emptyFormInstance = Object.assign(

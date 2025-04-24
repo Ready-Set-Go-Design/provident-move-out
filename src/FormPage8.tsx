@@ -4,14 +4,23 @@ import { RootState } from "./store/store";
 import NavButton from "./components/NavButton";
 import { useNavigate } from "react-router";
 import SignatureCanvas from "react-signature-canvas";
-import { useEffect, useRef } from "react";
-import { isFormDataValid } from "./utils/isFormDataValid";
+import { useEffect, useRef, useState } from "react";
+import { withPrefix } from "./utils/withPrefix";
+import { isPageValid } from "./utils/isPageValid";
+import { useMeasure } from "react-use";
+import { AllFieldsRequiredMessage } from "./components/AllFieldsRequiredMessage";
+import { Input } from "./components/input";
+import { Checkbox, CheckboxField } from "./components/checkbox";
+import { Button } from "./components/button";
 
 function FormPage8() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const formData = useSelector((state: RootState) => state.form);
   const sigCanvas = useRef<SignatureCanvas | null>(null);
+  const [showValidationError, setShowValidationError] =
+    useState<boolean>(false);
+  const pageIsValid = isPageValid("/page8");
 
   const clearForm = () => {
     if (sigCanvas.current) {
@@ -20,22 +29,36 @@ function FormPage8() {
     }
   };
 
-  useEffect(() => {
-    if (sigCanvas.current) {
+  const [containerRef, { width, height }] = useMeasure();
+
+  const redrawSignature = () => {
+    if (formData.signature_image && sigCanvas.current) {
       sigCanvas.current.clear();
+      const img = new window.Image();
+      img.addEventListener("load", function () {
+        sigCanvas.current?.getCanvas().getContext("2d")?.drawImage(img, 0, 0);
+      });
+      img.setAttribute("src", formData.signature_image);
     }
-    if (
-      formData.signature_image &&
-      sigCanvas.current &&
-      formData.signature_image !== ""
-    ) {
-      sigCanvas.current.fromDataURL(formData.signature_image as string);
-    }
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setTimeout(redrawSignature, 100);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [formData.signature_image]);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(redrawSignature, 100);
+    return () => clearTimeout(timeoutId);
   }, []);
 
   return (
-    <div className="p-4">
-      <div className="mb-4">
+    <div className={withPrefix("p-4")}>
+      <div className={withPrefix("mb-4")}>
         <h1>Signature</h1>
 
         <div>
@@ -43,16 +66,24 @@ function FormPage8() {
           digital form.
         </div>
 
-        <div className="border-2 border-gray-300 rounded p-4 mt-4">
+        <div
+          className={withPrefix(
+            "border-1 rounded p-4 mt-4 w-full h-full min-h-[130px] mb-4",
+            showValidationError && formData.signature_image === ""
+              ? "border-red-500"
+              : "border-gray-300"
+          )}
+          ref={containerRef as unknown as React.RefObject<HTMLDivElement>}
+        >
           <SignatureCanvas
             penColor="green"
             canvasProps={{
-              width: 500,
-              height: 200,
+              width: width,
+              height: height,
               className: "sigCanvas",
             }}
             onEnd={() => {
-              const base64 = sigCanvas.current?.toDataURL("image/png");
+              const base64 = sigCanvas.current?.toDataURL();
               if (base64) {
                 dispatch(
                   updateField({
@@ -64,39 +95,48 @@ function FormPage8() {
             }}
             ref={sigCanvas}
           />
-          <NavButton
-            outline={true}
-            action={clearForm}
-            label={"Clear"}
-            fullWidth="false"
-          />
         </div>
-        <div className="mb-4 mt-4">
-          <input
-            type="checkbox"
+        <Button color="white" onClick={clearForm}>
+          Clear
+        </Button>
+        <CheckboxField
+          className={withPrefix(
+            "border-1 rounded-md pf:overflow-hidden p-2 mt-4",
+            showValidationError && formData.verify_entered_information === ""
+              ? "border-red-500"
+              : "border-transparent"
+          )}
+        >
+          <Checkbox
+            color="green"
             name="verify_entered_information"
-            value=""
+            value={formData.verify_entered_information}
             checked={formData.verify_entered_information == "true"}
-            onChange={(e) => {
+            onChange={(checked) => {
               dispatch(
                 updateField({
                   field: "verify_entered_information",
-                  value: e.currentTarget.checked ? "true" : "",
+                  value: checked ? "true" : "",
                 })
               );
             }}
           />{" "}
           I verify that all information entered is correct
-        </div>
+        </CheckboxField>
       </div>
 
-      <div className="flex gap-2">
+      <div className={withPrefix("mt-4")}>
+        <AllFieldsRequiredMessage show={showValidationError} id="/page8" />
         <NavButton
-          mode="regular"
-          action={() => navigate("/form_page9")}
-          label={"Submit"}
+          label="Submit"
+          action={() => {
+            if (pageIsValid) {
+              navigate("/form_page9");
+            } else {
+              setShowValidationError(true);
+            }
+          }}
           currentPage="page8"
-          disabled={isFormDataValid(formData) === false}
         />
       </div>
     </div>

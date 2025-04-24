@@ -1,40 +1,96 @@
 import { FormState } from "../store/formSlice";
+import humanizeString from "./humanizeFieldName";
 import { validationRequirements } from "./validationRequirements";
 
 export const validateForm = (formData: FormState) => {
+  const humanizeFieldName = (fieldName: string) => {
+    const source = [
+      { replace: "selected_unit", with: "suite_or_unit_number" },
+      { replace: "selected_address", with: "address" },
+      { replace: "signature_image" },
+    ];
+
+    const substitution = source.find(
+      (sourceItem) => sourceItem.replace === fieldName
+    );
+
+    return humanizeString(substitution?.with ?? fieldName);
+  };
+
   const pageValidations: any = [];
   validationRequirements.forEach((requirement, index) => {
-    const allFieldsValid = requirement.fields.every((field: any) => {
-      if (typeof field === "object") {
-        // console.log(field, formData[field.conditional]);
-        if (field.conditional && formData[field.conditional] === field.value) {
-          return (
+    const fieldErrors: Array<string> = JSON.parse("[]");
+    let allFieldsValid: boolean = true;
+    requirement.fields.forEach((field: any) => {
+      if (field.conditional) {
+        if (formData[field.conditional] === field.value) {
+          const present =
             field &&
             field.id &&
             formData &&
             formData[field.id] &&
-            formData[field.id] > ""
-          );
+            (formData[field.id] as any) > "";
+
+          let length;
+          if (field && field.id && field.length) {
+            length =
+              field &&
+              field.id &&
+              field.length &&
+              formData &&
+              formData[field.id] &&
+              (formData[field.id] as any).length === field.length;
+          }
+          if (field && field.id && !field.length) {
+            // length field is not required
+            length = true;
+          }
+
+          // check for empty string
+          if (!present || !length) {
+            fieldErrors.push(field.id);
+            allFieldsValid = false;
+          }
         } else if (
-          field.conditional &&
           formData[field.conditional] &&
           formData[field.conditional] !== field.value &&
           field.value !== ""
         ) {
-          return true;
+          // allFieldsValid = true;
         } else {
-          return false;
+          fieldErrors.push(field.id);
+          allFieldsValid = false;
         }
       } else {
-        if (formData[field] && formData[field] > "") {
-          return true;
+        if (
+          !formData[field.name] ||
+          (formData[field.name] &&
+            formData[field.name] === "" &&
+            field.format === undefined)
+        ) {
+          fieldErrors.push(field.name);
+          allFieldsValid = false;
         } else {
-          return false;
+          if (field.format) {
+            switch (field.format) {
+              case "email":
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(formData[field.name] as string)) {
+                  fieldErrors.push(field.name);
+                  allFieldsValid = false;
+                }
+                break;
+            }
+          }
         }
       }
     });
 
-    pageValidations.push({ ...requirement, valid: allFieldsValid });
+    pageValidations.push({
+      ...requirement,
+      valid: allFieldsValid,
+      errors: fieldErrors.map((field: string) => humanizeFieldName(field)),
+    });
   });
 
   return pageValidations;

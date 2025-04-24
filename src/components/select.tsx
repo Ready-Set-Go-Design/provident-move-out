@@ -56,9 +56,15 @@ export const Select = forwardRef(function Select(
         ])}
       />
       {!multiple && (
-        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+        <span
+          className={withPrefix(
+            "pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
+          )}
+        >
           <svg
-            className="size-5 stroke-zinc-500 group-has-data-disabled:stroke-zinc-600 sm:size-4 dark:stroke-zinc-400 forced-colors:stroke-[CanvasText]"
+            className={withPrefix(
+              "size-5 stroke-zinc-500 group-has-data-disabled:stroke-zinc-600 sm:size-4 dark:stroke-zinc-400 forced-colors:stroke-[CanvasText]"
+            )}
             viewBox="0 0 16 16"
             aria-hidden="true"
             fill="none"

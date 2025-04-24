@@ -1,14 +1,14 @@
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { updateField } from "./store/formSlice";
-import { Input } from "./components/input";
 
 import { RootState } from "./store/store";
 import NavButton from "./components/NavButton";
-import { useEffect, useState } from "react";
-import { set } from "lodash";
 import { Select } from "./components/select";
 import { withPrefix } from "./utils/withPrefix";
+import { isPageValid } from "./utils/isPageValid";
+import { useState } from "react";
+import { AllFieldsRequiredMessage } from "./components/AllFieldsRequiredMessage";
 
 const ServiceType = ({
   label,
@@ -29,7 +29,7 @@ const ServiceType = ({
   return (
     <div
       className={withPrefix(
-        "bg-gray-200 p-2 rounded cursor-pointer hover:bg-gray-400"
+        "bg-gray-200 p-2 rounded cursor-pointer hover:bg-gray-400 w-full"
       )}
       onClick={setServiceType}
     >
@@ -44,6 +44,13 @@ function FormPage1() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const formData = useSelector((state: RootState) => state.form);
+  const [showValidationError, setShowValidationError] =
+    useState<boolean>(false);
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
+  const from = urlParams.get("from");
+
+  const pageIsValid = isPageValid("/");
 
   return (
     <div className={withPrefix("p-4")}>
@@ -54,7 +61,14 @@ function FormPage1() {
         Please answer a few questions to better help us prepare your move in.
       </div>
 
-      <div className={withPrefix("flex w-full")}>
+      <div
+        className={withPrefix(
+          "inline-flex gap-2 w-full rounded-md pf:overflow-hidden border-1",
+          showValidationError && formData.occupancy_type === ""
+            ? "border-red-500"
+            : "border-transparent"
+        )}
+      >
         <ServiceType label="Tenant" value="TENANT" dispatch={dispatch} />
         <ServiceType
           label="Home Owner"
@@ -74,6 +88,7 @@ function FormPage1() {
                 updateField({ field: "occupancy_day", value: e.target.value })
               );
             }}
+            invalid={showValidationError && formData.occupancy_day === ""}
           >
             <option value="">Select Day</option>
             {Array.from({ length: 31 }, (_, i) => (
@@ -89,6 +104,7 @@ function FormPage1() {
                 updateField({ field: "occupancy_month", value: e.target.value })
               );
             }}
+            invalid={showValidationError && formData.occupancy_month === ""}
           >
             <option value="">Select Month</option>
             {Array.from({ length: 12 }, (_, i) => (
@@ -106,6 +122,7 @@ function FormPage1() {
                 updateField({ field: "occupancy_year", value: e.target.value })
               );
             }}
+            invalid={showValidationError && formData.occupancy_year === ""}
           >
             <option value="">Select Year</option>
             {Array.from({ length: 5 }, (_, i) => (
@@ -117,13 +134,21 @@ function FormPage1() {
         </div>
       </div>
 
-      <p className={withPrefix("mt-4")}>
+      <div className={withPrefix("mt-4")}>
+        <AllFieldsRequiredMessage show={showValidationError} id="/" />
+
         <NavButton
           label="Save and Continue"
-          action={() => navigate("/form_page2")}
+          action={() => {
+            if (pageIsValid) {
+              navigate(from ? `/form_${from}` : "/form_page2");
+            } else {
+              setShowValidationError(true);
+            }
+          }}
           currentPage="page1"
         />
-      </p>
+      </div>
     </div>
   );
 }

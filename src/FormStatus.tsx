@@ -33,48 +33,45 @@ function FormStatus({ currentFormPage }: FormStatusProps) {
     }
   };
 
+  const currentPageNumber = getHashFromCurrentBrowserUrl().replace("page", "");
   return (
-    <div className={withPrefix("m-4 flex")}>
+    <div
+      className={withPrefix(
+        "m-auto flex justify-between w-[50%] before:m-auto before:bg-gray-200 before:m-4 before:w-[50%] before:absolute before:mt-[6px] before:z-[-1] before:h-[4px] before:absolute"
+      )}
+    >
       {pageValidations.map((requirement: any, index: number) => {
         return (
-          <span
+          <div
             key={requirement.id}
-            className={withPrefix(
-              `cursor-pointer p-2 rounded-[30px] mr-4 ${
-                currentFormPage ===
-                (requirement.id === "/"
-                  ? requirement.id
-                  : `/form_${requirement.id.replace("/", "")}`)
-                  ? "bg-gray-200"
-                  : ""
-              }`
-            )}
-            onClick={() => {
-              dispatch(addPageVisit(getHashFromCurrentBrowserUrl() as string));
-              navigate(
-                requirement.id === "/"
-                  ? requirement.id
-                  : `form_${requirement.id.replace("/", "")}`
-              );
-            }}
+            className={withPrefix("w-[15px] h-[15px]")}
+            // onClick={() => {
+            //   if (index + 1 < Number(currentPageNumber)) {
+            //     dispatch(
+            //       addPageVisit(getHashFromCurrentBrowserUrl() as string)
+            //     );
+            //     navigate(
+            //       requirement.id === "/"
+            //         ? requirement.id
+            //         : `form_${requirement.id.replace("/", "")}`
+            //     );
+            //   }
+            // }}
           >
-            <span
+            <div
               key={`stepper-status-${requirement.id}`}
-              className={withPrefix("text-gray-600")}
-            >
-              {requirement.valid &&
-                (formData.pageVisited ?? []).includes(`page${index + 1}`) && (
-                  <span className={withPrefix("text-green-600")}>✓</span>
-                )}
-              {!requirement.valid &&
-                (formData.pageVisited ?? []).includes(`page${index + 1}`) && (
-                  <span className={withPrefix("text-red-600")}>✗</span>
-                )}
-              {!(formData.pageVisited ?? []).includes(`page${index + 1}`) && (
-                <span className={withPrefix("text-gray-400")}>•</span>
-              )}
-            </span>
-          </span>
+              className={withPrefix([
+                "pf:justify-center",
+                index + 1 <= Number(currentPageNumber)
+                  ? "w-[15px] h-[15px]"
+                  : "w-[10px] h-[10px] mt-[2.5px] ml-auto",
+                "rounded-xl",
+                index + 1 <= Number(currentPageNumber)
+                  ? "bg-green-600"
+                  : "bg-gray-400",
+              ])}
+            ></div>
+          </div>
         );
       })}
     </div>

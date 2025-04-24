@@ -2,20 +2,31 @@ export const validationRequirements = [
   {
     id: "/",
     fields: [
-      "occupancy_type",
-      "occupancy_day",
-      "occupancy_month",
-      "occupancy_year",
+      { name: "occupancy_type" },
+      { name: "occupancy_day" },
+      { name: "occupancy_month" },
+      { name: "occupancy_year" },
     ],
   },
-  { id: "/page2", fields: ["selected_address", "selected_unit"] },
+  {
+    id: "/page2",
+    fields: [{ name: "selected_address" }, { name: "selected_unit" }],
+  },
   {
     id: "/page3",
-    fields: ["first_name", "last_name", "business_name", "email"],
+    fields: [
+      { name: "first_name" },
+      { name: "last_name" },
+      { name: "business_name" },
+      { name: "email", format: "email" },
+    ],
   },
   {
     id: "/page4",
-    fields: ["payment_mode", "accept_preauth_terms_and_conditions"],
+    fields: [
+      { name: "payment_mode" },
+      { name: "accept_preauth_terms_and_conditions" },
+    ],
   },
   {
     id: "/page5",
@@ -24,16 +35,22 @@ export const validationRequirements = [
         conditional: "payment_mode",
         value: "provide_banking_information",
         id: "branch_transit_number",
+        format: "length",
+        length: 5,
       },
       {
         conditional: "payment_mode",
         value: "provide_banking_information",
         id: "bank_account_number",
+        format: "length",
+        length: 7,
       },
       {
         conditional: "payment_mode",
         value: "provide_banking_information",
         id: "financial_institution_number",
+        format: "length",
+        length: 3,
       },
       {
         conditional: "payment_mode",
@@ -42,8 +59,14 @@ export const validationRequirements = [
       },
     ],
   },
-  { id: "/page6", fields: ["accept_preauth_terms_and_conditions"] },
+  { id: "/page6", fields: [{ name: "accept_terms_and_conditions" }] },
   { id: "/page7", fields: [] },
-  { id: "/page8", fields: ["verify_entered_information", "signature_image"] },
+  {
+    id: "/page8",
+    fields: [
+      { name: "verify_entered_information" },
+      { name: "signature_image" },
+    ],
+  },
   { id: "/page9", fields: [] },
 ];

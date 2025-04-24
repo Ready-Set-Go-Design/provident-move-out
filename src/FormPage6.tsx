@@ -2,13 +2,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateField } from "./store/formSlice";
 import { RootState } from "./store/store";
 import NavButton from "./components/NavButton";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { withPrefix } from "./utils/withPrefix";
+import { isPageValid } from "./utils/isPageValid";
+import { AllFieldsRequiredMessage } from "./components/AllFieldsRequiredMessage";
+import { useState } from "react";
+import { Input } from "./components/input";
+import { Checkbox, CheckboxField } from "./components/checkbox";
 
 function FormPage6() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const formData = useSelector((state: RootState) => state.form);
+  const [showValidationError, setShowValidationError] =
+    useState<boolean>(false);
+  const pageIsValid = isPageValid("/page6");
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
+  const from = urlParams.get("from");
 
   return (
     <div className={withPrefix("p-4")}>
@@ -36,29 +47,43 @@ function FormPage6() {
           acknowledged by Customer, Customer acknowledges and agrees as follows:
         </p>
 
-        <div className={withPrefix("mb-4 mt-4")}>
-          <input
-            type="checkbox"
+        <CheckboxField
+          className={withPrefix(
+            "border-1 rounded-md pf:overflow-hidden p-2 mt-4",
+            showValidationError && formData.accept_terms_and_conditions === ""
+              ? "border-red-500"
+              : "border-transparent"
+          )}
+        >
+          <Checkbox
+            color="green"
             name="accept_terms_and_conditions"
-            value=""
+            value={formData.accept_terms_and_conditions}
             checked={formData.accept_terms_and_conditions == "true"}
-            onChange={(e) => {
+            onChange={(checked) => {
               dispatch(
                 updateField({
                   field: "accept_terms_and_conditions",
-                  value: e.currentTarget.checked ? "true" : "",
+                  value: checked ? "true" : "",
                 })
               );
             }}
           />{" "}
           I accept the terms and conditions of pre-auth payments
-        </div>
+        </CheckboxField>
       </div>
 
-      <div className={withPrefix("flex gap-2")}>
+      <div className={withPrefix("mt-4")}>
+        <AllFieldsRequiredMessage show={showValidationError} id="/page6" />
         <NavButton
-          action={() => navigate("/form_page7")}
-          label={"Save and Continue"}
+          label="Save and Continue"
+          action={() => {
+            if (pageIsValid) {
+              navigate(from ? `/form_${from}` : "/form_page7");
+            } else {
+              setShowValidationError(true);
+            }
+          }}
           currentPage="page6"
         />
       </div>

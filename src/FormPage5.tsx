@@ -2,13 +2,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateField } from "./store/formSlice";
 import { RootState } from "./store/store";
 import NavButton from "./components/NavButton";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { withPrefix } from "./utils/withPrefix";
+import { isPageValid } from "./utils/isPageValid";
+import { useState } from "react";
+import { AllFieldsRequiredMessage } from "./components/AllFieldsRequiredMessage";
+import { Input } from "./components/input";
+import { validateForm } from "./utils/validateForm";
+import { Field, Label } from "./components/fieldset";
+import { Button } from "./components/button";
 
 function FormPage5() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const formData = useSelector((state: RootState) => state.form);
+  const [voidChequeImageError, setVoidChequeImageError] =
+    useState<boolean>(false);
+  const [showValidationError, setShowValidationError] =
+    useState<boolean>(false);
+  const pageIsValid = isPageValid("/page5");
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
+  const from = urlParams.get("from");
+
+  const validatedForm = validateForm(formData).find(
+    (requirement: any) => requirement.id === "/page5"
+  );
 
   return (
     <div className={withPrefix("p-4")}>
@@ -28,15 +47,19 @@ function FormPage5() {
         <div>
           <h1>Provide Banking Information</h1>
 
-          <div className={withPrefix("mb-2")}>
-            <div className={withPrefix("font-bold")}>Branch Transit Number</div>
-            <div>A 5-digit number</div>
+          <Field className={withPrefix("mb-4")}>
+            <Label className={withPrefix("font-bold")}>
+              Branch Transit Number
+            </Label>
 
-            <input
+            <Input
               type="number"
+              invalid={
+                showValidationError &&
+                validatedForm?.errors.includes("Branch Transit Number")
+              }
               name="branch_transit_number"
-              placeholder="12345"
-              className={withPrefix("p-2 border border-gray-300 rounded")}
+              placeholder="5-digit Branch Transit Number"
               value={formData.branch_transit_number}
               onChange={(e) => {
                 dispatch(
@@ -47,18 +70,18 @@ function FormPage5() {
                 );
               }}
             />
-          </div>
-          <div className={withPrefix("mb-2")}>
-            <div className={withPrefix("font-bold")}>
-              Financial Institution Number
-            </div>
-            <div>A number</div>
+          </Field>
+          <Field className={withPrefix("mb-4")}>
+            <Label>Financial Institution Number</Label>
 
-            <input
+            <Input
+              invalid={
+                showValidationError &&
+                validatedForm?.errors.includes("Financial Institution Number")
+              }
               type="text"
               name="financial_institution_number"
-              placeholder="Financial Institution Number"
-              className={withPrefix("p-2 border border-gray-300 rounded")}
+              placeholder="3-digit Financial Institution Number"
               value={formData.financial_institution_number}
               onChange={(e) => {
                 dispatch(
@@ -69,16 +92,20 @@ function FormPage5() {
                 );
               }}
             />
-          </div>
-          <div className={withPrefix("mb-2")}>
-            <div className={withPrefix("font-bold")}>Bank Account Number</div>
-            <div>Another number</div>
+          </Field>
+          <Field className={withPrefix("mb-4")}>
+            <Label className={withPrefix("font-bold")}>
+              Bank Account Number
+            </Label>
 
-            <input
+            <Input
+              invalid={
+                showValidationError &&
+                validatedForm?.errors.includes("Bank Account Number")
+              }
               type="text"
               name="bank_account_number"
-              placeholder="Bank Account Number"
-              className={withPrefix("p-2 border border-gray-300 rounded")}
+              placeholder="7-digit Bank Account Number"
               value={formData.bank_account_number}
               onChange={(e) => {
                 dispatch(
@@ -89,32 +116,96 @@ function FormPage5() {
                 );
               }}
             />
-          </div>
+          </Field>
         </div>
       )}
 
       {formData.payment_mode === "provide_void_cheque" && (
         <div>
           {" "}
-          <div>Upload a void cheque.</div>
-          <input
+          <h1>Upload a void cheque</h1>
+          <Input
+            invalid={
+              showValidationError &&
+              validatedForm?.errors.includes("Provide Void Cheque")
+            }
             type="file"
+            className={withPrefix("hidden")}
             name="void_cheque"
-            placeholder="Email"
-            className={withPrefix("p-2 border border-gray-300 rounded")}
+            placeholder="Upload your void cheque"
             onChange={(e) => {
               const file = e.target.files?.[0];
+
+              if (!file) {
+                setVoidChequeImageError(true);
+                return;
+              }
+              if (file.type !== "image/jpeg" && file.type !== "image/png") {
+                setVoidChequeImageError(true);
+                return;
+              }
               if (file) {
                 const reader = new FileReader();
                 reader.onloadend = () => {
                   if (reader.result) {
                     const imageData = reader.result.toString();
-                    dispatch(
-                      updateField({
-                        field: "void_cheque_image",
-                        value: imageData,
-                      })
-                    );
+                    if (!imageData || file.size > 1500000) {
+                      if (file.size > 1500000) {
+                        const img = new Image();
+                        img.onload = () => {
+                          const canvas = document.createElement("canvas");
+                          const ctx = canvas.getContext("2d");
+                          if (!ctx) return;
+
+                          const scaleFactor = Math.sqrt(1500000 / file.size);
+                          canvas.width = img.width * scaleFactor;
+                          canvas.height = img.height * scaleFactor;
+
+                          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                          canvas.toBlob(
+                            (blob) => {
+                              if (blob && blob.size <= 1500000) {
+                                const resizedReader = new FileReader();
+                                resizedReader.onloadend = () => {
+                                  if (resizedReader.result) {
+                                    console.log("trying to dispatch 1");
+                                    console.log(
+                                      resizedReader.result.toString()
+                                    );
+                                    dispatch(
+                                      updateField({
+                                        field: "void_cheque_image",
+                                        value: resizedReader.result.toString(),
+                                      })
+                                    );
+                                    setVoidChequeImageError(false);
+                                  } else {
+                                    console.log("failing");
+                                  }
+                                };
+                                resizedReader.readAsDataURL(blob);
+                              } else {
+                                setVoidChequeImageError(true);
+                              }
+                            },
+                            "image/jpeg",
+                            0.9
+                          );
+                        };
+                        img.src = imageData;
+                      } else {
+                        setVoidChequeImageError(true);
+                      }
+                    } else {
+                      console.log("trying to dispatch");
+                      dispatch(
+                        updateField({
+                          field: "void_cheque_image",
+                          value: imageData,
+                        })
+                      );
+                      setVoidChequeImageError(false);
+                    }
                   }
                 };
                 reader.readAsDataURL(file);
@@ -123,27 +214,19 @@ function FormPage5() {
               // load image data from this file
             }}
           />
+          <div className={withPrefix("mb-4")}>
+            {voidChequeImageError && (
+              <div className={withPrefix("text-red-500")}>
+                Please upload a valid image file (JPEG or PNG).
+              </div>
+            )}
+          </div>
           {formData.void_cheque_image && formData.void_cheque_image > "" && (
             <div>
-              <div className={withPrefix("max-w-[200px] max-h-[200px]")}>
+              <div className={withPrefix("max-w-full h-auto")}>
                 <img
                   className={withPrefix("object-contain")}
                   src={formData.void_cheque_image}
-                />
-              </div>
-              <div className={withPrefix("text-right mb-4")}>
-                <NavButton
-                  outline={true}
-                  fullWidth="false"
-                  action={() =>
-                    dispatch(
-                      updateField({
-                        field: "void_cheque_image",
-                        value: "",
-                      })
-                    )
-                  }
-                  label="Replace Image"
                 />
               </div>
             </div>
@@ -151,9 +234,80 @@ function FormPage5() {
         </div>
       )}
 
-      <div className={withPrefix("flex gap-2")}>
+      <AllFieldsRequiredMessage show={showValidationError} id="/page5" />
+      <div className={withPrefix("flex gap-2 mt-4")}>
+        {formData.payment_mode === "provide_void_cheque" &&
+          formData.void_cheque_image === "" && (
+            <Button
+              outline={true}
+              className={withPrefix("mb-4")}
+              onClick={() => {
+                const fileInput = document.querySelector(
+                  'input[name="void_cheque"]'
+                ) as HTMLInputElement;
+                fileInput.click();
+              }}
+            >
+              Select Image
+            </Button>
+          )}
+        {formData.payment_mode === "provide_void_cheque" &&
+          formData.void_cheque_image > "" && (
+            <Button
+              outline={true}
+              onClick={() => {
+                dispatch(
+                  updateField({
+                    field: "void_cheque_image",
+                    value: "",
+                  })
+                );
+                const fileInput = document.querySelector(
+                  'input[name="void_cheque"]'
+                ) as HTMLInputElement;
+                fileInput.click();
+              }}
+            >
+              Replace Image
+            </Button>
+          )}
         <NavButton
-          action={() => navigate("/form_page6")}
+          action={() => {
+            console.log(formData.payment_mode);
+            if (pageIsValid) {
+              if (formData.payment_mode === "provide_banking_information") {
+                dispatch(
+                  updateField({
+                    field: "void_cheque_image",
+                    value: "",
+                  })
+                );
+              } else if (formData.payment_mode === "provide_void_cheque") {
+                console.log("clearing");
+                dispatch(
+                  updateField({
+                    field: "branch_transit_number",
+                    value: "",
+                  })
+                );
+                dispatch(
+                  updateField({
+                    field: "bank_account_number",
+                    value: "",
+                  })
+                );
+                dispatch(
+                  updateField({
+                    field: "financial_institution_number",
+                    value: "",
+                  })
+                );
+              }
+              navigate(from ? `/form_${from}` : "/form_page6");
+            } else {
+              setShowValidationError(true);
+            }
+          }}
           label={"Save and Continue"}
           currentPage="page5"
         />

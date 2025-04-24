@@ -2,20 +2,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateField } from "./store/formSlice";
 import { RootState } from "./store/store";
 import NavButton from "./components/NavButton";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { useState } from "react";
-import { Input } from "./components/input";
 import { Radio, RadioField, RadioGroup } from "./components/radio";
 import { Description, Label } from "./components/fieldset";
-import clsx from "clsx";
 import { withPrefix } from "./utils/withPrefix";
 import { Checkbox, CheckboxField } from "./components/checkbox";
+import { isPageValid } from "./utils/isPageValid";
+import { AllFieldsRequiredMessage } from "./components/AllFieldsRequiredMessage";
 
 function FormPage4() {
   const [mode, setMode] = useState<string>("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const formData = useSelector((state: RootState) => state.form);
+  const [showValidationError, setShowValidationError] =
+    useState<boolean>(false);
+  const pageIsValid = isPageValid("/page4");
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
+  const from = urlParams.get("from");
 
   return (
     <div className={withPrefix("p-4")}>
@@ -24,11 +30,16 @@ function FormPage4() {
 
       <div>
         <RadioGroup
+          className={withPrefix(
+            "border-1 rounded-md pf:overflow-hidden p-2 mt-4",
+            showValidationError && formData.payment_mode === ""
+              ? "border-red-500"
+              : "border-transparent"
+          )}
           name="payment_mode"
           defaultValue="provide_banking_information"
           value={formData.payment_mode}
           onChange={(e) => {
-            console.log(e);
             dispatch(
               updateField({
                 field: "payment_mode",
@@ -54,36 +65,62 @@ function FormPage4() {
         </RadioGroup>
       </div>
 
-      <div>
-        <CheckboxField>
-          <Checkbox
-            color="green"
-            name="accept_preauth_terms_and_conditions"
-            value={formData.accept_preauth_terms_and_conditions}
-            onChange={(checked) => {
-              dispatch(
-                updateField({
-                  field: "accept_preauth_terms_and_conditions",
-                  value: checked ? "true" : "",
-                })
-              );
-            }}
-          />
-          <Label>I accept the terms and conditions of pre-auth payments</Label>
-        </CheckboxField>
-      </div>
-
-      <div className={withPrefix("flex gap-2")}>
-        {formData.payment_mode === "" && (
-          <NavButton
-            outline={true}
-            action={() => navigate("/form_page6")}
-            label={"Skip this step"}
-          />
+      <CheckboxField
+        className={withPrefix(
+          "border-1 rounded-md pf:overflow-hidden p-2 mt-4",
+          showValidationError &&
+            formData.accept_preauth_terms_and_conditions === ""
+            ? "border-red-500"
+            : "border-transparent"
         )}
+      >
+        <Checkbox
+          color="green"
+          name="accept_preauth_terms_and_conditions"
+          value={formData.accept_preauth_terms_and_conditions}
+          checked={formData.accept_preauth_terms_and_conditions === "true"}
+          onChange={(checked) => {
+            dispatch(
+              updateField({
+                field: "accept_preauth_terms_and_conditions",
+                value: checked ? "true" : "",
+              })
+            );
+          }}
+        />
+        <Label>I accept the terms and conditions of pre-auth payments</Label>
+      </CheckboxField>
+
+      <AllFieldsRequiredMessage show={showValidationError} id="/page4" />
+      <div className={withPrefix("flex gap-2 mt-4")}>
+        <NavButton
+          outline={true}
+          action={() => {
+            dispatch(
+              updateField({
+                field: "accept_preauth_terms_and_conditions",
+                value: "",
+              })
+            );
+            dispatch(
+              updateField({
+                field: "payment_mode",
+                value: "",
+              })
+            );
+            navigate(from ? `/form_${from}` : "/form_page6");
+          }}
+          label={"Skip this step"}
+        />
 
         <NavButton
-          action={() => navigate("/form_page5")}
+          action={() => {
+            if (pageIsValid) {
+              navigate(from ? `/form_${from}` : "/form_page5");
+            } else {
+              setShowValidationError(true);
+            }
+          }}
           label={"Save and Continue"}
           currentPage="page4"
         />

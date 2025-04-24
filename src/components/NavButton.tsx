@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import { addPageVisit } from "../store/formSlice";
 import { Button } from "./button";
+import { useLocation } from "react-router-dom";
 
 function NavButton({
   action,
@@ -19,18 +20,26 @@ function NavButton({
   const dispatch = useDispatch();
 
   return (
-    <Button
-      disabled={disabled}
-      color="green"
-      {...((outline as any) && { outline })}
+    <div
       onClick={() => {
-        action();
-
-        dispatch(addPageVisit(currentPage as string));
+        if (disabled) {
+          action();
+        }
       }}
     >
-      {label}
-    </Button>
+      <Button
+        disabled={disabled}
+        color="green"
+        {...((outline as any) && { outline })}
+        onClick={() => {
+          action();
+
+          dispatch(addPageVisit(currentPage as string));
+        }}
+      >
+        {label}
+      </Button>
+    </div>
   );
 }
 
