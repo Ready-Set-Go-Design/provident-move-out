@@ -17,7 +17,11 @@ export const validationRequirements = [
     fields: [
       { name: "first_name" },
       { name: "last_name" },
-      { name: "business_name" },
+      {
+        conditional: "occupancy_type",
+        value: "HOME_OWNER",
+        id: "business_name",
+      },
       { name: "email", format: "email" },
     ],
   },

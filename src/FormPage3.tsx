@@ -60,23 +60,25 @@ function FormPage3() {
         />
       </Field>
 
-      <Field className={withPrefix("mb-4")}>
-        <Label>Business Name</Label>
-        <Input
-          invalid={showValidationError && formData.business_name === ""}
-          type="text"
-          name="business_name"
-          value={formData.business_name}
-          onChange={(e) => {
-            dispatch(
-              updateField({
-                field: "business_name",
-                value: e.currentTarget.value,
-              })
-            );
-          }}
-        />
-      </Field>
+      {formData.occupancy_type.toLowerCase() !== "tenant" && (
+        <Field className={withPrefix("mb-4")}>
+          <Label>Business Name</Label>
+          <Input
+            invalid={showValidationError && formData.business_name === ""}
+            type="text"
+            name="business_name"
+            value={formData.business_name}
+            onChange={(e) => {
+              dispatch(
+                updateField({
+                  field: "business_name",
+                  value: e.currentTarget.value,
+                })
+              );
+            }}
+          />
+        </Field>
+      )}
       <Field className={withPrefix("mb-4")}>
         <Label>Email Address</Label>
         <Input
