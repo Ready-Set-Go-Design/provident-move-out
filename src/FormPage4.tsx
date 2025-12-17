@@ -3,117 +3,105 @@ import { updateField } from "./store/formSlice";
 import { RootState } from "./store/store";
 import NavButton from "./components/NavButton";
 import { useLocation, useNavigate } from "react-router";
-import { useState } from "react";
-import { Radio, RadioField, RadioGroup } from "./components/radio";
-import { Description, Label } from "./components/fieldset";
+import { Input } from "./components/input";
 import { withPrefix } from "./utils/withPrefix";
-import { Checkbox, CheckboxField } from "./components/checkbox";
 import { isPageValid } from "./utils/isPageValid";
 import { AllFieldsRequiredMessage } from "./components/AllFieldsRequiredMessage";
+import { useState } from "react";
+import { validateForm } from "./utils/validateForm";
+import { Field, Label } from "./components/fieldset";
+import { WrappedInput } from "./components/WrappedInput";
+import { FooterWrapper } from "./components/FooterWrapper";
 
 function FormPage4() {
-  const [mode, setMode] = useState<string>("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const formData = useSelector((state: RootState) => state.form);
   const [showValidationError, setShowValidationError] =
     useState<boolean>(false);
   const pageIsValid = isPageValid("/page4");
+  const validatedForm = validateForm(formData).find(
+    (requirement: any) => requirement.id === "/page4"
+  );
+
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const from = urlParams.get("from");
 
   return (
-    <div className={withPrefix("p-4")}>
-      <div></div>
-      <h2>Pre-Authorized Payments</h2>
+    <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
+      <h1 className={withPrefix("py-4 text-2xl")}>Primary Account Holder</h1>
 
-      <div>
-        <RadioGroup
-          className={withPrefix(
-            "border-1 rounded-md pf:overflow-hidden p-2 mt-4",
-            showValidationError && formData.payment_mode === ""
-              ? "border-red-500"
-              : "border-transparent"
-          )}
-          name="payment_mode"
-          defaultValue="provide_banking_information"
-          value={formData.payment_mode}
-          onChange={(e) => {
-            dispatch(
-              updateField({
-                field: "payment_mode",
-                value: e,
-              })
-            );
+      <Field className={withPrefix("mb-4")}>
+        <Label className={withPrefix("text-sm font-bold")}>First name</Label>
+        <WrappedInput
+          showSearch={false}
+          invalid={
+            showValidationError && validatedForm?.errors.includes("first_name")
+          }
+          type="text"
+          name="first_name"
+          placeholder={""}
+          value={formData.first_name}
+          onChange={(e: any) => {
+            dispatch(updateField({ field: "first_name", value: e }));
           }}
-        >
-          <RadioField>
-            <Radio value="provide_banking_information" color="green" />
-            <Label>Provide banking information</Label>
-            <Description>
-              Customers can provide their banking information for payments.
-            </Description>
-          </RadioField>
-          <RadioField>
-            <Radio value="provide_void_cheque" color="green" />
-            <Label>Provide a void cheque</Label>
-            <Description>
-              Customers can provide a void cheque for payments.
-            </Description>
-          </RadioField>
-        </RadioGroup>
-      </div>
-
-      <CheckboxField
-        className={withPrefix(
-          "border-1 rounded-md pf:overflow-hidden p-2 mt-4",
-          showValidationError &&
-            formData.accept_preauth_terms_and_conditions === ""
-            ? "border-red-500"
-            : "border-transparent"
-        )}
-      >
-        <Checkbox
-          color="green"
-          name="accept_preauth_terms_and_conditions"
-          value={formData.accept_preauth_terms_and_conditions}
-          checked={formData.accept_preauth_terms_and_conditions === "true"}
-          onChange={(checked) => {
-            dispatch(
-              updateField({
-                field: "accept_preauth_terms_and_conditions",
-                value: checked ? "true" : "",
-              })
-            );
+          clearAction={(e: any) => {
+            dispatch(updateField({ field: "first_name", value: "" }));
           }}
         />
-        <Label>I accept the terms and conditions of pre-auth payments</Label>
-      </CheckboxField>
+      </Field>
+      <Field className={withPrefix("mb-4")}>
+        <Label className={withPrefix("text-sm font-bold")}>Last name</Label>
+
+        <WrappedInput
+          showSearch={false}
+          invalid={
+            showValidationError && validatedForm?.errors.includes("last_name")
+          }
+          type="text"
+          name="last_name"
+          placeholder={""}
+          value={formData.last_name}
+          onChange={(e: any) => {
+            dispatch(updateField({ field: "last_name", value: e }));
+          }}
+          clearAction={(e: any) => {
+            dispatch(updateField({ field: "last_name", value: "" }));
+          }}
+        />
+      </Field>
+      <Field className={withPrefix("mb-4")}>
+        <Label className={withPrefix("text-sm font-bold")}>
+          Business name
+          <br />
+          <div className={withPrefix("font-normal text-gray-500 mb-1")}>
+            If you wish this account be under a business enter the name below
+          </div>
+        </Label>
+        <WrappedInput
+          showSearch={false}
+          invalid={
+            showValidationError &&
+            validatedForm?.errors.includes("business_name")
+          }
+          type="text"
+          name="business_name"
+          placeholder={""}
+          value={formData.business_name}
+          onChange={(e: any) => {
+            dispatch(updateField({ field: "business_name", value: e }));
+          }}
+          clearAction={(e: any) => {
+            dispatch(updateField({ field: "business_name", value: "" }));
+          }}
+        />
+      </Field>
 
       <AllFieldsRequiredMessage show={showValidationError} id="/page4" />
-      <div className={withPrefix("flex gap-2 mt-4")}>
+      <FooterWrapper>
         <NavButton
-          outline={true}
-          action={() => {
-            dispatch(
-              updateField({
-                field: "accept_preauth_terms_and_conditions",
-                value: "",
-              })
-            );
-            dispatch(
-              updateField({
-                field: "payment_mode",
-                value: "",
-              })
-            );
-            navigate(from ? `/form_${from}` : "/form_page6");
-          }}
-          label={"Skip this step"}
-        />
-
-        <NavButton
+          label="Save and Continue"
           action={() => {
             if (pageIsValid) {
               navigate(from ? `/form_${from}` : "/form_page5");
@@ -121,10 +109,10 @@ function FormPage4() {
               setShowValidationError(true);
             }
           }}
-          label={"Save and Continue"}
           currentPage="page4"
+          disabledButClickable={!pageIsValid}
         />
-      </div>
+      </FooterWrapper>
     </div>
   );
 }

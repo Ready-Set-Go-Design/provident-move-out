@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store/store";
-import { addPageVisit } from "./store/formSlice";
+
 import { validateForm } from "./utils/validateForm";
 import { withPrefix } from "./utils/withPrefix";
 
@@ -37,22 +37,24 @@ function Stepper({ currentFormPage }: StepperProps) {
   if (currentPageNumber === "") {
     currentPageNumber = "1";
   }
-  console.log(currentPageNumber);
+
   return (
-    <div className="relative">
+    <div className={withPrefix(`relative w-full bg-(--stepper-bg) p-[16px]`)}>
       <div
         className={withPrefix(
-          "bg-gray-200 m-4 w-[50%] m-auto flex mt-[6px] h-[4px] left-[calc(25%)] absolute"
+          "bg-(--stepper-line) m-4 w-[calc(100%-30px)] m-auto  mt-[8px] h-[1px]  absolute shadow-md"
         )}
       ></div>
       <div
-        className={withPrefix("m-auto flex relative justify-between w-[50%]")}
+        className={withPrefix(
+          "m-auto flex relative justify-between w-[calc(100%-30px)]"
+        )}
       >
         {pageValidations.map((requirement: any, index: number) => {
           return (
             <div
               key={requirement.id}
-              className={withPrefix("w-[15px] h-[15px]")}
+              className={withPrefix("w-[16px] h-[16px] ml-[-16px] mr-[-16px]")}
               onClick={() => {
                 navigate(
                   requirement.id === "/"
@@ -65,13 +67,12 @@ function Stepper({ currentFormPage }: StepperProps) {
                 key={`stepper-status-${requirement.id}`}
                 className={withPrefix([
                   "pf:justify-center",
-                  index + 1 <= Number(currentPageNumber)
-                    ? "w-[15px] h-[15px]"
-                    : "w-[10px] h-[10px] mt-[2.5px] ml-auto",
+                  "shadow-md",
+                  "w-[16px] h-[16px]",
                   "rounded-xl",
                   index + 1 <= Number(currentPageNumber)
-                    ? "bg-green-600"
-                    : "bg-gray-400",
+                    ? "bg-(--primary-color)"
+                    : "bg-(--stepper-unselected) border border-(--stepper-unselected-border)",
                 ])}
               ></div>
             </div>

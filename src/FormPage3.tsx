@@ -3,13 +3,16 @@ import { updateField } from "./store/formSlice";
 import { RootState } from "./store/store";
 import NavButton from "./components/NavButton";
 import { useLocation, useNavigate } from "react-router";
-import { Input } from "./components/input";
+
 import { withPrefix } from "./utils/withPrefix";
 import { isPageValid } from "./utils/isPageValid";
 import { AllFieldsRequiredMessage } from "./components/AllFieldsRequiredMessage";
 import { useState } from "react";
 import { validateForm } from "./utils/validateForm";
 import { Field, Label } from "./components/fieldset";
+import { WrappedInput } from "./components/WrappedInput";
+import { Radio, RadioField, RadioGroup } from "./components/radio";
+import { FooterWrapper } from "./components/FooterWrapper";
 
 function FormPage3() {
   const dispatch = useDispatch();
@@ -26,89 +29,120 @@ function FormPage3() {
   const urlParams = new URLSearchParams(location.search);
   const from = urlParams.get("from");
 
+  const [verificationCode, setVerificationCode] = useState<string>("");
+  const [verificationMethod, setVerificationMethod] = useState<string>("sms");
+  const [verificationCodeSent, setVerificationCodeSent] =
+    useState<boolean>(false);
+
   return (
-    <div className={withPrefix("p-4")}>
-      <div></div>
-      <h2>Primary Account Holder</h2>
-      <Field className={withPrefix("mb-4")}>
-        <Label>First Name</Label>
+    <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
+      <h1 className={withPrefix("py-4 text-2xl")}>Occupant verification</h1>
 
-        <Input
-          invalid={showValidationError && formData.first_name === ""}
-          type="text"
-          name="first_name"
-          value={formData.first_name}
-          onChange={(e) => {
-            dispatch(
-              updateField({ field: "first_name", value: e.currentTarget.value })
-            );
-          }}
-        />
-      </Field>
-      <Field className={withPrefix("mb-4")}>
-        <Label>Last Name</Label>
-        <Input
-          invalid={showValidationError && formData.last_name === ""}
-          type="text"
-          name="last_name"
-          value={formData.last_name}
-          onChange={(e) => {
-            dispatch(
-              updateField({ field: "last_name", value: e.currentTarget.value })
-            );
-          }}
-        />
-      </Field>
+      <div className={withPrefix("text-sm font-semibold")}>
+        You'll need to verify you are the occupant of the residence. Select a
+        verification method below.{" "}
+      </div>
 
-      {formData.occupancy_type.toLowerCase() !== "tenant" && (
-        <Field className={withPrefix("mb-4")}>
-          <Label>Business Name</Label>
-          <Input
-            invalid={showValidationError && formData.business_name === ""}
-            type="text"
-            name="business_name"
-            value={formData.business_name}
+      {!verificationCodeSent && !formData.code_verified && (
+        <div className={withPrefix("mb-4")}>
+          {" "}
+          <RadioGroup
+            className={withPrefix(
+              "border-1 rounded-md pf:overflow-hidden p-2 mt-4",
+              showValidationError && formData.verificationMethod === ""
+                ? "border-red-500"
+                : "border-transparent"
+            )}
+            name="renting_or_selling"
+            defaultValue="selling"
+            value={verificationMethod}
             onChange={(e) => {
-              dispatch(
-                updateField({
-                  field: "business_name",
-                  value: e.currentTarget.value,
-                })
-              );
+              setVerificationMethod(e);
+            }}
+          >
+            <RadioField>
+              <Radio value="sms" color="brand" />
+              <Label>SMS number ending in 354</Label>
+            </RadioField>
+            <RadioField>
+              <Radio value="email" color="brand" />
+              <Label>Email da..np@gmail.com</Label>
+            </RadioField>
+          </RadioGroup>
+        </div>
+      )}
+
+      {verificationCodeSent && !formData.code_verified && (
+        <Field className={withPrefix("mb-4 mt-4")}>
+          <Label className={withPrefix("text-sm font-semibold")}>
+            Enter the 6-digit code below
+          </Label>
+          <WrappedInput
+            showSearch={false}
+            invalid={
+              showValidationError && validatedForm?.errors.includes("Email")
+            }
+            type="verification_code"
+            name="verification_code"
+            placeholder={""}
+            value={verificationCode}
+            onChange={(e: any) => {
+              setVerificationCode(e);
+            }}
+            clearAction={(e: any) => {
+              setVerificationCode("");
             }}
           />
         </Field>
       )}
-      <Field className={withPrefix("mb-4")}>
-        <Label>Email Address</Label>
-        <Input
-          invalid={
-            showValidationError && validatedForm?.errors.includes("Email")
-          }
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={(e) => {
-            dispatch(
-              updateField({ field: "email", value: e.currentTarget.value })
-            );
-          }}
-        />
-      </Field>
-      <div className={withPrefix("mt-4")}>
-        <AllFieldsRequiredMessage show={showValidationError} id="/page3" />
-        <NavButton
-          label="Save and Continue"
-          action={() => {
-            if (pageIsValid) {
-              navigate(from ? `/form_${from}` : "/form_page4");
-            } else {
-              setShowValidationError(true);
+
+      {formData.code_verified && (
+        <div
+          className={withPrefix("text-green-600 font-semibold text-md mt-4")}
+        >
+          Your identity has been successfully verified.
+        </div>
+      )}
+      <AllFieldsRequiredMessage show={showValidationError} id="/page3" />
+
+      <FooterWrapper>
+        {(verificationCodeSent || formData.code_verified) && (
+          <NavButton
+            label={
+              !formData.code_verified ? "Verify Code" : "Save and Continue"
             }
-          }}
-          currentPage="page3"
-        />
-      </div>
+            action={async () => {
+              if (!formData.code_verified && !pageIsValid) {
+                // submit code verification call
+                console.log("sending code for verification");
+                dispatch(updateField({ field: "code_verified", value: true }));
+                // this makes a fetch call, returning success or failure
+              } else {
+                if (pageIsValid) {
+                  navigate(from ? `/form_${from}` : "/form_page4");
+                } else {
+                  setShowValidationError(true);
+                }
+              }
+            }}
+            currentPage="page3"
+            disabledButClickable={
+              !formData.code_verified && verificationCode.length != 6
+            }
+          />
+        )}
+        {!verificationCodeSent && !formData.code_verified && (
+          <NavButton
+            label="Send Code"
+            action={async () => {
+              // submit send code call
+              console.log("sending code");
+              setVerificationCodeSent(true);
+            }}
+            currentPage="page3"
+          />
+        )}
+      </FooterWrapper>
     </div>
   );
 }

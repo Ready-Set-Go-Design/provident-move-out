@@ -2,91 +2,156 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateField } from "./store/formSlice";
 import { RootState } from "./store/store";
 import NavButton from "./components/NavButton";
-import { useLocation, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
+import SignatureCanvas from "react-signature-canvas";
+import { useEffect, useRef, useState } from "react";
 import { withPrefix } from "./utils/withPrefix";
 import { isPageValid } from "./utils/isPageValid";
+import { useMeasure } from "react-use";
 import { AllFieldsRequiredMessage } from "./components/AllFieldsRequiredMessage";
-import { useState } from "react";
-import { Input } from "./components/input";
 import { Checkbox, CheckboxField } from "./components/checkbox";
+import { Button } from "./components/button";
+import { FooterWrapper } from "./components/FooterWrapper";
 
 function FormPage6() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const formData = useSelector((state: RootState) => state.form);
+  const sigCanvas = useRef<SignatureCanvas | null>(null);
   const [showValidationError, setShowValidationError] =
     useState<boolean>(false);
   const pageIsValid = isPageValid("/page6");
-  const location = useLocation();
-  const urlParams = new URLSearchParams(location.search);
-  const from = urlParams.get("from");
+
+  const clearForm = () => {
+    if (sigCanvas.current) {
+      sigCanvas.current.clear();
+      dispatch(updateField({ field: "signature_image", value: "" }));
+    }
+  };
+
+  const [containerRef, { width, height }] = useMeasure();
+
+  const redrawSignature = () => {
+    if (formData.signature_image && sigCanvas.current) {
+      sigCanvas.current.clear();
+      const img = new window.Image();
+      img.addEventListener("load", function () {
+        sigCanvas.current?.getCanvas().getContext("2d")?.drawImage(img, 0, 0);
+      });
+      img.setAttribute("src", formData.signature_image);
+    }
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setTimeout(redrawSignature, 100);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [formData.signature_image]);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(redrawSignature, 100);
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   return (
-    <div className={withPrefix("p-4")}>
-      <div>
-        <h1>Terms and Conditions</h1>
+    <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
+      <div className={withPrefix("mb-4")}>
+        <h1>Signature</h1>
 
-        <p>
-          Provident Energy Management Inc. (“Provident”) has been retained
-          pursuant to an Agreement (the “Master Agreement”) by the developer,
-          the owner, the condominium corporation and/or the authorized agent, as
-          applicable (the “Owner/Condominium”), of the premises in which the
-          above‐noted Service Address is located and/or of premises that are
-          invoiced for utilities that include utilities consumed at or by the
-          above‐noted Service Address (the “Premises”) to supply the Services
-          (as defined below) including meter reading, billing and collection
-          services. The terms and conditions set out in this agreement comprise
-          the legally binding agreement between the individual(s) named as
-          Primary Account Holder and Secondary Account Holder (if any)
-          (“Customer”) and Provident governing Customer’s use of the Services
-          (as defined below). This Agreement is subject to Provident’s
-          Conditions of Service (as applicable to the services provided by
-          Provident at the Premises) (the “Conditions”), which may be accessed
-          at www.pemi.com. In consideration of Provident providing the Services,
-          and for other good and valuable consideration, the receipt of which is
-          acknowledged by Customer, Customer acknowledges and agrees as follows:
-        </p>
-
+        <div>
+          By typing your name in the fields below, you are legally signing this
+          digital form.
+        </div>
         <CheckboxField
           className={withPrefix(
-            "border-1 rounded-md pf:overflow-hidden p-2 mt-4",
-            showValidationError && formData.accept_terms_and_conditions === ""
+            "border-1 rounded-md pf:overflow-hidden py-2 mt-4",
+            showValidationError && formData.verify_entered_information === ""
               ? "border-red-500"
               : "border-transparent"
           )}
         >
           <Checkbox
-            color="green"
-            name="accept_terms_and_conditions"
-            value={formData.accept_terms_and_conditions}
-            checked={formData.accept_terms_and_conditions == "true"}
+            color="brand"
+            name="verify_entered_information"
+            value={formData.verify_entered_information}
+            checked={formData.verify_entered_information == "true"}
             onChange={(checked) => {
               dispatch(
                 updateField({
-                  field: "accept_terms_and_conditions",
+                  field: "verify_entered_information",
                   value: checked ? "true" : "",
                 })
               );
             }}
           />{" "}
-          I accept the terms and conditions of pre-auth payments
+          I verify that all information entered is correct
         </CheckboxField>
+        <div
+          className={`${
+            formData.signature_image === "" ? "sig-canvas" : ""
+          } ${withPrefix(
+            `border-1 rounded p-4 mt-4 w-full h-full min-h-[130px] mb-4  `,
+            showValidationError && formData.signature_image === ""
+              ? "border-red-500"
+              : "border-gray-300"
+          )} `}
+          ref={containerRef as unknown as React.RefObject<HTMLDivElement>}
+        >
+          <SignatureCanvas
+            penColor="#26aae1"
+            canvasProps={{
+              width: width,
+              height: "200px",
+              className: "sigCanvas",
+            }}
+            onEnd={() => {
+              const base64 = sigCanvas.current?.toDataURL();
+              if (base64) {
+                dispatch(
+                  updateField({
+                    field: "signature_image",
+                    value: base64 as string,
+                  })
+                );
+              }
+            }}
+            ref={sigCanvas}
+          />
+        </div>
+        <Button color="white" onClick={clearForm}>
+          Clear
+        </Button>
+
+        <div className={withPrefix("mt-4")}>
+          Please note that completing this form does not signify that your
+          account has been formally closed. A Customer Service Representative
+          wil follow-up to request additional information. if required.
+        </div>
+
+        <div className={withPrefix("mt-4")}>
+          A copy of this contract will be emailed to{" "}
+          <strong>{formData.email || "placeholder@email.com"}</strong>
+        </div>
       </div>
 
-      <div className={withPrefix("mt-4")}>
-        <AllFieldsRequiredMessage show={showValidationError} id="/page6" />
+      <AllFieldsRequiredMessage show={showValidationError} id="/page6" />
+      <FooterWrapper>
         <NavButton
-          label="Save and Continue"
+          label="Submit"
           action={() => {
             if (pageIsValid) {
-              navigate(from ? `/form_${from}` : "/form_page7");
+              navigate("/form_page7");
             } else {
               setShowValidationError(true);
             }
           }}
           currentPage="page6"
+          disabledButClickable={!pageIsValid}
         />
-      </div>
+      </FooterWrapper>
     </div>
   );
 }

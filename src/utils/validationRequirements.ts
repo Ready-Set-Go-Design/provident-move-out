@@ -3,74 +3,58 @@ export const validationRequirements = [
     id: "/",
     fields: [
       { name: "occupancy_type" },
-      { name: "occupancy_day" },
-      { name: "occupancy_month" },
-      { name: "occupancy_year" },
+      { name: "occupancy_day", message: "Departure Day" },
+      { name: "occupancy_month", message: "Departure Month" },
+      { name: "occupancy_year", message: "Departure Year" },
+      {
+        conditional: "occupancy_type",
+        value: "HOME_OWNER",
+        id: "renting_or_selling",
+      },
+      {
+        name: "renting_or_selling",
+        must_be: "selling",
+        message: " ",
+      },
     ],
   },
   {
     id: "/page2",
-    fields: [{ name: "selected_address" }, { name: "selected_unit" }],
+    fields: [
+      { name: "selected_address" },
+      { name: "selected_unit" },
+      { name: "customer_number" },
+    ],
   },
   {
     id: "/page3",
-    fields: [
-      { name: "first_name" },
-      { name: "last_name" },
-      {
-        conditional: "occupancy_type",
-        value: "HOME_OWNER",
-        id: "business_name",
-      },
-      { name: "email", format: "email" },
-    ],
+    fields: [{ name: "code_verified" }],
   },
   {
     id: "/page4",
-    fields: [
-      { name: "payment_mode" },
-      { name: "accept_preauth_terms_and_conditions" },
-    ],
+    fields: [{ name: "first_name" }, { name: "last_name" }],
   },
   {
     id: "/page5",
     fields: [
       {
-        conditional: "payment_mode",
-        value: "provide_banking_information",
-        id: "branch_transit_number",
-        format: "length",
-        length: 5,
+        name: "lawyer_first_name",
       },
       {
-        conditional: "payment_mode",
-        value: "provide_banking_information",
-        id: "bank_account_number",
-        format: "length",
-        length: 7,
+        name: "lawyer_last_name",
       },
       {
-        conditional: "payment_mode",
-        value: "provide_banking_information",
-        id: "financial_institution_number",
-        format: "length",
-        length: 3,
-      },
-      {
-        conditional: "payment_mode",
-        value: "provide_void_cheque",
-        id: "void_cheque_image",
+        name: "lawyer_phone",
+        minLength: 10,
       },
     ],
   },
-  { id: "/page6", fields: [{ name: "accept_terms_and_conditions" }] },
-  { id: "/page7", fields: [] },
   {
-    id: "/page8",
+    id: "/page6",
     fields: [
       { name: "verify_entered_information" },
       { name: "signature_image" },
     ],
   },
-  { id: "/page9", fields: [] },
+  { id: "/page7", fields: [] },
 ];

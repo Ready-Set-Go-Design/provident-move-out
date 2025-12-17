@@ -1,6 +1,5 @@
 @layer theme, base, components, utilities;
 
-
 @import "tailwindcss/theme.css" layer(theme) prefix(pf);
 @import "tailwindcss/preflight.css" layer(base) prefix(pf);
 @import "tailwindcss/utilities.css" prefix(pf);
@@ -10,10 +9,58 @@
 @import "tailwindcss/utilities.css"; */
 /* @import "tailwindcss" prefix(pf); */
 
-
 @theme {
-    --color-main-button: #399571;
-    --font-sans: Inter, sans-serif;
-    --font-sans--font-feature-settings: 'cv11';
+  --color-main-button: #399571;
+  --font-sans: Inter, sans-serif;
+  --font-sans--font-feature-settings: "cv11";
 }
 
+:root {
+  --primary-color: #26aae1;
+  --provident-white: #ffffff;
+  --stepper-bg: #fafafa;
+  --stepper-selected: var(--primary-color);
+  --stepper-unselected: #ffffff;
+  --stepper-unselected-border: #d4d4d8;
+  --stepper-line: #d9d9d9;
+  --validation-error-color: #f19d38;
+  --button-disabled: #a1a1aa;
+}
+
+.button-base {
+  background-color: var(--primary-color);
+  color: var(--provident-white);
+}
+.sig-canvas {
+  position: relative;
+}
+.sig-canvas:before {
+  width: calc(100% - 2rem);
+  height: calc(100% - 2rem);
+  display: flex;
+  max-height: 100%;
+  box-sizing: border-box;
+  content: "Sign here";
+  font-weight: bold;
+
+  align-items: center;
+  justify-content: center;
+  background-color: #fafafa;
+  color: #f4f4f5;
+  z-index: -1;
+  position: absolute;
+
+  font-size: 48px;
+}
+
+@media (min-width: 480px) {
+  .sig-canvas:before {
+    font-size: 64px;
+  }
+}
+
+@media (min-width: 768px) {
+  .sig-canvas:before {
+    font-size: 72px;
+  }
+}

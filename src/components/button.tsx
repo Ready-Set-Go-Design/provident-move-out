@@ -1,8 +1,8 @@
 import * as Headless from "@headlessui/react";
-import clsx from "clsx";
 import React, { forwardRef } from "react";
 import { Link } from "./link";
 import { withPrefix } from "../utils/withPrefix";
+import clsx from "clsx";
 
 const styles = {
   base: [
@@ -13,7 +13,7 @@ const styles = {
     // focus
     "focus:outline-hidden data-focus:outline data-focus:outline-2 data-focus:outline-offset-2 data-focus:outline-blue-500",
     // Disabled
-    "data-disabled:opacity-50",
+
     // Icon
     "*:data-[slot=icon]:-mx-0.5 *:data-[slot=icon]:my-0.5 *:data-[slot=icon]:size-5 *:data-[slot=icon]:shrink-0 *:data-[slot=icon]:self-center *:data-[slot=icon]:text-(--btn-icon) sm:*:data-[slot=icon]:my-1 sm:*:data-[slot=icon]:size-4 forced-colors:[--btn-icon:ButtonText] forced-colors:data-hover:[--btn-icon:ButtonText]",
   ],
@@ -39,7 +39,7 @@ const styles = {
     // Dark mode: `after` layer expands to cover entire button
     "dark:after:-inset-px dark:after:rounded-lg",
     // Disabled
-    "data-disabled:before:shadow-none data-disabled:after:shadow-none",
+    "data-disabled:before:shadow-none data-disabled:after:shadow-none data-disabled:bg-gray-400 data-disabled:cursor-not-allowed",
   ],
   outline: [
     // Base
@@ -156,6 +156,16 @@ const styles = {
       "text-white [--btn-hover-overlay:var(--color-white)]/10 [--btn-bg:var(--color-rose-500)] [--btn-border:var(--color-rose-600)]/90",
       "[--btn-icon:var(--color-rose-300)] data-active:[--btn-icon:var(--color-rose-200)] data-hover:[--btn-icon:var(--color-rose-200)]",
     ],
+    brand: [
+      "text-white [--btn-hover-overlay:var(--color-white)]/10 [--btn-bg:var(--primary-color)] [--btn-border:var(--primary-color)]/90",
+      "[--btn-icon:var(--color-primary-color)]/40 data-active:[--btn-icon:var(--primary-color)]/50 data-hover:[--btn-icon:var(--primary-color)]/50",
+      "data-disabled:[--btn-bg:var(--color-gray-400)] data-disabled:[--btn-border:var(--color-gray-400)]/90",
+    ],
+    disabled: [
+      "text-white [--btn-hover-overlay:var(--button-disabled)]/10 [--btn-bg:var(--var(--button-disabled))] [--btn-border:var(--button-disabled)]/90",
+      "[--btn-icon:var(--button-disabled)]/40 data-active:[--btn-icon:var(--button-disabled)]/50 data-hover:[--btn-icon:var(--button-disabled)]/50",
+      "data-disabled:[--btn-bg:var(--button-disabled)] data-disabled:[--btn-border:var(--button-disabled))]/90",
+    ],
   },
 };
 
@@ -166,13 +176,22 @@ type ButtonProps = (
 ) & { className?: string; children: React.ReactNode } & (
     | Omit<Headless.ButtonProps, "as" | "className">
     | Omit<React.ComponentPropsWithoutRef<typeof Link>, "className">
-  );
+  ) & { disabledButClickable?: boolean };
 
 export const Button = forwardRef(function Button(
-  { color, outline, plain, className, children, ...props }: ButtonProps,
+  {
+    color,
+    outline,
+    plain,
+    className,
+    children,
+    disabledButClickable,
+    ...props
+  }: ButtonProps,
   ref: React.ForwardedRef<HTMLElement>
 ) {
   let classes = withPrefix(
+    disabledButClickable ? styles.colors.disabled : "",
     className,
     styles.base,
     outline
@@ -193,7 +212,7 @@ export const Button = forwardRef(function Button(
   ) : (
     <Headless.Button
       {...props}
-      className={withPrefix(classes, "cursor-default")}
+      className={withPrefix(classes, "cursor-pointer")}
       ref={ref}
     >
       <TouchTarget>{children}</TouchTarget>

@@ -48,7 +48,11 @@ export const validateForm = (formData: FormState) => {
 
           // check for empty string
           if (!present || !length) {
-            fieldErrors.push(field.id);
+            if (field.message) {
+              fieldErrors.push(field.message);
+            } else {
+              fieldErrors.push(field.id);
+            }
             allFieldsValid = false;
           }
         } else if (
@@ -58,7 +62,11 @@ export const validateForm = (formData: FormState) => {
         ) {
           // allFieldsValid = true;
         } else {
-          fieldErrors.push(field.id);
+          if (field.message) {
+            fieldErrors.push(field.message);
+          } else {
+            fieldErrors.push(field.id);
+          }
           allFieldsValid = false;
         }
       } else {
@@ -68,7 +76,11 @@ export const validateForm = (formData: FormState) => {
             formData[field.name] === "" &&
             field.format === undefined)
         ) {
-          fieldErrors.push(field.name);
+          if (field.message) {
+            fieldErrors.push(field.message);
+          } else {
+            fieldErrors.push(field.name);
+          }
           allFieldsValid = false;
         } else {
           if (field.format) {
@@ -76,10 +88,34 @@ export const validateForm = (formData: FormState) => {
               case "email":
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(formData[field.name] as string)) {
-                  fieldErrors.push(field.name);
+                  if (field.message) {
+                    fieldErrors.push(field.message);
+                  } else {
+                    fieldErrors.push(field.name);
+                  }
                   allFieldsValid = false;
                 }
                 break;
+            }
+          } else if (field.minLength) {
+            if ((formData[field.name] as string).length < field.minLength) {
+              if (field.message) {
+                fieldErrors.push(field.message);
+              } else {
+                fieldErrors.push(field.name);
+              }
+              allFieldsValid = false;
+            }
+          } else if (field.must_be) {
+            if (formData[field.name] !== field.must_be) {
+              if (field.message) {
+                if (field.message != " ") {
+                  fieldErrors.push(field.message);
+                }
+              } else {
+                fieldErrors.push(field.name);
+              }
+              allFieldsValid = false;
             }
           }
         }

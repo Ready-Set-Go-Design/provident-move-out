@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-// import "./Webflow.css";
+
 import "./App.css";
 import { Routes, Route } from "react-router";
 import { useLocation } from "react-router-dom";
 import Stepper from "./Stepper";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "./store/store";
-import { clearForm, emptyForm } from "./store/formSlice";
+import { clearForm } from "./store/formSlice";
 import { useNavigate } from "react-router-dom";
 import FormPage1 from "./FormPage1";
 import FormPage2 from "./FormPage2";
@@ -15,8 +15,7 @@ import FormPage4 from "./FormPage4";
 import FormPage5 from "./FormPage5";
 import FormPage6 from "./FormPage6";
 import FormPage7 from "./FormPage7";
-import FormPage8 from "./FormPage8";
-import FormPage9 from "./FormPage9";
+
 import {
   Alert,
   AlertActions,
@@ -24,7 +23,6 @@ import {
   AlertTitle,
 } from "./components/alert";
 import { Button } from "./components/button";
-import { withPrefix } from "./utils/withPrefix";
 
 function App() {
   const [currentFormPage, setCurrentFormPage] = useState<string>("");
@@ -80,8 +78,6 @@ function App() {
 
   return (
     <>
-      <h1 className={withPrefix("p-4 text-2xl")}>Form Test</h1>
-
       <Alert open={showResetMessage} onClose={() => setShowResetMessage(false)}>
         <AlertTitle>You have an application in-progress</AlertTitle>
         <AlertDescription>
@@ -97,6 +93,7 @@ function App() {
       </Alert>
 
       <Stepper currentFormPage={currentFormPage} />
+
       <Routes>
         <Route path={"/"} element={<FormPage1 />} />
         <Route path="/form_page2" element={<FormPage2 />} />
@@ -105,8 +102,6 @@ function App() {
         <Route path="/form_page5" element={<FormPage5 />} />
         <Route path="/form_page6" element={<FormPage6 />} />
         <Route path="/form_page7" element={<FormPage7 />} />
-        <Route path="/form_page8" element={<FormPage8 />} />
-        <Route path="/form_page9" element={<FormPage9 />} />
       </Routes>
     </>
   );

@@ -60,7 +60,7 @@ const base = [
   // Background color applied to control in dark mode
   "dark:bg-white/5 dark:group-data-checked:bg-(--radio-checked-bg)",
   // Border
-  "border border-zinc-950/15 group-data-checked:border-transparent group-data-hover:group-data-checked:border-transparent group-data-hover:border-zinc-950/30 group-data-checked:bg-(--radio-checked-border)",
+  "border border-(--button-disabled) group-data-checked:border-transparent group-data-hover:group-data-checked:border-transparent group-data-hover:border-zinc-950/30 group-data-checked:bg-(--radio-checked-border)",
   "dark:border-white/15 dark:group-data-checked:border-white/5 dark:group-data-hover:group-data-checked:border-white/5 dark:group-data-hover:border-white/30",
   // Inner highlight shadow
   "after:absolute after:inset-0 after:rounded-full after:shadow-[inset_0_1px_--theme(--color-white/15%)]",
@@ -116,6 +116,8 @@ const colors = {
     "[--radio-checked-indicator:var(--color-white)] [--radio-checked-bg:var(--color-fuchsia-500)] [--radio-checked-border:var(--color-fuchsia-600)]/90",
   pink: "[--radio-checked-indicator:var(--color-white)] [--radio-checked-bg:var(--color-pink-500)] [--radio-checked-border:var(--color-pink-600)]/90",
   rose: "[--radio-checked-indicator:var(--color-white)] [--radio-checked-bg:var(--color-rose-500)] [--radio-checked-border:var(--color-rose-600)]/90",
+  brand:
+    "[--radio-checked-indicator:var(--color-white)] [--radio-checked-bg:var(--primary-color)] [--radio-checked-border:var(--button-disabled)]/90",
 };
 
 type Color = keyof typeof colors;
@@ -140,7 +142,7 @@ export function Radio({
       <span className={withPrefix([base, colors[color]])}>
         <span
           className={withPrefix([
-            "size-full rounded-full border-[4.5px] border-transparent bg-(--radio-indicator) bg-clip-padding",
+            "size-full rounded-full border-[2.25px] border-white  bg-clip-padding",
             // Forced colors mode
             "forced-colors:border-[Canvas] forced-colors:group-data-checked:border-[Highlight]",
             colors[color],

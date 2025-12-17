@@ -1,8 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface FormState {
-  [key: string]: string | string[] | undefined;
+  [key: string]: string | string[] | undefined | boolean;
   occupancy_type: "TENANT" | "HOME_OWNER" | "";
+  code_verified: boolean;
+  renting_or_selling: string;
+  customer_number: string;
   occupancy_day: string;
   occupancy_month: string;
   occupancy_year: string;
@@ -12,19 +15,19 @@ export interface FormState {
   last_name: string;
   business_name: string;
   email: string;
-  payment_mode: string;
-  pageVisited: string[];
-  accept_preauth_terms_and_conditions?: string;
   accept_terms_and_conditions: string;
-  void_cheque_image: string;
-  branch_transit_number: string;
-  financial_institution_number: string;
-  bank_account_number: string;
   verify_entered_information?: string;
   signature_image: string;
+  lawyer_first_name: string;
+  lawyer_last_name: string;
+  lawyer_phone: string;
+  pageVisited: string[];
 }
 
 export const emptyForm: FormState = {
+  code_verified: false,
+  customer_number: "",
+  renting_or_selling: "",
   selected_address: "",
   selected_unit: "",
   occupancy_type: "",
@@ -35,20 +38,17 @@ export const emptyForm: FormState = {
   last_name: "",
   business_name: "",
   email: "",
-  payment_mode: "",
-  pageVisited: [],
-  accept_preauth_terms_and_conditions: "",
+  lawyer_first_name: "",
+  lawyer_last_name: "",
+  lawyer_phone: "",
   accept_terms_and_conditions: "",
-  void_cheque_image: "",
-  branch_transit_number: "",
-  financial_institution_number: "",
-  bank_account_number: "",
   verify_entered_information: "",
   signature_image: "",
+  pageVisited: [],
 };
 
 const getInitialState = (): FormState => {
-  const savedData = localStorage.getItem("customerFormData");
+  const savedData = localStorage.getItem("moveoutFormData");
   if (savedData) {
     return JSON.parse(savedData);
   }
@@ -61,14 +61,14 @@ const formSlice = createSlice({
   reducers: {
     updateField: (
       state,
-      action: PayloadAction<{ field: keyof FormState; value: string }>
+      action: PayloadAction<{ field: keyof FormState; value: string | boolean }>
     ) => {
       const { field, value } = action.payload;
       if (field !== "pageVisited") {
         state[field] = value;
       }
       try {
-        localStorage.setItem("customerFormData", JSON.stringify(state));
+        localStorage.setItem("moveoutFormData", JSON.stringify(state));
       } catch (error) {}
     },
     clearForm: (state) => {
@@ -77,14 +77,14 @@ const formSlice = createSlice({
         JSON.parse(JSON.stringify(emptyForm)) as FormState
       );
       localStorage.setItem(
-        "customerFormData",
+        "moveoutFormData",
         JSON.stringify(emptyFormInstance)
       );
     },
     addPageVisit: (state, action: PayloadAction<string>) => {
       if (!state.pageVisited.includes(action.payload)) {
         state.pageVisited.push(action.payload);
-        localStorage.setItem("customerFormData", JSON.stringify(state));
+        localStorage.setItem("moveoutFormData", JSON.stringify(state));
       }
     },
   },

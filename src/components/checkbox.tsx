@@ -114,6 +114,8 @@ const colors = {
     "[--checkbox-check:var(--color-white)] [--checkbox-checked-bg:var(--color-fuchsia-500)] [--checkbox-checked-border:var(--color-fuchsia-600)]/90",
   pink: "[--checkbox-check:var(--color-white)] [--checkbox-checked-bg:var(--color-pink-500)] [--checkbox-checked-border:var(--color-pink-600)]/90",
   rose: "[--checkbox-check:var(--color-white)] [--checkbox-checked-bg:var(--color-rose-500)] [--checkbox-checked-border:var(--color-rose-600)]/90",
+  brand:
+    "[--checkbox-check:var(--color-white)] [--checkbox-checked-bg:var(--primary-color)] [--checkbox-checked-border:var(--primary-color)]/90",
 };
 
 type Color = keyof typeof colors;
