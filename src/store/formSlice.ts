@@ -2,19 +2,18 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface FormState {
   [key: string]: string | string[] | undefined | boolean;
-  occupancy_type: "TENANT" | "HOME_OWNER" | "";
+  user_type: "TENANT" | "HOME_OWNER" | "";
   code_verified: boolean;
-  renting_or_selling: string;
+  selling_or_renting: string;
   customer_number: string;
-  occupancy_day: string;
-  occupancy_month: string;
-  occupancy_year: string;
+  moving_day: string;
+  moving_month: string;
+  moving_year: string;
   selected_address: string;
   selected_unit: string;
   first_name: string;
   last_name: string;
   business_name: string;
-  email: string;
   accept_terms_and_conditions: string;
   verify_entered_information?: string;
   signature_image: string;
@@ -22,22 +21,27 @@ export interface FormState {
   lawyer_last_name: string;
   lawyer_phone: string;
   pageVisited: string[];
+  forwarding_address: string;
+  forwarding_city: string;
+  forwarding_province: string;
+  forwarding_postal_code: string;
+  forwarding_country: string;
+  location_id: string;
 }
 
 export const emptyForm: FormState = {
   code_verified: false,
   customer_number: "",
-  renting_or_selling: "",
+  selling_or_renting: "",
   selected_address: "",
   selected_unit: "",
-  occupancy_type: "",
-  occupancy_day: "",
-  occupancy_month: "",
-  occupancy_year: "",
+  user_type: "",
+  moving_day: "",
+  moving_month: "",
+  moving_year: "",
   first_name: "",
   last_name: "",
   business_name: "",
-  email: "",
   lawyer_first_name: "",
   lawyer_last_name: "",
   lawyer_phone: "",
@@ -45,6 +49,12 @@ export const emptyForm: FormState = {
   verify_entered_information: "",
   signature_image: "",
   pageVisited: [],
+  forwarding_address: "",
+  forwarding_city: "",
+  forwarding_province: "",
+  forwarding_postal_code: "",
+  forwarding_country: "",
+  location_id: "",
 };
 
 const getInitialState = (): FormState => {

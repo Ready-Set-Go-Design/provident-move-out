@@ -23,11 +23,13 @@ import {
   AlertTitle,
 } from "./components/alert";
 import { Button } from "./components/button";
+import { clearSubmission } from "./store/submissionSlice";
 
 function App() {
   const [currentFormPage, setCurrentFormPage] = useState<string>("");
   const [showResetMessage, setShowResetMessage] = useState<boolean>(false);
   const formData = useSelector((state: RootState) => state.form);
+  const submission = useSelector((state: RootState) => state.submission);
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -54,24 +56,14 @@ function App() {
       }
     }
 
-    setShowResetMessage(applicationInProgress);
-  }, []); // Only run on mount
-
-  const isFormDataValid = (): boolean => {
-    let isValid = true;
-    // iterate fields in formData object
-    for (const key in formData) {
-      if (key !== "pagesVisited" && formData[key] !== "") {
-        isValid = false;
-        break;
-      }
+    if (!submission.submitted) {
+      setShowResetMessage(applicationInProgress);
     }
-
-    return isValid;
-  };
+  }, []); // Only run on mount
 
   const handleStartOver = () => {
     dispatch(clearForm());
+    dispatch(clearSubmission());
     setShowResetMessage(false);
     navigate("/");
   };

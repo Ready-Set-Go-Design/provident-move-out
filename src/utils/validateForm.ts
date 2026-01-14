@@ -1,3 +1,4 @@
+import { f } from "react-router/dist/development/route-data-5OzAzQtT";
 import { FormState } from "../store/formSlice";
 import humanizeString from "./humanizeFieldName";
 import { validationRequirements } from "./validationRequirements";
@@ -18,63 +19,27 @@ export const validateForm = (formData: FormState) => {
   };
 
   const pageValidations: any = [];
-  validationRequirements.forEach((requirement, index) => {
+  validationRequirements.forEach((requirement) => {
     const fieldErrors: Array<string> = JSON.parse("[]");
     let allFieldsValid: boolean = true;
+
     requirement.fields.forEach((field: any) => {
-      if (field.conditional) {
-        if (formData[field.conditional] === field.value) {
-          const present =
-            field &&
-            field.id &&
-            formData &&
-            formData[field.id] &&
-            (formData[field.id] as any) > "";
+      if (
+        !formData[field.name] ||
+        (formData[field.name] &&
+          formData[field.name] === "" &&
+          field.format === undefined)
+      ) {
+        let checkCondition = false;
 
-          let length;
-          if (field && field.id && field.length) {
-            length =
-              field &&
-              field.id &&
-              field.length &&
-              formData &&
-              formData[field.id] &&
-              (formData[field.id] as any).length === field.length;
+        if (field.conditional && field.conditional.id && field.conditional.is) {
+          if (formData[field.conditional.id] === field.conditional.is) {
+            checkCondition = true;
           }
-          if (field && field.id && !field.length) {
-            // length field is not required
-            length = true;
-          }
-
-          // check for empty string
-          if (!present || !length) {
-            if (field.message) {
-              fieldErrors.push(field.message);
-            } else {
-              fieldErrors.push(field.id);
-            }
-            allFieldsValid = false;
-          }
-        } else if (
-          formData[field.conditional] &&
-          formData[field.conditional] !== field.value &&
-          field.value !== ""
-        ) {
-          // allFieldsValid = true;
-        } else {
-          if (field.message) {
-            fieldErrors.push(field.message);
-          } else {
-            fieldErrors.push(field.id);
-          }
-          allFieldsValid = false;
         }
-      } else {
         if (
-          !formData[field.name] ||
-          (formData[field.name] &&
-            formData[field.name] === "" &&
-            field.format === undefined)
+          formData[field.name] !== field.must_be &&
+          formData[field.conditional?.id] === field.conditional?.is
         ) {
           if (field.message) {
             fieldErrors.push(field.message);
@@ -82,41 +47,55 @@ export const validateForm = (formData: FormState) => {
             fieldErrors.push(field.name);
           }
           allFieldsValid = false;
-        } else {
-          if (field.format) {
-            switch (field.format) {
-              case "email":
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(formData[field.name] as string)) {
-                  if (field.message) {
-                    fieldErrors.push(field.message);
-                  } else {
-                    fieldErrors.push(field.name);
-                  }
-                  allFieldsValid = false;
-                }
-                break;
-            }
-          } else if (field.minLength) {
-            if ((formData[field.name] as string).length < field.minLength) {
-              if (field.message) {
-                fieldErrors.push(field.message);
-              } else {
-                fieldErrors.push(field.name);
-              }
-              allFieldsValid = false;
-            }
-          } else if (field.must_be) {
-            if (formData[field.name] !== field.must_be) {
-              if (field.message) {
-                if (field.message != " ") {
+        }
+      } else {
+        if (field.format) {
+          switch (field.format) {
+            case "email":
+              const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+              if (!emailRegex.test(formData[field.name] as string)) {
+                if (field.message) {
                   fieldErrors.push(field.message);
+                } else {
+                  fieldErrors.push(field.name);
                 }
-              } else {
-                fieldErrors.push(field.name);
+                allFieldsValid = false;
               }
-              allFieldsValid = false;
+              break;
+          }
+        } else if (field.minLength) {
+          if ((formData[field.name] as string).length < field.minLength) {
+            if (field.message) {
+              fieldErrors.push(field.message);
+            } else {
+              fieldErrors.push(field.name);
             }
+            allFieldsValid = false;
+          }
+        } else if (field.must_be) {
+          let checkCondition = false;
+
+          if (field.conditional) {
+            if (
+              formData[field.conditional.id] === formData[field.conditional.is]
+            ) {
+              checkCondition = true;
+            }
+          }
+
+          if (
+            checkCondition == true &&
+            formData[field.name] !== field.must_be &&
+            formData[field.conditional?.id] === field.conditional?.is
+          ) {
+            if (field.message) {
+              if (field.message != " ") {
+                fieldErrors.push(field.message);
+              }
+            } else {
+              fieldErrors.push(field.name);
+            }
+            allFieldsValid = false;
           }
         }
       }

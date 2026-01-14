@@ -98,6 +98,117 @@ function FormPage4() {
         />
       </Field>
 
+      <Field className={withPrefix("mt-8 mb-4")}>
+        <Label className={withPrefix("text-md font-bold")}>
+          Forwarding Address
+        </Label>
+      </Field>
+
+      <Field className={withPrefix("mt-8 mb-4")}>
+        <Label className={withPrefix("text-sm font-bold")}>Address</Label>
+        <WrappedInput
+          showSearch={false}
+          invalid={
+            showValidationError &&
+            validatedForm?.errors.includes("forwarding_address")
+          }
+          type="text"
+          name="forwarding_address"
+          placeholder={""}
+          value={formData.forwarding_address}
+          onChange={(e: any) => {
+            dispatch(updateField({ field: "forwarding_address", value: e }));
+          }}
+          clearAction={(e: any) => {
+            dispatch(updateField({ field: "forwarding_address", value: "" }));
+          }}
+        />
+      </Field>
+      <Field className={withPrefix("mt-8 mb-4")}>
+        <Label className={withPrefix("text-sm font-bold")}>City</Label>
+        <WrappedInput
+          showSearch={false}
+          invalid={
+            showValidationError &&
+            validatedForm?.errors.includes("forwarding_city")
+          }
+          type="text"
+          name="forwarding_city"
+          placeholder={""}
+          value={formData.forwarding_city}
+          onChange={(e: any) => {
+            dispatch(updateField({ field: "forwarding_city", value: e }));
+          }}
+          clearAction={(e: any) => {
+            dispatch(updateField({ field: "forwarding_city", value: "" }));
+          }}
+        />
+      </Field>
+      <Field className={withPrefix("mt-8 mb-4")}>
+        <Label className={withPrefix("text-sm font-bold")}>Province</Label>
+        <WrappedInput
+          showSearch={false}
+          invalid={
+            showValidationError &&
+            validatedForm?.errors.includes("forwarding_province")
+          }
+          type="text"
+          name="forwarding_province"
+          placeholder={""}
+          value={formData.forwarding_province}
+          onChange={(e: any) => {
+            dispatch(updateField({ field: "forwarding_province", value: e }));
+          }}
+          clearAction={(e: any) => {
+            dispatch(updateField({ field: "forwarding_province", value: "" }));
+          }}
+        />
+      </Field>
+      <Field className={withPrefix("mt-8 mb-4")}>
+        <Label className={withPrefix("text-sm font-bold")}>Country</Label>
+        <WrappedInput
+          showSearch={false}
+          invalid={
+            showValidationError &&
+            validatedForm?.errors.includes("forwarding_country")
+          }
+          type="text"
+          name="forwarding_country"
+          placeholder={""}
+          value={formData.forwarding_country}
+          onChange={(e: any) => {
+            dispatch(updateField({ field: "forwarding_country", value: e }));
+          }}
+          clearAction={(e: any) => {
+            dispatch(updateField({ field: "forwarding_country", value: "" }));
+          }}
+        />
+      </Field>
+      <Field className={withPrefix("mt-8 mb-4")}>
+        <Label className={withPrefix("text-sm font-bold")}>Postal Code</Label>
+        <WrappedInput
+          showSearch={false}
+          invalid={
+            showValidationError &&
+            validatedForm?.errors.includes("forwarding_postal_code")
+          }
+          type="text"
+          name="forwarding_postal_code"
+          placeholder={""}
+          value={formData.forwarding_postal_code}
+          onChange={(e: any) => {
+            dispatch(
+              updateField({ field: "forwarding_postal_code", value: e })
+            );
+          }}
+          clearAction={(e: any) => {
+            dispatch(
+              updateField({ field: "forwarding_postal_code", value: "" })
+            );
+          }}
+        />
+      </Field>
+
       <AllFieldsRequiredMessage show={showValidationError} id="/page4" />
       <FooterWrapper>
         <NavButton

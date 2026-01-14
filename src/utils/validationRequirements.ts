@@ -2,19 +2,17 @@ export const validationRequirements = [
   {
     id: "/",
     fields: [
-      { name: "occupancy_type" },
-      { name: "occupancy_day", message: "Departure Day" },
-      { name: "occupancy_month", message: "Departure Month" },
-      { name: "occupancy_year", message: "Departure Year" },
       {
-        conditional: "occupancy_type",
-        value: "HOME_OWNER",
-        id: "renting_or_selling",
+        name: "user_type",
       },
+      { name: "moving_day", message: "Departure Day" },
+      { name: "moving_month", message: "Departure Month" },
+      { name: "moving_year", message: "Departure Year" },
       {
-        name: "renting_or_selling",
+        name: "selling_or_renting",
         must_be: "selling",
-        message: " ",
+        conditional: { id: "user_type", is: "HOME_OWNER" },
+        message: "You must be selling your home to proceed",
       },
     ],
   },
@@ -32,7 +30,15 @@ export const validationRequirements = [
   },
   {
     id: "/page4",
-    fields: [{ name: "first_name" }, { name: "last_name" }],
+    fields: [
+      { name: "first_name" },
+      { name: "last_name" },
+      { name: "forwarding_address" },
+      { name: "forwarding_city" },
+      { name: "forwarding_province" },
+      { name: "forwarding_country" },
+      { name: "forwarding_postal_code" },
+    ],
   },
   {
     id: "/page5",

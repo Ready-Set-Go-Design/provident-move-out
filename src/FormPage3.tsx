@@ -53,7 +53,7 @@ function FormPage3() {
                 ? "border-red-500"
                 : "border-transparent"
             )}
-            name="renting_or_selling"
+            name="selling_or_renting"
             defaultValue="selling"
             value={verificationMethod}
             onChange={(e) => {

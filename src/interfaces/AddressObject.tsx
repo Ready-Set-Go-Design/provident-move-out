@@ -9,4 +9,5 @@ export default interface AddressObject {
   state: string | null;
   postal_code: string | null;
   country: string | null;
+  location_id: string;
 }

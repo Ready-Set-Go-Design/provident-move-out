@@ -1,6 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import generateAddressObject from "../utils/generateAddressObject";
-import masterAddressList from "../utils/masterAddressList";
 import AddressObject from "../interfaces/AddressObject";
 
 export interface Address {
@@ -11,83 +9,64 @@ export interface Address {
 export interface AddressState {
   addresses: AddressObject[];
   filteredAddresses?: string[][];
+  filteredUnits?: string[][];
   searchResultsType?: string;
 }
 
 const initialState: AddressState = {
   // TODO: Replace with external file or api call
   filteredAddresses: [],
-  searchResultsType: "ALL",
-  addresses: masterAddressList,
+  filteredUnits: [],
+  addresses: [],
 };
 
 export const searchAddressesAsync = createAsyncThunk<
   {
-    searchResultsType: string | undefined;
     filteredAddresses: string[][];
+    type: "BUILDING" | "UNIT";
   },
-  { addressQuery: string }
->("address/searchAddressesAsync", async ({ addressQuery }, { getState }) => {
-  const formData = getState() as { form: { selected_address: string } };
-  ` 
-`;
+  {
+    addressQuery: string;
+    type: "BUILDING" | "UNIT";
+    street_number?: string;
+    street_name?: string;
+  }
+>(
+  "address/searchAddressesAsync",
+  async ({ addressQuery, type, street_number, street_name }, { getState }) => {
+    let executeSearch;
 
-  const addressObject = await generateAddressObject({
-    addressQuery: addressQuery,
-  });
-  const state = getState() as { address: AddressState };
-
-  const filteredAddresses: any = state.address.addresses.filter((address) => {
-    // switch (formData.selected_address as string) {
-
-    if (!addressObject.street_name && address.street_number) {
-      return String(address.street_number).includes(
-        addressObject.street_number as string
-      );
-    }
-    //   case "STREET_NAME":
-    if (address.street_name) {
-      const streeet_name_matching = address.street_name
-        .replace("'", "")
-        .replace("'", "")
-        .toLowerCase()
-        .includes(
-          (addressObject.street_name as string).replace("'", "").toLowerCase()
-        );
-
-      if (addressObject.street_number) {
-        const street_number_matching = String(address.street_number).includes(
-          addressObject.street_number as string
-        );
-        return street_number_matching && streeet_name_matching;
-      } else {
-        return streeet_name_matching;
-      }
+    if (type === "BUILDING") {
+      executeSearch = await fetch("http://localhost:3002/find-buildings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ search: addressQuery }),
+      });
+    } else {
+      executeSearch = await fetch("http://localhost:3002/find-units", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          search: addressQuery,
+          street_name,
+          street_number,
+        }),
+      });
     }
 
-    return false;
-    // break;
-    //   case "STREET_NUMBER":
-    // return (
-    //   address.street_name
-    //     .replace("'", "")
-    //     .replace("'", "")
-    //     .toLowerCase()
-    //     .includes(
-    //       (addressObject.street_name as string)
-    //         .replace("'", "")
-    //         .toLowerCase()
-    //     ) &&
-    //   (address.street_number as string).toLowerCase() ===
-    //     (addressObject.street_number as string).toLowerCase()
-    // );
-    // break;
-    // }
-  });
-  // return address[0].toLowerCase().includes(query.toLowerCase())
+    let results: any;
 
-  return { filteredAddresses, searchResultsType: addressObject.search_mode };
-});
+    if (executeSearch) {
+      results = await executeSearch.json();
+    }
+
+    return { filteredAddresses: results ? results.items : [], type: type };
+  }
+);
 
 const addressSlice = createSlice({
   name: "address",
@@ -95,11 +74,13 @@ const addressSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(searchAddressesAsync.fulfilled, (state, action) => {
-      state.filteredAddresses = action.payload.filteredAddresses;
-      state.searchResultsType = action.payload.searchResultsType;
+      if (action.payload.type === "BUILDING") {
+        state.filteredAddresses = action.payload.filteredAddresses;
+      } else {
+        state.filteredUnits = action.payload.filteredAddresses;
+      }
     });
   },
 });
-
 export const {} = addressSlice.actions;
 export default addressSlice.reducer;

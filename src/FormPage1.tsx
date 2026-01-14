@@ -28,7 +28,11 @@ const ServiceType = ({
 }) => {
   const formData = useSelector((state: RootState) => state.form);
   const setServiceType = (e: React.MouseEvent<HTMLDivElement>) => {
-    dispatch(updateField({ field: "occupancy_type", value: value }));
+    dispatch(updateField({ field: "user_type", value: value }));
+
+    if (value === "TENANT") {
+      dispatch(updateField({ field: "selling_or_renting", value: "" }));
+    }
   };
 
   return (
@@ -41,7 +45,7 @@ const ServiceType = ({
       <div
         className={withPrefix([
           "border ",
-          formData.occupancy_type === value
+          formData.user_type === value
             ? "border-(--primary-color) bg-(--primary-color)"
             : "border-gray-400 bg-white",
           "left-2 top-2 absolute text-lg w-[18px] h-[18px] rounded-full",
@@ -74,7 +78,7 @@ function FormPage1() {
     (requirement: any) => requirement.id === "/"
   );
 
-  const isRenter = formData.renting_or_selling === "renting";
+  const isRenter = formData.selling_or_renting === "renting";
 
   return (
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
@@ -89,7 +93,7 @@ function FormPage1() {
       <div
         className={withPrefix(
           "inline-flex gap-2 w-full rounded-md overflow-hidden border-1 ",
-          showValidationError && formData.occupancy_type === ""
+          showValidationError && formData.user_type === ""
             ? "border-red-500"
             : "border-transparent"
         )}
@@ -131,7 +135,7 @@ function FormPage1() {
         />
       </div>
 
-      {formData.occupancy_type === "HOME_OWNER" && (
+      {formData.user_type === "HOME_OWNER" && (
         <div>
           <div className={withPrefix("font-semibold text-md mt-6 mb-2")}>
             Are you selling or renting the unit?
@@ -140,18 +144,18 @@ function FormPage1() {
           <RadioGroup
             className={withPrefix(
               "border-1 rounded-md pf:overflow-hidden p-2 mt-4",
-              showValidationError && formData.renting_or_selling === ""
+              showValidationError && formData.selling_or_renting === ""
                 ? "border-red-500"
                 : "border-transparent"
             )}
-            name="renting_or_selling"
+            name="selling_or_renting"
             defaultValue="selling"
-            value={formData.renting_or_selling}
+            value={formData.selling_or_renting}
             onChange={(e) => {
               console.log("value ", e);
               dispatch(
                 updateField({
-                  field: "renting_or_selling",
+                  field: "selling_or_renting",
                   value: e,
                 })
               );
@@ -167,7 +171,7 @@ function FormPage1() {
             </RadioField>
           </RadioGroup>
 
-          {formData.renting_or_selling === "renting" && (
+          {formData.selling_or_renting === "renting" && (
             <AllFieldsRequiredMessage
               show={true}
               id="/"
@@ -185,13 +189,13 @@ function FormPage1() {
       <div className={withPrefix("mb-8")}>
         <div className={withPrefix("flex gap-2")}>
           <Select
-            value={formData.occupancy_day}
+            value={formData.moving_day}
             onChange={(e) => {
               dispatch(
-                updateField({ field: "occupancy_day", value: e.target.value })
+                updateField({ field: "moving_day", value: e.target.value })
               );
             }}
-            invalid={showValidationError && formData.occupancy_day === ""}
+            invalid={showValidationError && formData.moving_day === ""}
           >
             <option value="">Day</option>
             {Array.from({ length: 31 }, (_, i) => (
@@ -201,13 +205,13 @@ function FormPage1() {
             ))}
           </Select>
           <Select
-            value={formData.occupancy_month}
+            value={formData.moving_month}
             onChange={(e) => {
               dispatch(
-                updateField({ field: "occupancy_month", value: e.target.value })
+                updateField({ field: "moving_month", value: e.target.value })
               );
             }}
-            invalid={showValidationError && formData.occupancy_month === ""}
+            invalid={showValidationError && formData.moving_month === ""}
           >
             <option value="">Month</option>
             {Array.from({ length: 12 }, (_, i) => (
@@ -219,13 +223,13 @@ function FormPage1() {
             ))}
           </Select>
           <Select
-            value={formData.occupancy_year}
+            value={formData.moving_year}
             onChange={(e) => {
               dispatch(
-                updateField({ field: "occupancy_year", value: e.target.value })
+                updateField({ field: "moving_year", value: e.target.value })
               );
             }}
-            invalid={showValidationError && formData.occupancy_year === ""}
+            invalid={showValidationError && formData.moving_year === ""}
           >
             <option value="">Year</option>
             {Array.from({ length: 5 }, (_, i) => (

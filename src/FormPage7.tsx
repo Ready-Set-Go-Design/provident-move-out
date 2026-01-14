@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { clearForm } from "./store/formSlice";
+import { clearSubmission, updateField } from "./store/submissionSlice";
 import { RootState } from "./store/store";
 import NavButton from "./components/NavButton";
 import { useNavigate } from "react-router";
@@ -9,22 +10,73 @@ import { withPrefix } from "./utils/withPrefix";
 import PDFTemplate from "./PDFTemplate";
 import { Button } from "./components/button";
 import { FooterWrapper } from "./components/FooterWrapper";
+import { useEffect } from "react";
+import { submitForm } from "./utils/submitForm";
 
 function FormPage7() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const formData = useSelector((state: RootState) => state.form);
+  const submissionData = useSelector((state: RootState) => state.submission);
 
+  const { submitted, error } = submissionData;
+  useEffect(() => {
+    // submit form
+    if (!submitted && formData) {
+      console.log("submitting");
+      doSubmitForm();
+    }
+  }, []);
+
+  const doSubmitForm = async () => {
+    try {
+      const submission = await submitForm(formData);
+      console.log(submission);
+
+      if (submission.result === true) {
+        dispatch(updateField({ field: "submitted", value: true }));
+      } else {
+        dispatch(updateField({ field: "error", value: true }));
+      }
+    } catch (error) {
+      console.log(error);
+      dispatch(updateField({ field: "error", value: error as string }));
+    }
+  };
+
+  if (!submitted && !error) {
+    return (
+      <div className={withPrefix("p-4")}>
+        <div className={withPrefix("mb-4")}>
+          <h1>Submitting your application...</h1>
+        </div>
+      </div>
+    );
+  }
+
+  if (!submitted && error) {
+    return (
+      <div className={withPrefix("p-4")}>
+        <div className={withPrefix("mb-4")}>
+          <h1>There was a problem submitting your application.</h1>
+
+          <div className={withPrefix("mb-4")}>
+            Please go back and try again.
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
       <div className={withPrefix("mb-4")}>
         <h1>
-          Thanks for completing the Customer Service Agreement with Provident
-          Energy Management Inc.
+          Thanks for completing the Move-out form with Provident Energy
+          Management Inc.
         </h1>
       </div>
 
-      {/* <div className={withPrefix("mb-4")}>
+      <div className={withPrefix("mb-4")}>
         <Button
           onClick={async () => {
             const blob = await ReactPDF.pdf(
@@ -33,19 +85,20 @@ function FormPage7() {
             const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.href = url;
-            link.download = "new_customer_form.pdf";
+            link.download = "move_out_form.pdf";
             link.click();
             URL.revokeObjectURL(url);
           }}
         >
           Download PDF
         </Button>
-      </div> */}
+      </div>
 
       <FooterWrapper>
         <NavButton
           action={() => {
             dispatch(clearForm());
+            dispatch(clearSubmission());
             navigate("/");
           }}
           label={"Return to Homepage"}
