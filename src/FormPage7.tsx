@@ -10,21 +10,22 @@ import { withPrefix } from "./utils/withPrefix";
 import PDFTemplate from "./PDFTemplate";
 import { Button } from "./components/button";
 import { FooterWrapper } from "./components/FooterWrapper";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { submitForm } from "./utils/submitForm";
 
 function FormPage7() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const hasSubmitted = useRef(false);
   const formData = useSelector((state: RootState) => state.form);
   const submissionData = useSelector((state: RootState) => state.submission);
 
   const { submitted, error } = submissionData;
   useEffect(() => {
     // submit form
-    if (!submitted && formData) {
-      console.log("submitting");
+    if (!submitted && formData && !hasSubmitted.current) {
       doSubmitForm();
+      hasSubmitted.current = true;
     }
   }, []);
 
@@ -46,22 +47,35 @@ function FormPage7() {
 
   if (!submitted && !error) {
     return (
-      <div className={withPrefix("p-4")}>
-        <div className={withPrefix("mb-4")}>
-          <h1>Submitting your application...</h1>
-        </div>
+      <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
+        <h1 className={withPrefix("py-4 text-2xl")}>Submitting Agreement...</h1>
       </div>
     );
   }
 
   if (!submitted && error) {
     return (
-      <div className={withPrefix("p-4")}>
+      <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
+        <h1 className={withPrefix("py-4 text-2xl")}>Submission Error</h1>
         <div className={withPrefix("mb-4")}>
-          <h1>There was a problem submitting your application.</h1>
+          <div className={withPrefix("mt-4 mb-4")}>
+            There was a problem submitting your agreement. Please ensure that
+            all fields are filled out and try again.
+          </div>
+        </div>
 
-          <div className={withPrefix("mb-4")}>
-            Please go back and try again.
+        <div className={withPrefix("mt-8 flex")}>
+          <div>
+            <NavButton
+              outline={true}
+              action={() => {
+                dispatch(clearForm());
+                dispatch(clearSubmission());
+                navigate("/");
+              }}
+              label={"Return to Homepage"}
+              currentPage=""
+            />
           </div>
         </div>
       </div>
@@ -69,11 +83,10 @@ function FormPage7() {
   }
   return (
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
+      <h1 className={withPrefix("py-4 text-2xl")}>Submission Complete</h1>
       <div className={withPrefix("mb-4")}>
-        <h1>
-          Thanks for completing the Move-out form with Provident Energy
-          Management Inc.
-        </h1>
+        Thanks for completing the Move-out form with Provident Energy Management
+        Inc.
       </div>
 
       <div className={withPrefix("mb-4")}>

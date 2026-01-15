@@ -27,6 +27,8 @@ export interface FormState {
   forwarding_postal_code: string;
   forwarding_country: string;
   location_id: string;
+  email: string;
+  phone_number: string;
 }
 
 export const emptyForm: FormState = {
@@ -55,6 +57,8 @@ export const emptyForm: FormState = {
   forwarding_postal_code: "",
   forwarding_country: "",
   location_id: "",
+  email: "",
+  phone_number: "",
 };
 
 const getInitialState = (): FormState => {
