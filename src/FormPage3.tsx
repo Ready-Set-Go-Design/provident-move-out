@@ -26,13 +26,13 @@ function FormPage3() {
   const [tokenForVerification, setTokenForVerification] = useState<string>("");
 
   const [loading, setLoading] = useState<boolean>(
-    formData.code_verified === false ? true : false
+    formData.code_verified === false ? true : false,
   );
   const [showValidationError, setShowValidationError] =
     useState<boolean>(false);
   const pageIsValid = isPageValid("/page3");
   const validatedForm = validateForm(formData).find(
-    (requirement: any) => requirement.id === "/page3"
+    (requirement: any) => requirement.id === "/page3",
   );
 
   const location = useLocation();
@@ -47,7 +47,7 @@ function FormPage3() {
   const sendVerificationCode = async () => {
     try {
       const sendCodeResponse = await fetch(
-        "http://localhost:3002/validations/send",
+        `${(import.meta as any).env.VITE_API_URL}/validations/send`,
         {
           method: "POST",
           headers: {
@@ -57,11 +57,11 @@ function FormPage3() {
             method: verificationMethod,
             token: tokenForVerification,
           }),
-        }
+        },
       );
       if (!sendCodeResponse.ok) {
         setError(
-          "There was an issue trying to send the verification code. Please try again."
+          "There was an issue trying to send the verification code. Please try again.",
         );
         return;
       }
@@ -91,7 +91,7 @@ function FormPage3() {
   const validateCustomerNumber = async () => {
     try {
       const validateCN = await fetch(
-        "http://localhost:3002/validations/validate-user-info",
+        `${(import.meta as any).env.VITE_API_URL}/validations/validate-user-info`,
         {
           method: "POST",
           headers: {
@@ -101,11 +101,11 @@ function FormPage3() {
             customer_number: formData.customer_number,
             token: tokenForVerification,
           }),
-        }
+        },
       );
       if (!validateCN.ok) {
         setError(
-          "There was an issue trying to validate your customer number. Please try again."
+          "There was an issue trying to validate your customer number. Please try again.",
         );
       }
 
@@ -121,7 +121,7 @@ function FormPage3() {
         setLoading(false);
       } else {
         setError(
-          "The customer number you provided could not be validated. Please check your entry and try again."
+          "The customer number you provided could not be validated. Please check your entry and try again.",
         );
       }
     } catch (error) {
@@ -134,7 +134,7 @@ function FormPage3() {
   const verifyCode = async () => {
     try {
       const validateCode = await fetch(
-        "http://localhost:3002/validations/validate-code",
+        `${(import.meta as any).env.VITE_API_URL}/validations/validate-code`,
         {
           method: "POST",
           headers: {
@@ -144,11 +144,11 @@ function FormPage3() {
             code: verificationCode,
             token: tokenForVerification,
           }),
-        }
+        },
       );
       if (!validateCode.ok) {
         setError(
-          "There was an issue trying to validate your code. Please try again."
+          "There was an issue trying to validate your code. Please try again.",
         );
       }
 
@@ -162,7 +162,7 @@ function FormPage3() {
 
         if (result.data) {
           dispatch(
-            updateField({ field: "phone_number", value: result.data.phone })
+            updateField({ field: "phone_number", value: result.data.phone }),
           );
           dispatch(updateField({ field: "email", value: result.data.email }));
         }
@@ -170,7 +170,7 @@ function FormPage3() {
         setLoading(false);
       } else {
         setError(
-          "The code you provided could not be validated. Please check your entry and try again."
+          "The code you provided could not be validated. Please check your entry and try again.",
         );
       }
     } catch (error) {
@@ -231,7 +231,7 @@ function FormPage3() {
               "border-1 rounded-md pf:overflow-hidden p-2 mt-4",
               showValidationError && formData.verificationMethod === ""
                 ? "border-red-500"
-                : "border-transparent"
+                : "border-transparent",
             )}
             name="selling_or_renting"
             defaultValue="selling"

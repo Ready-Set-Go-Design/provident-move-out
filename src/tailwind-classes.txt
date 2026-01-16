@@ -104,7 +104,6 @@ pf:/form_page5
 pf:page4
 pf:/page3
 pf:sms
-pf:http://localhost:3002/validations/send
 pf:POST
 pf:Content-Type
 pf:application/json
@@ -128,7 +127,6 @@ pf:not
 pf:be
 pf:sent.
 pf:Failed
-pf:http://localhost:3002/validations/validate-user-info
 pf:validate
 pf:your
 pf:customer
@@ -139,7 +137,6 @@ pf:provided
 pf:validated.
 pf:check
 pf:entry
-pf:http://localhost:3002/validations/validate-code
 pf:sending
 pf:code_verified
 pf:phone_number
@@ -285,7 +282,6 @@ pf:/page7
 pf:suite_or_unit_number
 pf:address
 pf:[]
-pf:http://localhost:3002/move-out-submission
 pf:`HTTP
 pf:error!
 pf:status:
@@ -424,8 +420,6 @@ pf:moveoutFormData
 pf:BUILDING
 pf:UNIT
 pf:address/searchAddressesAsync
-pf:http://localhost:3002/find-buildings
-pf:http://localhost:3002/find-units
 pf:as
 pf:className
 pf:control

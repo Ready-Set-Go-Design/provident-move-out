@@ -37,25 +37,31 @@ export const searchAddressesAsync = createAsyncThunk<
     let executeSearch;
 
     if (type === "BUILDING") {
-      executeSearch = await fetch("http://localhost:3002/find-buildings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      executeSearch = await fetch(
+        `${(import.meta as any).env.VITE_API_URL}/addresses/find-buildings`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ search: addressQuery }),
         },
-        body: JSON.stringify({ search: addressQuery }),
-      });
+      );
     } else {
-      executeSearch = await fetch("http://localhost:3002/find-units", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      executeSearch = await fetch(
+        `${(import.meta as any).env.VITE_API_URL}/addresses/find-units`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            search: addressQuery,
+            street_name,
+            street_number,
+          }),
         },
-        body: JSON.stringify({
-          search: addressQuery,
-          street_name,
-          street_number,
-        }),
-      });
+      );
     }
 
     let results: any;
@@ -65,7 +71,7 @@ export const searchAddressesAsync = createAsyncThunk<
     }
 
     return { filteredAddresses: results ? results.items : [], type: type };
-  }
+  },
 );
 
 const addressSlice = createSlice({

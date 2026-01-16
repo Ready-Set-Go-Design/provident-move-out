@@ -5,19 +5,22 @@ export const submitForm = async (formData: any) => {
     delete sanitizedForm.error;
     delete sanitizedForm.pageVisited;
     sanitizedForm.moving_date = `${sanitizedForm.moving_year}-${String(
-      sanitizedForm.moving_month
+      sanitizedForm.moving_month,
     ).padStart(2, "0")}-${String(sanitizedForm.moving_day).padStart(2, "0")}`;
     delete sanitizedForm.moving_day;
     delete sanitizedForm.moving_month;
     delete sanitizedForm.moving_year;
 
-    const response = await fetch("http://localhost:3002/move-out-submission", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `${(import.meta as any).env.VITE_API_URL}/submissions/move-out`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(sanitizedForm),
       },
-      body: JSON.stringify(sanitizedForm),
-    });
+    );
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
