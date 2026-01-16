@@ -8,7 +8,7 @@
     "build": "vite build --base=https://ready-set-go-design.github.io/provident-test/dist/",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "serve -s ./dist"
+    "start": "serve -s dist"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.1",
