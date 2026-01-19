@@ -89,11 +89,11 @@ function FormPage7() {
         Inc.
       </div>
 
-      <div className={withPrefix("mb-4")}>
+      <div className={withPrefix("mt-8")}>
         <Button
           onClick={async () => {
             const blob = await ReactPDF.pdf(
-              <PDFTemplate formData={formData} />
+              <PDFTemplate formData={formData} />,
             ).toBlob();
             const url = URL.createObjectURL(blob);
             const link = document.createElement("a");

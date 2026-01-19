@@ -274,7 +274,7 @@ function FormPage3() {
               invalid={
                 showValidationError && validatedForm?.errors.includes("Email")
               }
-              type="verification_code"
+              type="text"
               name="verification_code"
               placeholder={""}
               value={verificationCode}

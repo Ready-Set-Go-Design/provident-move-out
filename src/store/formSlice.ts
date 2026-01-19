@@ -62,7 +62,7 @@ export const emptyForm: FormState = {
 };
 
 const getInitialState = (): FormState => {
-  const savedData = localStorage.getItem("moveoutFormData");
+  const savedData = localStorage.getItem("moveOutFormData");
   if (savedData) {
     return JSON.parse(savedData);
   }
@@ -75,7 +75,10 @@ const formSlice = createSlice({
   reducers: {
     updateField: (
       state,
-      action: PayloadAction<{ field: keyof FormState; value: string | boolean }>
+      action: PayloadAction<{
+        field: keyof FormState;
+        value: string | boolean;
+      }>,
     ) => {
       const { field, value } = action.payload;
       if (field !== "pageVisited") {
@@ -88,11 +91,11 @@ const formSlice = createSlice({
     clearForm: (state) => {
       const emptyFormInstance = Object.assign(
         state,
-        JSON.parse(JSON.stringify(emptyForm)) as FormState
+        JSON.parse(JSON.stringify(emptyForm)) as FormState,
       );
       localStorage.setItem(
         "moveoutFormData",
-        JSON.stringify(emptyFormInstance)
+        JSON.stringify(emptyFormInstance),
       );
     },
     addPageVisit: (state, action: PayloadAction<string>) => {

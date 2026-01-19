@@ -25,7 +25,7 @@ export const WrappedInput = ({
   return (
     <div
       className={withPrefix(
-        "flex border shadow-md rounded-md border-gray-300 p-1 pt-1 justify-between items-center w-full"
+        `flex border shadow-md rounded-md p-1 pt-1 justify-between items-center w-full ${invalid ? "border-(--validation-error-color)" : "border-gray-300"}`,
       )}
     >
       {showSearch && (
@@ -44,7 +44,7 @@ export const WrappedInput = ({
       {value > "" && (
         <div
           className={withPrefix(
-            "text-gray-400 rounded-full hover:text-gray-600 cursor-pointer"
+            "text-gray-400 rounded-full hover:text-gray-600 cursor-pointer pr-2",
           )}
           onClick={() => {
             clearAction();

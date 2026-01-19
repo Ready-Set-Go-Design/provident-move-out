@@ -1,7 +1,6 @@
 "use client";
 
 import * as Headless from "@headlessui/react";
-import clsx from "clsx";
 import { Fragment } from "react";
 import { withPrefix } from "../utils/withPrefix";
 
@@ -72,12 +71,12 @@ export function Listbox<T>({
         />
         <span
           className={withPrefix(
-            "pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
+            "pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2",
           )}
         >
           <svg
             className={withPrefix(
-              "size-5 stroke-zinc-500 group-data-disabled:stroke-zinc-600 sm:size-4 dark:stroke-zinc-400 forced-colors:stroke-[CanvasText]"
+              "size-5 stroke-zinc-500 group-data-disabled:stroke-zinc-600 sm:size-4 dark:stroke-zinc-400 forced-colors:stroke-[CanvasText]",
             )}
             viewBox="0 0 16 16"
             aria-hidden="true"
@@ -115,7 +114,7 @@ export function Listbox<T>({
           // Shadows
           "ring-1 shadow-lg ring-zinc-950/10 dark:ring-white/10 dark:ring-inset",
           // Transitions
-          "transition-opacity duration-100 ease-in data-closed:data-leave:opacity-0 data-transition:pointer-events-none"
+          "transition-opacity duration-100 ease-in data-closed:data-leave:opacity-0 data-transition:pointer-events-none",
         )}
       >
         {options}
@@ -140,7 +139,7 @@ export function ListboxOption<T>({
     "*:data-[slot=icon]:text-zinc-500 group-data-focus/option:*:data-[slot=icon]:text-white dark:*:data-[slot=icon]:text-zinc-400",
     "forced-colors:*:data-[slot=icon]:text-[CanvasText] forced-colors:group-data-focus/option:*:data-[slot=icon]:text-[Canvas]",
     // Avatars
-    "*:data-[slot=avatar]:-mx-0.5 *:data-[slot=avatar]:size-6 sm:*:data-[slot=avatar]:size-5"
+    "*:data-[slot=avatar]:-mx-0.5 *:data-[slot=avatar]:size-6 sm:*:data-[slot=avatar]:size-5",
   );
 
   return (
@@ -166,12 +165,12 @@ export function ListboxOption<T>({
               // Forced colors mode
               "forced-color-adjust-none forced-colors:data-focus:bg-[Highlight] forced-colors:data-focus:text-[HighlightText]",
               // Disabled
-              "data-disabled:opacity-50"
+              "data-disabled:opacity-50",
             )}
           >
             <svg
               className={withPrefix(
-                "relative hidden size-5 self-center stroke-current group-data-selected/option:inline sm:size-4"
+                "relative hidden size-5 self-center stroke-current group-data-selected/option:inline sm:size-4",
               )}
               viewBox="0 0 16 16"
               fill="none"
@@ -205,7 +204,7 @@ export function ListboxLabel({
       {...props}
       className={withPrefix(
         className,
-        "ml-2.5 truncate first:ml-0 sm:ml-2 sm:first:ml-0"
+        "ml-2.5 truncate first:ml-0 sm:ml-2 sm:first:ml-0",
       )}
     />
   );
@@ -221,7 +220,7 @@ export function ListboxDescription({
       {...props}
       className={withPrefix(
         className,
-        "flex flex-1 overflow-hidden text-zinc-500 group-data-focus/option:text-white before:w-2 before:min-w-0 before:shrink dark:text-zinc-400"
+        "flex flex-1 overflow-hidden text-zinc-500 group-data-focus/option:text-white before:w-2 before:min-w-0 before:shrink dark:text-zinc-400",
       )}
     >
       <span className={withPrefix("flex-1 truncate")}>{children}</span>
