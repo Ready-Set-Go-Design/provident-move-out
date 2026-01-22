@@ -21,7 +21,7 @@ function FormPage5() {
     useState<boolean>(false);
   const pageIsValid = isPageValid("/page5");
   const validatedForm = validateForm(formData).find(
-    (requirement: any) => requirement.id === "/page5"
+    (requirement: any) => requirement.id === "/page5",
   );
 
   const location = useLocation();
@@ -86,14 +86,14 @@ function FormPage5() {
             validatedForm?.errors.includes("lawyer_phone")
           }
           type="text"
-          name="lawyer_phone"
+          name="lawyer_phone_number"
           placeholder={""}
-          value={formData.lawyer_phone}
+          value={formData.lawyer_phone_number}
           onChange={(e: any) => {
-            dispatch(updateField({ field: "lawyer_phone", value: e }));
+            dispatch(updateField({ field: "lawyer_phone_number", value: e }));
           }}
           clearAction={(e: any) => {
-            dispatch(updateField({ field: "lawyer_phone", value: "" }));
+            dispatch(updateField({ field: "lawyer_phone_number", value: "" }));
           }}
         />
       </Field>

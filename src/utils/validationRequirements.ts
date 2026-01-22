@@ -50,7 +50,7 @@ export const validationRequirements = [
         name: "lawyer_last_name",
       },
       {
-        name: "lawyer_phone",
+        name: "lawyer_phone_number",
         minLength: 10,
       },
     ],

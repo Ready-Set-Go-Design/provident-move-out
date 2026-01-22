@@ -19,7 +19,7 @@ export interface FormState {
   signature_image: string;
   lawyer_first_name: string;
   lawyer_last_name: string;
-  lawyer_phone: string;
+  lawyer_phone_number: string;
   pageVisited: string[];
   forwarding_address: string;
   forwarding_city: string;
@@ -29,6 +29,7 @@ export interface FormState {
   location_id: string;
   email: string;
   phone_number: string;
+  submission_id: string;
 }
 
 export const emptyForm: FormState = {
@@ -46,7 +47,7 @@ export const emptyForm: FormState = {
   business_name: "",
   lawyer_first_name: "",
   lawyer_last_name: "",
-  lawyer_phone: "",
+  lawyer_phone_number: "",
   accept_terms_and_conditions: "",
   verify_entered_information: "",
   signature_image: "",
@@ -59,6 +60,7 @@ export const emptyForm: FormState = {
   location_id: "",
   email: "",
   phone_number: "",
+  submission_id: "",
 };
 
 const getInitialState = (): FormState => {
@@ -85,7 +87,7 @@ const formSlice = createSlice({
         state[field] = value;
       }
       try {
-        localStorage.setItem("moveoutFormData", JSON.stringify(state));
+        localStorage.setItem("moveOutFormData", JSON.stringify(state));
       } catch (error) {}
     },
     clearForm: (state) => {
@@ -94,14 +96,14 @@ const formSlice = createSlice({
         JSON.parse(JSON.stringify(emptyForm)) as FormState,
       );
       localStorage.setItem(
-        "moveoutFormData",
+        "moveOutFormData",
         JSON.stringify(emptyFormInstance),
       );
     },
     addPageVisit: (state, action: PayloadAction<string>) => {
       if (!state.pageVisited.includes(action.payload)) {
         state.pageVisited.push(action.payload);
-        localStorage.setItem("moveoutFormData", JSON.stringify(state));
+        localStorage.setItem("moveOutFormData", JSON.stringify(state));
       }
     },
   },
