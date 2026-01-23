@@ -83,7 +83,7 @@ function FormPage7() {
                 dispatch(clearSubmission());
                 navigate("/");
               }}
-              label={"Return to Homepage"}
+              label={"Start Over"}
               currentPage=""
             />
           </div>
@@ -135,7 +135,7 @@ function FormPage7() {
             dispatch(clearSubmission());
             navigate("/");
           }}
-          label={"Return to Homepage"}
+          label={"Start Over"}
           currentPage=""
         />
       </FooterWrapper>

@@ -45,6 +45,8 @@ pf:text-2xl
 pf:mb-4
 pf:mt-4
 pf:mt-8
+pf:Start
+pf:Over
 pf:Download
 pf:PDF
 pf:clicked
@@ -107,7 +109,7 @@ pf:forwarding_postal_code
 pf:/form_page5
 pf:page4
 pf:/page3
-pf:sms
+pf:sms_0
 pf:POST
 pf:Content-Type
 pf:application/json
@@ -135,6 +137,7 @@ pf:validate
 pf:your
 pf:customer
 pf:number.
+pf:,
 pf:number
 pf:you
 pf:provided
@@ -150,6 +153,8 @@ pf:font-semibold
 pf:p-2
 pf:selling_or_renting
 pf:selling
+pf:`phone-${index}`
+pf:`sms_${index}`
 pf:Email
 pf:verification_code
 pf:text-green-600
@@ -424,7 +429,6 @@ pf:moveOutFormData
 pf:form
 pf:setting
 pf:empty
-pf:moveoutFormData
 pf:BUILDING
 pf:UNIT
 pf:address/searchAddressesAsync
@@ -1623,7 +1627,6 @@ pf:0V9a.75.75
 pf:.75-.75Zm0
 pf:0-1.5.75.75
 pf:1.5Z
-pf:,
 pf:lodash/throttle
 pf:Searching
 pf:units:

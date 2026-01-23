@@ -21,7 +21,7 @@ function FormPage3() {
   const hasPerformedLookup = useRef(false);
 
   const [error, setError] = useState<string | null>(null);
-  const [maskedPhoneNumber, setMaskedPhoneNumber] = useState<string>("");
+  const [maskedPhoneNumber, setMaskedPhoneNumber] = useState<Array<string>>([]);
   const [maskedEmail, setMaskedEmail] = useState<string>("");
   const [tokenForVerification, setTokenForVerification] = useState<string>("");
 
@@ -40,7 +40,7 @@ function FormPage3() {
   const from = urlParams.get("from");
 
   const [verificationCode, setVerificationCode] = useState<string>("");
-  const [verificationMethod, setVerificationMethod] = useState<string>("sms");
+  const [verificationMethod, setVerificationMethod] = useState<string>("sms_0");
   const [verificationCodeSent, setVerificationCodeSent] =
     useState<boolean>(false);
 
@@ -114,7 +114,7 @@ function FormPage3() {
       if (result.result == true) {
         // customer number is valid
 
-        setMaskedPhoneNumber(result.data.phone);
+        setMaskedPhoneNumber(result.data.phone.split(","));
         setMaskedEmail(result.data.email);
         setTokenForVerification(result.data.token);
         setError(null);
@@ -204,7 +204,7 @@ function FormPage3() {
                 action={() => {
                   navigate("/");
                 }}
-                label={"Return to Homepage"}
+                label={"Start Over"}
                 currentPage=""
               />
             </div>
@@ -213,6 +213,8 @@ function FormPage3() {
       </div>
     );
   }
+
+  console.log(maskedPhoneNumber);
 
   return (
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
@@ -240,15 +242,16 @@ function FormPage3() {
               setVerificationMethod(e);
             }}
           >
-            <RadioField>
-              <Radio value="sms" color="brand" />
-              <Label>
-                SMS number ending in{" "}
-                <span className={withPrefix("font-bold")}>
-                  {maskedPhoneNumber}
-                </span>
-              </Label>
-            </RadioField>
+            {maskedPhoneNumber.map((part, index) => (
+              <RadioField key={`phone-${index}`}>
+                <Radio value={`sms_${index}`} color="brand" />
+                <Label>
+                  SMS number ending in{" "}
+                  <span className={withPrefix("font-bold")}>{part}</span>
+                </Label>
+              </RadioField>
+            ))}
+
             <RadioField>
               <Radio value="email" color="brand" />
               <Label>
