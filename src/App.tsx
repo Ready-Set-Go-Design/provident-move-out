@@ -58,7 +58,7 @@ function App() {
 
     if (
       submission.submitted &&
-      location.pathname.indexOf("form_page9") !== -1
+      location.pathname.indexOf("form_page7") !== -1
     ) {
       setShowResetMessage(false);
     } else {
