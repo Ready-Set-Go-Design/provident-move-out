@@ -56,7 +56,12 @@ function App() {
       }
     }
 
-    if (!submission.submitted) {
+    if (
+      submission.submitted &&
+      location.pathname.indexOf("form_page9") !== -1
+    ) {
+      setShowResetMessage(false);
+    } else {
       setShowResetMessage(applicationInProgress);
     }
   }, []); // Only run on mount
