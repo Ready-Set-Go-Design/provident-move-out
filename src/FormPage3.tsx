@@ -157,7 +157,6 @@ function FormPage3() {
       if (result.result == true) {
         // customer number is valid
 
-        console.log("sending code for verification");
         dispatch(updateField({ field: "code_verified", value: true }));
 
         if (result.data) {
@@ -213,8 +212,6 @@ function FormPage3() {
       </div>
     );
   }
-
-  console.log(maskedPhoneNumber);
 
   return (
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>

@@ -21,7 +21,7 @@ function FormPage4() {
     useState<boolean>(false);
   const pageIsValid = isPageValid("/page4");
   const validatedForm = validateForm(formData).find(
-    (requirement: any) => requirement.id === "/page4"
+    (requirement: any) => requirement.id === "/page4",
   );
 
   const location = useLocation();
@@ -198,12 +198,12 @@ function FormPage4() {
           value={formData.forwarding_postal_code}
           onChange={(e: any) => {
             dispatch(
-              updateField({ field: "forwarding_postal_code", value: e })
+              updateField({ field: "forwarding_postal_code", value: e }),
             );
           }}
           clearAction={(e: any) => {
             dispatch(
-              updateField({ field: "forwarding_postal_code", value: "" })
+              updateField({ field: "forwarding_postal_code", value: "" }),
             );
           }}
         />

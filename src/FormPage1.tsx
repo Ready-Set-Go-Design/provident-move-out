@@ -38,7 +38,7 @@ const ServiceType = ({
   return (
     <div
       className={withPrefix(
-        "bg-gray-100 p-2 relative rounded-lg cursor-pointer hover:bg-gray-300 w-full border border-gray-400 flex flex-col items-center "
+        "bg-gray-100 p-2 relative rounded-lg cursor-pointer hover:bg-gray-300 w-full border border-gray-400 flex flex-col items-center ",
       )}
       onClick={setServiceType}
     >
@@ -53,7 +53,7 @@ const ServiceType = ({
       ></div>
       <div
         className={withPrefix(
-          `h-[56px] w-[56px] fill-(--primary-color) mt-2 mb-4 `
+          `h-[56px] w-[56px] fill-(--primary-color) mt-2 mb-4 `,
         )}
       >
         {icon}
@@ -75,7 +75,7 @@ function FormPage1() {
 
   const pageIsValid = isPageValid("/");
   const validatedForm = validateForm(formData).find(
-    (requirement: any) => requirement.id === "/"
+    (requirement: any) => requirement.id === "/",
   );
 
   const isRenter = formData.selling_or_renting === "renting";
@@ -95,7 +95,7 @@ function FormPage1() {
           "inline-flex gap-2 w-full rounded-md overflow-hidden border-1 ",
           showValidationError && formData.user_type === ""
             ? "border-red-500"
-            : "border-transparent"
+            : "border-transparent",
         )}
       >
         <ServiceType
@@ -146,7 +146,7 @@ function FormPage1() {
               "border-1 rounded-md pf:overflow-hidden p-2 mt-4",
               showValidationError && formData.selling_or_renting === ""
                 ? "border-red-500"
-                : "border-transparent"
+                : "border-transparent",
             )}
             name="selling_or_renting"
             defaultValue="selling"
@@ -157,7 +157,7 @@ function FormPage1() {
                 updateField({
                   field: "selling_or_renting",
                   value: e,
-                })
+                }),
               );
             }}
           >
@@ -192,7 +192,7 @@ function FormPage1() {
             value={formData.moving_day}
             onChange={(e) => {
               dispatch(
-                updateField({ field: "moving_day", value: e.target.value })
+                updateField({ field: "moving_day", value: e.target.value }),
               );
             }}
             invalid={showValidationError && formData.moving_day === ""}
@@ -208,7 +208,7 @@ function FormPage1() {
             value={formData.moving_month}
             onChange={(e) => {
               dispatch(
-                updateField({ field: "moving_month", value: e.target.value })
+                updateField({ field: "moving_month", value: e.target.value }),
               );
             }}
             invalid={showValidationError && formData.moving_month === ""}
@@ -226,15 +226,15 @@ function FormPage1() {
             value={formData.moving_year}
             onChange={(e) => {
               dispatch(
-                updateField({ field: "moving_year", value: e.target.value })
+                updateField({ field: "moving_year", value: e.target.value }),
               );
             }}
             invalid={showValidationError && formData.moving_year === ""}
           >
             <option value="">Year</option>
             {Array.from({ length: 5 }, (_, i) => (
-              <option key={i + 2025} value={i + 2025}>
-                {i + 2025}
+              <option key={i + 2026} value={i + 2026}>
+                {i + 2026}
               </option>
             ))}
           </Select>

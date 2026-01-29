@@ -144,7 +144,6 @@ pf:provided
 pf:validated.
 pf:check
 pf:entry
-pf:sending
 pf:code_verified
 pf:phone_number
 pf:email
@@ -271,7 +270,7 @@ pf:moving_year
 pf:continue
 pf:/form_page2
 pf:pageVisited
-pf:form_page9
+pf:form_page7
 pf:clsx
 pf:pf
 pf:`${prefix}:`
@@ -1584,7 +1583,6 @@ pf:border-gray-300}`
 pf:text-gray-400
 pf:hover:text-gray-600
 pf:searchResultsType
-pf:Suite
 pf:`${address.unit_number}
 pf:${address.street_number}
 pf:${address.street_name}`
@@ -1629,16 +1627,11 @@ pf:.75-.75Zm0
 pf:0-1.5.75.75
 pf:1.5Z
 pf:lodash/throttle
-pf:Searching
-pf:units:
-pf:Selected
-pf:unit:
 pf:location_id
-pf:text-right
-pf:text-red-500
 pf:Enter
-pf:Unit
-pf:or
+pf:off
+pf:mr-[2px]
+pf:mt-[0.5px]
 pf:Number
 pf:w-6
 pf:m-2
