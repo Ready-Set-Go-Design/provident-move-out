@@ -159,11 +159,23 @@ function FormPage3() {
 
         dispatch(updateField({ field: "code_verified", value: true }));
 
+        setTimeout(() => {
+          navigate(from ? `/form_${from}` : "/form_page4");
+        }, 2000);
+
         if (result.data) {
           dispatch(
             updateField({ field: "phone_number", value: result.data.phone }),
           );
           dispatch(updateField({ field: "email", value: result.data.email }));
+
+          dispatch(
+            updateField({ field: "first_name", value: result.data.first_name }),
+          );
+
+          dispatch(
+            updateField({ field: "last_name", value: result.data.last_name }),
+          );
         }
         setError(null);
         setLoading(false);

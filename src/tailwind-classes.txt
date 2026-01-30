@@ -145,6 +145,7 @@ pf:validated.
 pf:check
 pf:entry
 pf:code_verified
+pf:/form_page4
 pf:phone_number
 pf:email
 pf:text-red-600
@@ -159,7 +160,6 @@ pf:verification_code
 pf:text-green-600
 pf:Verify
 pf:Code
-pf:/form_page4
 pf:page3
 pf:Send
 pf:/page2
@@ -270,7 +270,6 @@ pf:moving_year
 pf:continue
 pf:/form_page2
 pf:pageVisited
-pf:form_page7
 pf:clsx
 pf:pf
 pf:`${prefix}:`
