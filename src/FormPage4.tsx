@@ -71,7 +71,7 @@ function FormPage4() {
           }}
         />
       </Field>
-      <Field className={withPrefix("mb-4")}>
+      {/* <Field className={withPrefix("mb-4")}>
         <Label className={withPrefix("text-sm font-bold")}>
           Business name
           <br />
@@ -96,7 +96,7 @@ function FormPage4() {
             dispatch(updateField({ field: "business_name", value: "" }));
           }}
         />
-      </Field>
+      </Field> */}
 
       <Field className={withPrefix("mt-8 mb-4")}>
         <Label className={withPrefix("text-md font-bold")}>
