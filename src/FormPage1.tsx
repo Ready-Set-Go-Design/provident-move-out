@@ -19,10 +19,12 @@ const ServiceType = ({
   icon,
   value,
   dispatch,
+  tabIndex,
 }: {
   label: string;
   value: string;
   icon: any;
+  tabIndex: number;
 
   dispatch: any;
 }) => {
@@ -37,12 +39,23 @@ const ServiceType = ({
 
   return (
     <div
+      tabIndex={tabIndex}
+      role="button"
       className={withPrefix(
         "bg-gray-100 p-2 relative rounded-lg cursor-pointer hover:bg-gray-300 w-full border border-gray-400 flex flex-col items-center ",
       )}
       onClick={setServiceType}
+      aria-label={label}
+      aria-hidden={false}
+      onKeyDown={(e) => {
+        console.log(e.key);
+        if (e.key === "Enter" || e.key === " ") {
+          setServiceType(e as any);
+        }
+      }}
     >
       <div
+        aria-hidden={true}
         className={withPrefix([
           "border ",
           formData.user_type === value
@@ -52,13 +65,16 @@ const ServiceType = ({
         ])}
       ></div>
       <div
+        aria-hidden={true}
         className={withPrefix(
           `h-[56px] w-[56px] fill-(--primary-color) mt-2 mb-4 `,
         )}
       >
         {icon}
       </div>
-      <span className={withPrefix("text-sm")}>{label}</span>
+      <span className={withPrefix("text-sm")} aria-hidden={true}>
+        {label}
+      </span>
     </div>
   );
 };
@@ -82,15 +98,20 @@ function FormPage1() {
 
   return (
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
-      <h1 className={withPrefix("py-4 text-2xl")}>Moving Out</h1>
+      <h2 className={withPrefix("py-4 text-2xl")}>Moving Out</h2>
       <div>
         Please answer a few questions to better help us prepare your move out.
       </div>
 
-      <div className={withPrefix("font-bold text-md mt-6 mb-2")}>
+      <div
+        className={withPrefix("font-bold text-md mt-6 mb-2")}
+        id="option-heading"
+      >
         Choose an option
       </div>
       <div
+        role="group"
+        aria-labelledby="option-heading"
         className={withPrefix(
           "inline-flex gap-2 w-full rounded-md overflow-hidden border-1 ",
           showValidationError && formData.user_type === ""
@@ -101,6 +122,7 @@ function FormPage1() {
         <ServiceType
           label="Tenant"
           value="TENANT"
+          tabIndex={1}
           dispatch={dispatch}
           icon={
             <svg
@@ -120,6 +142,7 @@ function FormPage1() {
         <ServiceType
           label="Home Owner"
           value="HOME_OWNER"
+          tabIndex={2}
           icon={
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -150,6 +173,7 @@ function FormPage1() {
             )}
             name="selling_or_renting"
             defaultValue="selling"
+            aria-label="Are you selling or renting?"
             value={formData.selling_or_renting}
             onChange={(e) => {
               dispatch(
@@ -166,7 +190,7 @@ function FormPage1() {
             </RadioField>
             <RadioField>
               <Radio value="renting" color="brand" />
-              <Label>Renting</Label>
+              <Label aria-label="Renting this is different ">Renting</Label>
             </RadioField>
           </RadioGroup>
 
@@ -188,6 +212,7 @@ function FormPage1() {
       <div className={withPrefix("mb-8")}>
         <div className={withPrefix("flex gap-2")}>
           <Select
+            aria-label="Moving Day"
             value={formData.moving_day}
             onChange={(e) => {
               dispatch(
@@ -204,6 +229,7 @@ function FormPage1() {
             ))}
           </Select>
           <Select
+            aria-label="Moving Month"
             value={formData.moving_month}
             onChange={(e) => {
               dispatch(
@@ -222,6 +248,7 @@ function FormPage1() {
             ))}
           </Select>
           <Select
+            aria-label="Moving Year"
             value={formData.moving_year}
             onChange={(e) => {
               dispatch(

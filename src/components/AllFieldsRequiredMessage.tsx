@@ -13,7 +13,7 @@ export function AllFieldsRequiredMessage({
 }) {
   const formData = useSelector((state: any) => state.form);
   const validatedForm = validateForm(formData).find(
-    (requirement: any) => requirement.id === id
+    (requirement: any) => requirement.id === id,
   );
 
   const { errors } = validatedForm;
@@ -22,8 +22,9 @@ export function AllFieldsRequiredMessage({
     if (errors.length > 0 || override) {
       return (
         <div
+          role="alert"
           className={withPrefix(
-            "text-sm text-black bg-(--validation-error-color) rounded-lg p-2 grid grid-cols-[48px_1fr] gap-2"
+            "text-sm text-black bg-(--validation-error-color) rounded-lg p-2 grid grid-cols-[48px_1fr] gap-2",
           )}
         >
           <div className={withPrefix("w-[48px]")}>
@@ -41,7 +42,11 @@ export function AllFieldsRequiredMessage({
             </svg>
           </div>
           <div>
-            <span>{override ? override : errors.join(", ")}</span>
+            <span>
+              {override
+                ? override
+                : "The following fields are required: " + errors.join(", ")}
+            </span>
           </div>
         </div>
       );

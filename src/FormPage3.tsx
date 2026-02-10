@@ -192,7 +192,7 @@ function FormPage3() {
   if (loading) {
     return (
       <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
-        <h1 className={withPrefix("py-4 text-2xl")}>Occupant Verification</h1>
+        <h2 className={withPrefix("py-4 text-2xl")}>Occupant Verification</h2>
         <div>
           Validating customer number{" "}
           <span className={withPrefix("font-bold")}>
@@ -225,7 +225,7 @@ function FormPage3() {
 
   return (
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
-      <h1 className={withPrefix("py-4 text-2xl")}>Occupant Verification</h1>
+      <h2 className={withPrefix("py-4 text-2xl")}>Occupant Verification</h2>
 
       <div className={withPrefix("text-sm font-semibold")}>
         You'll need to verify you are the occupant of the residence. Select a

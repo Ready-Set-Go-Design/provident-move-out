@@ -59,7 +59,7 @@ function FormPage6() {
   return (
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
       <div className={withPrefix("mb-4")}>
-        <h1>Signature</h1>
+        <h2>Signature</h2>
 
         <div>
           By typing your name in the fields below, you are legally signing this
@@ -70,7 +70,7 @@ function FormPage6() {
             "border-1 rounded-md pf:overflow-hidden py-2 mt-4",
             showValidationError && formData.verify_entered_information === ""
               ? "border-red-500"
-              : "border-transparent"
+              : "border-transparent",
           )}
         >
           <Checkbox
@@ -83,7 +83,7 @@ function FormPage6() {
                 updateField({
                   field: "verify_entered_information",
                   value: checked ? "true" : "",
-                })
+                }),
               );
             }}
           />{" "}
@@ -96,7 +96,7 @@ function FormPage6() {
             `border-1 rounded p-4 mt-4 w-full h-full min-h-[130px] mb-4  `,
             showValidationError && formData.signature_image === ""
               ? "border-red-500"
-              : "border-gray-300"
+              : "border-gray-300",
           )} `}
           ref={containerRef as unknown as React.RefObject<HTMLDivElement>}
         >
@@ -114,7 +114,7 @@ function FormPage6() {
                   updateField({
                     field: "signature_image",
                     value: base64 as string,
-                  })
+                  }),
                 );
               }
             }}

@@ -58,7 +58,7 @@ function FormPage7() {
   if (!submitted && !error) {
     return (
       <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
-        <h1 className={withPrefix("py-4 text-2xl")}>Submitting Agreement...</h1>
+        <h2 className={withPrefix("py-4 text-2xl")}>Submitting Agreement...</h2>
       </div>
     );
   }
@@ -66,7 +66,7 @@ function FormPage7() {
   if (!submitted && error) {
     return (
       <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
-        <h1 className={withPrefix("py-4 text-2xl")}>Submission Error</h1>
+        <h2 className={withPrefix("py-4 text-2xl")}>Submission Error</h2>
         <div className={withPrefix("mb-4")}>
           <div className={withPrefix("mt-4 mb-4")}>
             There was a problem submitting your agreement. Please ensure that
@@ -74,26 +74,24 @@ function FormPage7() {
           </div>
         </div>
 
-        <div className={withPrefix("mt-8 flex")}>
-          <div>
-            <NavButton
-              outline={true}
-              action={() => {
-                dispatch(clearForm());
-                dispatch(clearSubmission());
-                navigate("/");
-              }}
-              label={"Start Over"}
-              currentPage=""
-            />
-          </div>
-        </div>
+        <FooterWrapper>
+          <NavButton
+            outline={true}
+            action={() => {
+              dispatch(clearForm());
+              dispatch(clearSubmission());
+              navigate("/");
+            }}
+            label={"Start Over"}
+            currentPage=""
+          />
+        </FooterWrapper>
       </div>
     );
   }
   return (
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
-      <h1 className={withPrefix("py-4 text-2xl")}>Submission Complete</h1>
+      <h2 className={withPrefix("py-4 text-2xl")}>Submission Complete</h2>
       <div className={withPrefix("mb-4")}>
         Thanks for completing the Move-out form with Provident Energy Management
         Inc.
@@ -126,6 +124,7 @@ function FormPage7() {
 
       <FooterWrapper>
         <NavButton
+          outline={true}
           action={() => {
             dispatch(clearForm());
             dispatch(clearSubmission());

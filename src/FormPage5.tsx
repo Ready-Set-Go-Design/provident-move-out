@@ -30,7 +30,7 @@ function FormPage5() {
 
   return (
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
-      <h1 className={withPrefix("py-4 text-2xl")}>Seller Information</h1>
+      <h2 className={withPrefix("py-4 text-2xl")}>Seller Information</h2>
 
       <Field className={withPrefix("mb-4")}>
         <Label className={withPrefix("text-sm font-bold")}>

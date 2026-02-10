@@ -65,6 +65,7 @@ export const Select = forwardRef(function Select(
             )}
             viewBox="0 0 16 16"
             aria-hidden="true"
+            role="img"
             fill="none"
           >
             <path

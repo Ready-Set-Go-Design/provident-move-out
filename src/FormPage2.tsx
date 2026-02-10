@@ -19,7 +19,7 @@ function FormPage2() {
 
   return (
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
-      <h1 className={withPrefix("py-4 text-2xl")}>Your Service Address</h1>
+      <h2 className={withPrefix("py-4 text-2xl")}>Your Service Address</h2>
 
       <div className={withPrefix("text-gray-500")}>
         This is the address you're leaving.

@@ -12,7 +12,7 @@ export const validateForm = (formData: FormState) => {
     ];
 
     const substitution = source.find(
-      (sourceItem) => sourceItem.replace === fieldName
+      (sourceItem) => sourceItem.replace === fieldName,
     );
 
     return humanizeString(substitution?.with ?? fieldName);

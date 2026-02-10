@@ -44,9 +44,9 @@ pf:py-4
 pf:text-2xl
 pf:mb-4
 pf:mt-4
-pf:mt-8
 pf:Start
 pf:Over
+pf:mt-8
 pf:text-(--validation-error-color)
 pf:/page6
 pf:signature_image
@@ -167,6 +167,7 @@ pf:/form_page3
 pf:page2
 pf:user_type
 pf:TENANT
+pf:button
 pf:bg-gray-100
 pf:rounded-lg
 pf:cursor-pointer
@@ -174,6 +175,7 @@ pf:hover:bg-gray-300
 pf:border-gray-400
 pf:flex-col
 pf:items-center
+pf:Enter
 pf:border-(--primary-color)
 pf:bg-white
 pf:left-2
@@ -189,6 +191,8 @@ pf:mt-2
 pf:renting
 pf:mt-6
 pf:mb-2
+pf:option-heading
+pf:group
 pf:inline-flex
 pf:gap-2
 pf:overflow-hidden
@@ -238,6 +242,13 @@ pf:1-.75.75H5.625a1.875
 pf:1-1.875-1.875v-6.198a2.29
 pf:.091-.086L12
 pf:5.432Z
+pf:Are
+pf:or
+pf:renting?
+pf:Renting
+pf:this
+pf:is
+pf:different
 pf:have
 pf:a
 pf:tenant
@@ -258,13 +269,16 @@ pf:open
 pf:until
 pf:new
 pf:Form)
-pf:is
 pf:received.
 pf:mb-8
+pf:Moving
+pf:Day
 pf:moving_day
+pf:Month
 pf:moving_month
 pf:default
 pf:long
+pf:Year
 pf:moving_year
 pf:continue
 pf:/form_page2
@@ -276,9 +290,6 @@ pf:g
 pf:`--${prefix}-color-`
 pf:`${prefix}:${updatedItem}`
 pf:Departure
-pf:Day
-pf:Month
-pf:Year
 pf:You
 pf:must
 pf:home
@@ -298,7 +309,6 @@ pf:${response.status}`
 pf:Error
 pf:submitting
 pf:form:
-pf:https://provident-cms-staging-b4204d254fc3.herokuapp.com/api
 pf:moveout
 pf:`${serverUrl()}/submissions/pdf`
 pf:content-type
@@ -639,7 +649,6 @@ pf:[--switch-bg:var(--pf-color-rose-500)]
 pf:[--switch-ring:var(--pf-color-rose-600)]/90
 pf:[--switch-shadow:var(--pf-color-rose-900)]/20
 pf:children
-pf:group
 pf:isolate
 pf:h-6
 pf:w-10
@@ -831,6 +840,7 @@ pf:group-has-data-disabled:stroke-zinc-600
 pf:sm:size-4
 pf:forced-colors:stroke-[CanvasText]
 pf:16
+pf:img
 pf:none
 pf:M5.75
 pf:10.75L8
@@ -1130,7 +1140,6 @@ pf:sm:data-[anchor~=start]:[--anchor-offset:-4px]
 pf:supports-[grid-template-columns:subgrid]:grid
 pf:supports-[grid-template-columns:subgrid]:grid-cols-[auto_1fr_1.5rem_0.5rem_auto]
 pf:data-leave:duration-100
-pf:button
 pf:px-3.5
 pf:sm:px-3
 pf:forced-colors:data-focus:*:data-[slot=icon]:text-[HighlightText]
@@ -1572,6 +1581,8 @@ pf:max-w-4xl
 pf:max-w-5xl
 pf:md
 pf:bg-zinc-950/15
+pf:z-[1]
+pf:z-[2]
 pf:grid-rows-[1fr_auto_1fr]
 pf:p-8
 pf:rounded-2xl
@@ -1609,8 +1620,11 @@ pf:`w-full
 pf:!rounded-full
 pf:!font-normal
 pf:!text-sm`
-pf:bottom-0
+pf:pt-4
+pf:pl-0
+pf:pr-0
 pf:pb-6
+pf:alert
 pf:text-black
 pf:bg-(--validation-error-color)
 pf:grid-cols-[48px_1fr]
@@ -1631,9 +1645,12 @@ pf:0V9a.75.75
 pf:.75-.75Zm0
 pf:0-1.5.75.75
 pf:1.5Z
+pf:following
+pf:fields
+pf:are
+pf:required:
 pf:lodash/throttle
 pf:location_id
-pf:Enter
 pf:off
 pf:mr-[2px]
 pf:mt-[0.5px]
