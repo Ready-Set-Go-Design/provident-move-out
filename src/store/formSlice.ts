@@ -88,17 +88,22 @@ const formSlice = createSlice({
       }
       try {
         localStorage.setItem("moveOutFormData", JSON.stringify(state));
-      } catch (error) {}
+      } catch (error) {
+        console.log("error saving form data to localStorage", error);
+      }
     },
     clearForm: (state) => {
       const emptyFormInstance = Object.assign(
         state,
         JSON.parse(JSON.stringify(emptyForm)) as FormState,
       );
-      localStorage.setItem(
-        "moveOutFormData",
-        JSON.stringify(emptyFormInstance),
-      );
+      // localStorage.setItem(
+      //   "moveOutFormData",
+      //   JSON.stringify(emptyFormInstance),
+      // );
+
+      localStorage.removeItem("moveOutFormData");
+      localStorage.removeItem("moveOutSubmissionData");
     },
     addPageVisit: (state, action: PayloadAction<string>) => {
       if (!state.pageVisited.includes(action.payload)) {

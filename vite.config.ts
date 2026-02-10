@@ -20,7 +20,7 @@ const extractTailwindClasses = () => ({
     if (file.endsWith(".jsx") || file.endsWith(".tsx")) {
       exec(
         `node scripts/extractTailwindClasses.js '${JSON.stringify(
-          extractorConfig
+          extractorConfig,
         )}'`,
         (error) => {
           if (error) {
@@ -29,7 +29,7 @@ const extractTailwindClasses = () => ({
             console.log("Tailwind classes extracted successfully.");
             server.ws.send({ type: "full-reload" });
           }
-        }
+        },
       );
     }
   },
@@ -37,7 +37,7 @@ const extractTailwindClasses = () => ({
     return new Promise<void>((resolve, reject) => {
       exec(
         `node scripts/extractTailwindClasses.js '${JSON.stringify(
-          extractorConfig
+          extractorConfig,
         )}'`,
         (error) => {
           if (error) {
@@ -45,7 +45,7 @@ const extractTailwindClasses = () => ({
           } else {
             resolve();
           }
-        }
+        },
       );
     });
   },

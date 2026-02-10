@@ -1,3 +1,5 @@
+import { serverUrl } from "./serverUrl";
+
 export const submitForm = async (formData: any) => {
   try {
     const sanitizedForm = { ...formData };
@@ -11,16 +13,13 @@ export const submitForm = async (formData: any) => {
     delete sanitizedForm.moving_month;
     delete sanitizedForm.moving_year;
 
-    const response = await fetch(
-      `${(import.meta as any).env.VITE_API_URL}/submissions/move-out`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(sanitizedForm),
+    const response = await fetch(`${serverUrl()}/submissions/move-out`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify(sanitizedForm),
+    });
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);

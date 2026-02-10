@@ -102,14 +102,10 @@ function FormPage7() {
       <div className={withPrefix("mt-8")}>
         <Button
           onClick={async () => {
-            console.log("Download PDF clicked");
-            console.log(submissionData);
             setPdfDownloadError(null);
             try {
               // Check if we have a PDF blob from the new API response
               if (submissionData && submissionData.submission_id) {
-                console.log(submissionData.submission_id);
-
                 await requestPDF(submissionData.submission_id);
               }
             } catch (error) {

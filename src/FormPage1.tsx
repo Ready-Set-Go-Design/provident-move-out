@@ -152,7 +152,6 @@ function FormPage1() {
             defaultValue="selling"
             value={formData.selling_or_renting}
             onChange={(e) => {
-              console.log("value ", e);
               dispatch(
                 updateField({
                   field: "selling_or_renting",

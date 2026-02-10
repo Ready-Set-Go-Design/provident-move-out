@@ -43,13 +43,13 @@ function App() {
     let applicationInProgress = false;
     for (const key in formData) {
       if (key !== "pageVisited" && formData[key] !== "") {
-        applicationInProgress = true;
-        break;
+        if (key === "code_verified") {
+        } else {
+          applicationInProgress = true;
+        }
       } else if (key === "pageVisited") {
         // If the pageVisited field is empty, it means the user is starting a new application
-        if (formData.pageVisited.length === 0) {
-          applicationInProgress = false;
-        } else {
+        if (formData.pageVisited.length > 0) {
           // If the pageVisited field has data, it means the user has visited pages
           applicationInProgress = true;
         }

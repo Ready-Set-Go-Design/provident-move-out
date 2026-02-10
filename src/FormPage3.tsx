@@ -13,6 +13,7 @@ import { Field, Label } from "./components/fieldset";
 import { WrappedInput } from "./components/WrappedInput";
 import { Radio, RadioField, RadioGroup } from "./components/radio";
 import { FooterWrapper } from "./components/FooterWrapper";
+import { serverUrl } from "./utils/serverUrl";
 
 function FormPage3() {
   const dispatch = useDispatch();
@@ -46,19 +47,16 @@ function FormPage3() {
 
   const sendVerificationCode = async () => {
     try {
-      const sendCodeResponse = await fetch(
-        `${(import.meta as any).env.VITE_API_URL}/validations/send`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            method: verificationMethod,
-            token: tokenForVerification,
-          }),
+      const sendCodeResponse = await fetch(`${serverUrl()}/validations/send`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          method: verificationMethod,
+          token: tokenForVerification,
+        }),
+      });
       if (!sendCodeResponse.ok) {
         setError(
           "There was an issue trying to send the verification code. Please try again.",
@@ -91,7 +89,7 @@ function FormPage3() {
   const validateCustomerNumber = async () => {
     try {
       const validateCN = await fetch(
-        `${(import.meta as any).env.VITE_API_URL}/validations/validate-user-info`,
+        `${serverUrl()}/validations/validate-user-info`,
         {
           method: "POST",
           headers: {
@@ -134,7 +132,7 @@ function FormPage3() {
   const verifyCode = async () => {
     try {
       const validateCode = await fetch(
-        `${(import.meta as any).env.VITE_API_URL}/validations/validate-code`,
+        `${serverUrl}/validations/validate-code`,
         {
           method: "POST",
           headers: {

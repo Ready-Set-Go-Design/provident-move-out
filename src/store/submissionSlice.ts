@@ -14,7 +14,7 @@ export const emptySubmission: SubmissionState = {
 };
 
 const getInitialState = (): SubmissionState => {
-  const savedData = localStorage.getItem("moveOutFormData");
+  const savedData = localStorage.getItem("moveOutSubmissionData");
   if (savedData) {
     return JSON.parse(savedData);
   }
@@ -22,7 +22,7 @@ const getInitialState = (): SubmissionState => {
 };
 
 const submissionSlice = createSlice({
-  name: "form",
+  name: "submission",
   initialState: getInitialState(),
   reducers: {
     updateField: (
@@ -37,8 +37,10 @@ const submissionSlice = createSlice({
         state[field] = value;
       }
       try {
-        localStorage.setItem("moveOutFormData", JSON.stringify(state));
-      } catch (error) {}
+        localStorage.setItem("moveOutSubmissionData", JSON.stringify(state));
+      } catch (error) {
+        console.log("error saving submission data to localStorage", error);
+      }
     },
     clearSubmission: (state) => {
       const emptyFormInstance = Object.assign(
@@ -46,10 +48,11 @@ const submissionSlice = createSlice({
         JSON.parse(JSON.stringify(emptySubmission)) as SubmissionState,
       );
       console.log("setting form to empty", emptyFormInstance);
-      localStorage.setItem(
-        "moveOutFormData",
-        JSON.stringify(emptyFormInstance),
-      );
+      // localStorage.setItem(
+      //   "moveOutSubmissionData",
+      //   JSON.stringify(emptyFormInstance),
+      // );
+      localStorage.removeItem("moveOutSubmissionData");
     },
   },
 });

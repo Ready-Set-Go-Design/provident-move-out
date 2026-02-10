@@ -29,7 +29,6 @@ function NavButton({
       onClick={() => {
         action();
         if (disabledButClickable) {
-          console.log("trying!");
           setTimeout(() => {
             window.scrollTo({
               top: document.body.scrollHeight,

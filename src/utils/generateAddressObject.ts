@@ -108,7 +108,6 @@ const generateAddressObject = async ({
       for (let i = address1_components.length - 1; i >= 0; i--) {
         const component = address1_components[i];
         if (isNaN(Number(component))) {
-          console.log("add street number", component);
           if (addressObj.street_number) {
             addressObj.unit_number = component;
           } else {
