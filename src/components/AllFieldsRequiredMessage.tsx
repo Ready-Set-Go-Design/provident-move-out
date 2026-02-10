@@ -1,28 +1,73 @@
 import { withPrefix } from "../utils/withPrefix";
 import { validateForm } from "../utils/validateForm";
 import { useSelector } from "react-redux";
+import { useEffect, useRef } from "react";
 
 export function AllFieldsRequiredMessage({
   show,
   id,
   override,
+  messageId,
+  focusOnShow = false,
+  announceKey,
+  focusOnAnnounceKey = false,
 }: {
   show: boolean;
   id: string;
   override?: string;
+  messageId?: string;
+  focusOnShow?: boolean;
+  announceKey?: number;
+  focusOnAnnounceKey?: boolean;
 }) {
   const formData = useSelector((state: any) => state.form);
+  const messageRef = useRef<HTMLParagraphElement | null>(null);
+  const wasShownRef = useRef(false);
+  const lastAnnounceKeyRef = useRef<number | undefined>(announceKey);
   const validatedForm = validateForm(formData).find(
     (requirement: any) => requirement.id === id,
   );
 
   const { errors } = validatedForm;
 
+  useEffect(() => {
+    if (!focusOnShow) {
+      wasShownRef.current = show;
+      return;
+    }
+
+    if (show && !wasShownRef.current) {
+      messageRef.current?.focus();
+    }
+
+    wasShownRef.current = show;
+  }, [focusOnShow, show]);
+
+  useEffect(() => {
+    if (!show) {
+      lastAnnounceKeyRef.current = announceKey;
+      return;
+    }
+
+    if (
+      typeof announceKey === "number" &&
+      announceKey !== lastAnnounceKeyRef.current
+    ) {
+      if (focusOnAnnounceKey) {
+        messageRef.current?.focus();
+      }
+      lastAnnounceKeyRef.current = announceKey;
+    }
+  }, [announceKey, focusOnAnnounceKey, show]);
+
   if (show) {
     if (errors.length > 0 || override) {
       return (
         <div
+          id={messageId}
           role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
           className={withPrefix(
             "text-sm text-black bg-(--validation-error-color) rounded-lg p-2 grid grid-cols-[48px_1fr] gap-2",
           )}
@@ -33,6 +78,8 @@ export function AllFieldsRequiredMessage({
               viewBox="0 0 24 24"
               fill="currentColor"
               className={withPrefix("w-full")}
+              aria-hidden="true"
+              focusable="false"
             >
               <path
                 fillRule="evenodd"
@@ -42,11 +89,11 @@ export function AllFieldsRequiredMessage({
             </svg>
           </div>
           <div>
-            <span>
+            <p tabIndex={-1} ref={messageRef}>
               {override
                 ? override
                 : "The following fields are required: " + errors.join(", ")}
-            </span>
+            </p>
           </div>
         </div>
       );

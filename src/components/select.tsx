@@ -58,6 +58,7 @@ export const Select = forwardRef(function Select(
           className={withPrefix(
             "pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2",
           )}
+          aria-hidden="true"
         >
           <svg
             className={withPrefix(
@@ -65,7 +66,7 @@ export const Select = forwardRef(function Select(
             )}
             viewBox="0 0 16 16"
             aria-hidden="true"
-            role="img"
+            focusable="false"
             fill="none"
           >
             <path
