@@ -363,7 +363,7 @@ function FormPage1() {
       </fieldset>
 
       <AllFieldsRequiredMessage
-        show={showValidationError}
+        show={showValidationError || isRenter === true}
         id="/"
         messageId={formErrorId}
         focusOnShow={false}
@@ -381,7 +381,7 @@ function FormPage1() {
             }
           }}
           currentPage="page1"
-          disabledButClickable={!validatedForm.valid || isRenter == true}
+          disabledButClickable={!validatedForm.valid}
         />
       </FooterWrapper>
     </div>

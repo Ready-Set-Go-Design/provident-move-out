@@ -1,4 +1,3 @@
-import { f } from "react-router/dist/development/route-data-5OzAzQtT";
 import { FormState } from "../store/formSlice";
 import humanizeString from "./humanizeFieldName";
 import { validationRequirements } from "./validationRequirements";
@@ -77,25 +76,26 @@ export const validateForm = (formData: FormState) => {
 
           if (field.conditional) {
             if (
-              formData[field.conditional.id] === formData[field.conditional.is]
+              formData[field.name] !== field.must_be &&
+              formData[field.conditional?.id] === field.conditional?.is
             ) {
               checkCondition = true;
             }
-          }
 
-          if (
-            checkCondition == true &&
-            formData[field.name] !== field.must_be &&
-            formData[field.conditional?.id] === field.conditional?.is
-          ) {
-            if (field.message) {
-              if (field.message != " ") {
-                fieldErrors.push(field.message);
+            if (
+              checkCondition == true &&
+              formData[field.name] !== field.must_be &&
+              formData[field.conditional?.id] === field.conditional?.is
+            ) {
+              if (field.message) {
+                if (field.message != " ") {
+                  fieldErrors.push(field.message);
+                }
+              } else {
+                fieldErrors.push(field.name);
               }
-            } else {
-              fieldErrors.push(field.name);
+              allFieldsValid = false;
             }
-            allFieldsValid = false;
           }
         }
       }
