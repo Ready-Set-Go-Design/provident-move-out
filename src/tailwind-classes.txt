@@ -93,11 +93,8 @@ pf:page5
 pf:/page4
 pf:first_name
 pf:last_name
-pf:font-normal
-pf:text-gray-500
-pf:mb-1
-pf:business_name
 pf:text-md
+pf:mb-[-16px]
 pf:forwarding_address
 pf:forwarding_city
 pf:forwarding_province
@@ -143,7 +140,7 @@ pf:provided
 pf:validated.
 pf:check
 pf:entry
-pf:`${serverUrl}/validations/validate-code`
+pf:`${serverUrl()}/validations/validate-code`
 pf:code_verified
 pf:/form_page4
 pf:phone_number
@@ -154,7 +151,14 @@ pf:p-2
 pf:selling_or_renting
 pf:selling
 pf:`phone-${index}`
+pf:col-span-full
 pf:`sms_${index}`
+pf:inline
+pf:ml-2
+pf:`SMS
+pf:ending
+pf:in
+pf:${part}`
 pf:Email
 pf:verification_code
 pf:text-green-600
@@ -163,6 +167,11 @@ pf:Code
 pf:page3
 pf:Send
 pf:/page2
+pf:form-errors
+pf:Your
+pf:Service
+pf:Address
+pf:text-gray-500
 pf:/form_page3
 pf:page2
 pf:bg-gray-100
@@ -190,7 +199,6 @@ pf:`h-[56px]
 pf:w-[56px]
 pf:fill-(--primary-color)
 pf:mt-2
-pf:form-errors
 pf:selling-radio
 pf:renting
 pf:HOME_OWNER
@@ -251,6 +259,7 @@ pf:.091-.086L12
 pf:5.432Z
 pf:Are
 pf:or
+pf:unit?
 pf:renting?
 pf:have
 pf:a
@@ -258,7 +267,6 @@ pf:tenant
 pf:fill
 pf:out
 pf:Customer
-pf:Service
 pf:Agreement
 pf:(Online
 pf:Move
@@ -312,6 +320,8 @@ pf:${response.status}`
 pf:Error
 pf:submitting
 pf:form:
+pf:API
+pf:URL:
 pf:moveout
 pf:`${serverUrl()}/submissions/pdf`
 pf:content-type
@@ -783,6 +793,7 @@ pf:hr
 pf:my-4
 pf:lg:-mx-4
 pf:h3
+pf:mb-1
 pf:px-2
 pf:text-xs/6
 pf:dark:text-zinc-400
@@ -1148,7 +1159,6 @@ pf:button
 pf:px-3.5
 pf:sm:px-3
 pf:forced-colors:data-focus:*:data-[slot=icon]:text-[HighlightText]
-pf:col-span-full
 pf:grid-cols-[auto_1fr_1.5rem_0.5rem_auto]
 pf:supports-[grid-template-columns:subgrid]:grid-cols-subgrid
 pf:*:data-[slot=icon]:col-start-1
@@ -1658,9 +1668,12 @@ pf:required:
 pf:lodash/throttle
 pf:location_id
 pf:Enter
+pf:find
+pf:building
 pf:off
 pf:mr-[2px]
 pf:mt-[0.5px]
+pf:unit
 pf:Number
 pf:w-6
 pf:m-2

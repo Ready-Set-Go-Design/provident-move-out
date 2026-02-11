@@ -16,17 +16,28 @@ function FormPage2() {
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const from = urlParams.get("from");
-
+  const formErrorId = "form-errors";
   return (
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
-      <h2 className={withPrefix("py-4 text-2xl")}>Your Service Address</h2>
+      <h2
+        className={withPrefix("py-4 text-2xl")}
+        aria-label="Your Service Address"
+      >
+        Your Service Address
+      </h2>
+      <main>
+        <div className={withPrefix("text-gray-500")}>
+          This is the address you're leaving.
+        </div>
+        <AddressSearch />
 
-      <div className={withPrefix("text-gray-500")}>
-        This is the address you're leaving.
-      </div>
-      <AddressSearch />
-
-      <AllFieldsRequiredMessage show={showValidationError} id="/page2" />
+        <AllFieldsRequiredMessage
+          show={showValidationError}
+          messageId={formErrorId}
+          focusOnShow={true}
+          id="/page2"
+        />
+      </main>
       <FooterWrapper>
         <NavButton
           label="Save and Continue"

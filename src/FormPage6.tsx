@@ -58,86 +58,92 @@ function FormPage6() {
 
   return (
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
-      <div className={withPrefix("mb-4")}>
-        <h2>Signature</h2>
+      <main>
+        <div className={withPrefix("mb-4")}>
+          <h2>Signature</h2>
 
-        <div>
-          By typing your name in the fields below, you are legally signing this
-          digital form.
-        </div>
-        <CheckboxField
-          className={withPrefix(
-            "border-1 rounded-md pf:overflow-hidden py-2 mt-4",
-            showValidationError && formData.verify_entered_information === ""
-              ? "border-red-500"
-              : "border-transparent",
-          )}
-        >
-          <Checkbox
-            color="brand"
-            name="verify_entered_information"
-            value={formData.verify_entered_information}
-            checked={formData.verify_entered_information == "true"}
-            onChange={(checked) => {
-              dispatch(
-                updateField({
-                  field: "verify_entered_information",
-                  value: checked ? "true" : "",
-                }),
-              );
-            }}
-          />{" "}
-          I verify that all information entered is correct
-        </CheckboxField>
-        <div
-          className={`${
-            formData.signature_image === "" ? "sig-canvas" : ""
-          } ${withPrefix(
-            `border-1 rounded p-4 mt-4 w-full h-full min-h-[130px] mb-4  `,
-            showValidationError && formData.signature_image === ""
-              ? "border-red-500"
-              : "border-gray-300",
-          )} `}
-          ref={containerRef as unknown as React.RefObject<HTMLDivElement>}
-        >
-          <SignatureCanvas
-            penColor="#26aae1"
-            canvasProps={{
-              width: width,
-              height: "200px",
-              className: "sigCanvas",
-            }}
-            onEnd={() => {
-              const base64 = sigCanvas.current?.toDataURL();
-              if (base64) {
+          <div>
+            By typing your name in the fields below, you are legally signing
+            this digital form.
+          </div>
+          <CheckboxField
+            className={withPrefix(
+              "border-1 rounded-md pf:overflow-hidden py-2 mt-4",
+              showValidationError && formData.verify_entered_information === ""
+                ? "border-red-500"
+                : "border-transparent",
+            )}
+          >
+            <Checkbox
+              color="brand"
+              name="verify_entered_information"
+              value={formData.verify_entered_information}
+              checked={formData.verify_entered_information == "true"}
+              onChange={(checked) => {
                 dispatch(
                   updateField({
-                    field: "signature_image",
-                    value: base64 as string,
+                    field: "verify_entered_information",
+                    value: checked ? "true" : "",
                   }),
                 );
-              }
-            }}
-            ref={sigCanvas}
-          />
-        </div>
-        <Button color="white" onClick={clearForm}>
-          Clear
-        </Button>
+              }}
+            />{" "}
+            I verify that all information entered is correct
+          </CheckboxField>
+          <div
+            className={`${
+              formData.signature_image === "" ? "sig-canvas" : ""
+            } ${withPrefix(
+              `border-1 rounded p-4 mt-4 w-full h-full min-h-[130px] mb-4  `,
+              showValidationError && formData.signature_image === ""
+                ? "border-red-500"
+                : "border-gray-300",
+            )} `}
+            ref={containerRef as unknown as React.RefObject<HTMLDivElement>}
+          >
+            <SignatureCanvas
+              penColor="#26aae1"
+              canvasProps={{
+                width: width,
+                height: "200px",
+                className: "sigCanvas",
+              }}
+              onEnd={() => {
+                const base64 = sigCanvas.current?.toDataURL();
+                if (base64) {
+                  dispatch(
+                    updateField({
+                      field: "signature_image",
+                      value: base64 as string,
+                    }),
+                  );
+                }
+              }}
+              ref={sigCanvas}
+            />
+          </div>
+          <Button color="white" onClick={clearForm}>
+            Clear
+          </Button>
 
-        <div className={withPrefix("mt-4")}>
-          Please note that completing this form does not signify that your
-          account has been formally closed. A Customer Service Representative
-          wil follow-up to request additional information. if required.
+          <div className={withPrefix("mt-4")}>
+            Please note that completing this form does not signify that your
+            account has been formally closed. A Customer Service Representative
+            wil follow-up to request additional information. if required.
+          </div>
+
+          <div className={withPrefix("mt-4")}>
+            A copy of this contract will be emailed to{" "}
+            <strong>{formData.email || "placeholder@email.com"}</strong>
+          </div>
         </div>
 
-        <div className={withPrefix("mt-4")}>
-          A copy of this contract will be emailed to{" "}
-          <strong>{formData.email || "placeholder@email.com"}</strong>
-        </div>
-      </div>
-
-      <AllFieldsRequiredMessage show={showValidationError} id="/page6" />
+        <AllFieldsRequiredMessage
+          show={showValidationError}
+          id="/page6"
+          focusOnShow={true}
+        />
+      </main>
       <FooterWrapper>
         <NavButton
           label="Submit"

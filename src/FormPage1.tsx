@@ -10,7 +10,6 @@ import { isPageValid } from "./utils/isPageValid";
 import { useEffect, useState, useRef } from "react";
 import { AllFieldsRequiredMessage } from "./components/AllFieldsRequiredMessage";
 import { validateForm } from "./utils/validateForm";
-import { Label } from "@headlessui/react";
 import { RadioField, RadioGroup, Radio } from "./components/radio";
 import { FooterWrapper } from "./components/FooterWrapper";
 
@@ -137,238 +136,250 @@ function FormPage1() {
 
   return (
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
-      <h2 className={withPrefix("py-4 text-2xl")}>Moving Out</h2>
-      <div>
-        Please answer a few questions to better help us prepare your move out.
-      </div>
+      <main>
+        <h2 className={withPrefix("py-4 text-2xl")}>Moving Out</h2>
 
-      <fieldset
-        aria-describedby={
-          showValidationError && formData.user_type === ""
-            ? formErrorId
-            : undefined
-        }
-        aria-invalid={showValidationError && formData.user_type === ""}
-        className={withPrefix("mt-6")}
-      >
-        <legend className={withPrefix("font-bold text-md mb-2")}>
-          Choose an option
-        </legend>
-        <div
-          className={withPrefix(
-            "inline-flex gap-2 w-full rounded-md overflow-hidden border-1 ",
-            showValidationError && formData.user_type === ""
-              ? "border-red-500"
-              : "border-transparent",
-          )}
-        >
-          <ServiceType
-            label="Tenant"
-            value="TENANT"
-            name="user_type"
-            checked={formData.user_type === "TENANT"}
-            describedById={
-              showValidationError && formData.user_type === ""
-                ? formErrorId
-                : undefined
-            }
-            inputRef={tenantInputRef}
-            onChange={(nextValue) => {
-              dispatch(updateField({ field: "user_type", value: nextValue }));
-              if (nextValue === "TENANT") {
-                dispatch(
-                  updateField({ field: "selling_or_renting", value: "" }),
-                );
-              }
-            }}
-            icon={
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className={withPrefix("w-full text-(--primary-color)")}
-                aria-hidden="true"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M15.75 1.5a6.75 6.75 0 0 0-6.651 7.906c.067.39-.032.717-.221.906l-6.5 6.499a3 3 0 0 0-.878 2.121v2.818c0 .414.336.75.75.75H6a.75.75 0 0 0 .75-.75v-1.5h1.5A.75.75 0 0 0 9 19.5V18h1.5a.75.75 0 0 0 .53-.22l2.658-2.658c.19-.189.517-.288.906-.22A6.75 6.75 0 1 0 15.75 1.5Zm0 3a.75.75 0 0 0 0 1.5A2.25 2.25 0 0 1 18 8.25a.75.75 0 0 0 1.5 0 3.75 3.75 0 0 0-3.75-3.75Z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            }
-          />
-          <ServiceType
-            label="Home Owner"
-            value="HOME_OWNER"
-            name="user_type"
-            checked={formData.user_type === "HOME_OWNER"}
-            describedById={
-              showValidationError && formData.user_type === ""
-                ? formErrorId
-                : undefined
-            }
-            onChange={(nextValue) => {
-              dispatch(updateField({ field: "user_type", value: nextValue }));
-            }}
-            icon={
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className={withPrefix("w-full text-(--primary-color)")}
-                aria-hidden="true"
-              >
-                <path d="M11.47 3.841a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 0 1.06-1.061l-8.689-8.69a2.25 2.25 0 0 0-3.182 0l-8.69 8.69a.75.75 0 1 0 1.061 1.06l8.69-8.689Z" />
-                <path d="m12 5.432 8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75V21a.75.75 0 0 1-.75.75H5.625a1.875 1.875 0 0 1-1.875-1.875v-6.198a2.29 2.29 0 0 0 .091-.086L12 5.432Z" />
-              </svg>
-            }
-          />
-        </div>
-      </fieldset>
-
-      {formData.user_type === "HOME_OWNER" && (
         <div>
-          <div className={withPrefix("font-semibold text-md mt-6 mb-2")}>
-            Are you selling or renting the unit?
-          </div>
+          Please answer a few questions to better help us prepare your move out.
+        </div>
 
-          <RadioGroup
+        <fieldset
+          aria-describedby={
+            showValidationError && formData.user_type === ""
+              ? formErrorId
+              : undefined
+          }
+          aria-invalid={showValidationError && formData.user_type === ""}
+          className={withPrefix("mt-6")}
+        >
+          <legend className={withPrefix("font-bold text-md mb-2")}>
+            Choose an option
+          </legend>
+          <div
             className={withPrefix(
-              "border-1 rounded-md pf:overflow-hidden p-2 mt-4",
-              showValidationError && formData.selling_or_renting === ""
+              "inline-flex gap-2 w-full rounded-md overflow-hidden border-1 ",
+              showValidationError && formData.user_type === ""
                 ? "border-red-500"
                 : "border-transparent",
             )}
-            name="selling_or_renting"
-            defaultValue="selling"
-            aria-label="Are you selling or renting?"
-            value={formData.selling_or_renting}
-            onChange={(e) => {
-              dispatch(
-                updateField({
-                  field: "selling_or_renting",
-                  value: e,
-                }),
-              );
-            }}
           >
-            <RadioField>
-              <Radio value="selling" color="brand" id={sellingRadioId} />
-              <Label>Selling</Label>
-            </RadioField>
-            <RadioField>
-              <Radio value="renting" color="brand" />
-              <Label>Renting</Label>
-            </RadioField>
-          </RadioGroup>
-
-          {formData.selling_or_renting === "renting" && (
-            <AllFieldsRequiredMessage
-              show={true}
-              id="/"
-              announceKey={rentingAnnounceKey}
-              focusOnAnnounceKey={true}
-              override={
-                "Please have a tenant fill out a Customer Service Agreement (Online Move In Form). The Landlord account will remain open until the new tenant Customer Service Agreement (Online Move In Form) is received."
+            <ServiceType
+              label="Tenant"
+              value="TENANT"
+              name="user_type"
+              checked={formData.user_type === "TENANT"}
+              describedById={
+                showValidationError && formData.user_type === ""
+                  ? formErrorId
+                  : undefined
+              }
+              inputRef={tenantInputRef}
+              onChange={(nextValue) => {
+                dispatch(updateField({ field: "user_type", value: nextValue }));
+                if (nextValue === "TENANT") {
+                  dispatch(
+                    updateField({ field: "selling_or_renting", value: "" }),
+                  );
+                }
+              }}
+              icon={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className={withPrefix("w-full text-(--primary-color)")}
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M15.75 1.5a6.75 6.75 0 0 0-6.651 7.906c.067.39-.032.717-.221.906l-6.5 6.499a3 3 0 0 0-.878 2.121v2.818c0 .414.336.75.75.75H6a.75.75 0 0 0 .75-.75v-1.5h1.5A.75.75 0 0 0 9 19.5V18h1.5a.75.75 0 0 0 .53-.22l2.658-2.658c.19-.189.517-.288.906-.22A6.75 6.75 0 1 0 15.75 1.5Zm0 3a.75.75 0 0 0 0 1.5A2.25 2.25 0 0 1 18 8.25a.75.75 0 0 0 1.5 0 3.75 3.75 0 0 0-3.75-3.75Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
               }
             />
-          )}
-        </div>
-      )}
+            <ServiceType
+              label="Home Owner"
+              value="HOME_OWNER"
+              name="user_type"
+              checked={formData.user_type === "HOME_OWNER"}
+              describedById={
+                showValidationError && formData.user_type === ""
+                  ? formErrorId
+                  : undefined
+              }
+              onChange={(nextValue) => {
+                dispatch(updateField({ field: "user_type", value: nextValue }));
+              }}
+              icon={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className={withPrefix("w-full text-(--primary-color)")}
+                  aria-hidden="true"
+                >
+                  <path d="M11.47 3.841a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 0 1.06-1.061l-8.689-8.69a2.25 2.25 0 0 0-3.182 0l-8.69 8.69a.75.75 0 1 0 1.061 1.06l8.69-8.689Z" />
+                  <path d="m12 5.432 8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75V21a.75.75 0 0 1-.75.75H5.625a1.875 1.875 0 0 1-1.875-1.875v-6.198a2.29 2.29 0 0 0 .091-.086L12 5.432Z" />
+                </svg>
+              }
+            />
+          </div>
+        </fieldset>
 
-      <fieldset
-        aria-describedby={
-          showValidationError &&
-          (formData.moving_day === "" ||
-            formData.moving_month === "" ||
-            formData.moving_year === "")
-            ? formErrorId
-            : undefined
-        }
-        aria-invalid={
-          showValidationError &&
-          (formData.moving_day === "" ||
-            formData.moving_month === "" ||
-            formData.moving_year === "")
-        }
-        className={withPrefix("mb-8")}
-      >
-        <legend className={withPrefix("font-semibold text-md mt-6 mb-2")}>
-          Departure date
-        </legend>
-        <div className={withPrefix("flex gap-2")}>
-          <label className={withPrefix("sr-only")} htmlFor="moving-day">
-            Moving day
-          </label>
-          <Select
-            id="moving-day"
-            value={formData.moving_day}
-            onChange={(e) => {
-              dispatch(
-                updateField({ field: "moving_day", value: e.target.value }),
-              );
-            }}
-            invalid={showValidationError && formData.moving_day === ""}
-          >
-            <option value="">Day</option>
-            {Array.from({ length: 31 }, (_, i) => (
-              <option key={i + 1} value={i + 1}>
-                {i + 1}
-              </option>
-            ))}
-          </Select>
-          <label className={withPrefix("sr-only")} htmlFor="moving-month">
-            Moving month
-          </label>
-          <Select
-            id="moving-month"
-            value={formData.moving_month}
-            onChange={(e) => {
-              dispatch(
-                updateField({ field: "moving_month", value: e.target.value }),
-              );
-            }}
-            invalid={showValidationError && formData.moving_month === ""}
-          >
-            <option value="">Month</option>
-            {Array.from({ length: 12 }, (_, i) => (
-              <option key={i + 1} value={i + 1}>
-                {new Date(0, i).toLocaleString("default", {
-                  month: "long",
-                })}
-              </option>
-            ))}
-          </Select>
-          <label className={withPrefix("sr-only")} htmlFor="moving-year">
-            Moving year
-          </label>
-          <Select
-            id="moving-year"
-            value={formData.moving_year}
-            onChange={(e) => {
-              dispatch(
-                updateField({ field: "moving_year", value: e.target.value }),
-              );
-            }}
-            invalid={showValidationError && formData.moving_year === ""}
-          >
-            <option value="">Year</option>
-            {Array.from({ length: 5 }, (_, i) => (
-              <option key={i + 2026} value={i + 2026}>
-                {i + 2026}
-              </option>
-            ))}
-          </Select>
-        </div>
-      </fieldset>
+        {formData.user_type === "HOME_OWNER" && (
+          <div>
+            <div
+              className={withPrefix("font-semibold text-md mt-6 mb-2")}
+              aria-label="Are you selling or renting the unit?"
+            >
+              Are you selling or renting the unit?
+            </div>
 
-      <AllFieldsRequiredMessage
-        show={showValidationError || isRenter === true}
-        id="/"
-        messageId={formErrorId}
-        focusOnShow={false}
-      />
+            <RadioGroup
+              className={withPrefix(
+                "border-1 rounded-md pf:overflow-hidden p-2 mt-4",
+                showValidationError && formData.selling_or_renting === ""
+                  ? "border-red-500"
+                  : "border-transparent",
+              )}
+              name="selling_or_renting"
+              defaultValue="selling"
+              aria-label="Are you selling or renting?"
+              value={formData.selling_or_renting}
+              onChange={(e) => {
+                dispatch(
+                  updateField({
+                    field: "selling_or_renting",
+                    value: e,
+                  }),
+                );
+              }}
+            >
+              <RadioField>
+                <label className={withPrefix("flex items-center gap-2")}>
+                  <Radio value="selling" color="brand" />
+                  <span>Selling</span>
+                </label>
+              </RadioField>
+              <RadioField>
+                <label
+                  className={withPrefix("flex items-center gap-2")}
+                  id={sellingRadioId}
+                >
+                  <Radio value="renting" color="brand" />
+                  <span>Renting</span>
+                </label>
+              </RadioField>
+            </RadioGroup>
 
+            {formData.selling_or_renting === "renting" && (
+              <AllFieldsRequiredMessage
+                show={true}
+                id="/"
+                announceKey={rentingAnnounceKey}
+                focusOnAnnounceKey={true}
+                override={
+                  "Please have a tenant fill out a Customer Service Agreement (Online Move In Form). The Landlord account will remain open until the new tenant Customer Service Agreement (Online Move In Form) is received."
+                }
+              />
+            )}
+          </div>
+        )}
+
+        <fieldset
+          aria-describedby={
+            showValidationError &&
+            (formData.moving_day === "" ||
+              formData.moving_month === "" ||
+              formData.moving_year === "")
+              ? formErrorId
+              : undefined
+          }
+          aria-invalid={
+            showValidationError &&
+            (formData.moving_day === "" ||
+              formData.moving_month === "" ||
+              formData.moving_year === "")
+          }
+          className={withPrefix("mb-8")}
+        >
+          <legend className={withPrefix("font-semibold text-md mt-6 mb-2")}>
+            Departure date
+          </legend>
+          <div className={withPrefix("flex gap-2")}>
+            <label className={withPrefix("sr-only")} htmlFor="moving-day">
+              Moving day
+            </label>
+            <Select
+              id="moving-day"
+              value={formData.moving_day}
+              onChange={(e) => {
+                dispatch(
+                  updateField({ field: "moving_day", value: e.target.value }),
+                );
+              }}
+              invalid={showValidationError && formData.moving_day === ""}
+            >
+              <option value="">Day</option>
+              {Array.from({ length: 31 }, (_, i) => (
+                <option key={i + 1} value={i + 1}>
+                  {i + 1}
+                </option>
+              ))}
+            </Select>
+            <label className={withPrefix("sr-only")} htmlFor="moving-month">
+              Moving month
+            </label>
+            <Select
+              id="moving-month"
+              value={formData.moving_month}
+              onChange={(e) => {
+                dispatch(
+                  updateField({ field: "moving_month", value: e.target.value }),
+                );
+              }}
+              invalid={showValidationError && formData.moving_month === ""}
+            >
+              <option value="">Month</option>
+              {Array.from({ length: 12 }, (_, i) => (
+                <option key={i + 1} value={i + 1}>
+                  {new Date(0, i).toLocaleString("default", {
+                    month: "long",
+                  })}
+                </option>
+              ))}
+            </Select>
+            <label className={withPrefix("sr-only")} htmlFor="moving-year">
+              Moving year
+            </label>
+            <Select
+              id="moving-year"
+              value={formData.moving_year}
+              onChange={(e) => {
+                dispatch(
+                  updateField({ field: "moving_year", value: e.target.value }),
+                );
+              }}
+              invalid={showValidationError && formData.moving_year === ""}
+            >
+              <option value="">Year</option>
+              {Array.from({ length: 5 }, (_, i) => (
+                <option key={i + 2026} value={i + 2026}>
+                  {i + 2026}
+                </option>
+              ))}
+            </Select>
+          </div>
+        </fieldset>
+
+        <AllFieldsRequiredMessage
+          show={showValidationError || isRenter === true}
+          id="/"
+          messageId={formErrorId}
+          focusOnShow={false}
+        />
+      </main>
       <FooterWrapper>
         <NavButton
           label="Save and continue"

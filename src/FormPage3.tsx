@@ -131,8 +131,10 @@ function FormPage3() {
 
   const verifyCode = async () => {
     try {
+      console.log(serverUrl());
+
       const validateCode = await fetch(
-        `${serverUrl}/validations/validate-code`,
+        `${serverUrl()}/validations/validate-code`,
         {
           method: "POST",
           headers: {
@@ -193,32 +195,34 @@ function FormPage3() {
     return (
       <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
         <h2 className={withPrefix("py-4 text-2xl")}>Occupant Verification</h2>
-        <div>
-          Validating customer number{" "}
-          <span className={withPrefix("font-bold")}>
-            {formData.customer_number}
-          </span>
-          ...
-        </div>
-
-        {error && (
-          <div className={withPrefix("text-red-600 mt-4")}>{error}</div>
-        )}
-
-        {error && (
-          <div className={withPrefix("flex mt-8")}>
-            <div>
-              <NavButton
-                outline={true}
-                action={() => {
-                  navigate("/");
-                }}
-                label={"Start Over"}
-                currentPage=""
-              />
-            </div>
+        <main>
+          <div>
+            Validating customer number{" "}
+            <span className={withPrefix("font-bold")}>
+              {formData.customer_number}
+            </span>
+            ...
           </div>
-        )}
+
+          {error && (
+            <div className={withPrefix("text-red-600 mt-4")}>{error}</div>
+          )}
+
+          {error && (
+            <div className={withPrefix("flex mt-8")}>
+              <div>
+                <NavButton
+                  outline={true}
+                  action={() => {
+                    navigate("/");
+                  }}
+                  label={"Start Over"}
+                  currentPage=""
+                />
+              </div>
+            </div>
+          )}
+        </main>
       </div>
     );
   }
@@ -226,91 +230,108 @@ function FormPage3() {
   return (
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
       <h2 className={withPrefix("py-4 text-2xl")}>Occupant Verification</h2>
+      <main>
+        <div className={withPrefix("text-sm font-semibold")}>
+          You'll need to verify you are the occupant of the residence. Select a
+          verification method below.{" "}
+        </div>
 
-      <div className={withPrefix("text-sm font-semibold")}>
-        You'll need to verify you are the occupant of the residence. Select a
-        verification method below.{" "}
-      </div>
+        {!verificationCodeSent && !formData.code_verified && (
+          <div className={withPrefix("mb-4")}>
+            {" "}
+            <RadioGroup
+              className={withPrefix(
+                "border-1 rounded-md pf:overflow-hidden p-2 mt-4",
+                showValidationError && formData.verificationMethod === ""
+                  ? "border-red-500"
+                  : "border-transparent",
+              )}
+              name="selling_or_renting"
+              defaultValue="selling"
+              value={verificationMethod}
+              onChange={(e) => {
+                setVerificationMethod(e);
+              }}
+            >
+              {maskedPhoneNumber.map((part, index) => (
+                <RadioField key={`phone-${index}`}>
+                  <label className={withPrefix("col-span-full")}>
+                    <Radio value={`sms_${index}`} color="brand" />
+                    <div
+                      className={withPrefix("inline ml-2")}
+                      aria-label={`SMS number ending in ${part}`}
+                    >
+                      SMS number ending in{" "}
+                      <span className={withPrefix("font-bold")}>{part}</span>
+                    </div>
+                  </label>
+                </RadioField>
+              ))}
 
-      {!verificationCodeSent && !formData.code_verified && (
-        <div className={withPrefix("mb-4")}>
-          {" "}
-          <RadioGroup
-            className={withPrefix(
-              "border-1 rounded-md pf:overflow-hidden p-2 mt-4",
-              showValidationError && formData.verificationMethod === ""
-                ? "border-red-500"
-                : "border-transparent",
-            )}
-            name="selling_or_renting"
-            defaultValue="selling"
-            value={verificationMethod}
-            onChange={(e) => {
-              setVerificationMethod(e);
-            }}
-          >
-            {maskedPhoneNumber.map((part, index) => (
-              <RadioField key={`phone-${index}`}>
-                <Radio value={`sms_${index}`} color="brand" />
-                <Label>
-                  SMS number ending in{" "}
-                  <span className={withPrefix("font-bold")}>{part}</span>
-                </Label>
+              <RadioField>
+                <label className={withPrefix("col-span-full")}>
+                  <Radio value="email" color="brand" />
+
+                  <div
+                    className={withPrefix("inline ml-2")}
+                    aria-label={`Email to address beginning with ${maskedEmail.slice(0, 2)} and ending with ${maskedEmail.split("@")[1].slice(1)}`}
+                  >
+                    Email{" "}
+                    <span className={withPrefix("font-bold")}>
+                      {maskedEmail}
+                    </span>
+                  </div>
+                </label>
               </RadioField>
-            ))}
+            </RadioGroup>
+            {error && (
+              <div className={withPrefix("text-red-600 mt-4")}>{error}</div>
+            )}
+          </div>
+        )}
 
-            <RadioField>
-              <Radio value="email" color="brand" />
-              <Label>
-                Email{" "}
-                <span className={withPrefix("font-bold")}>{maskedEmail}</span>
+        {verificationCodeSent && !formData.code_verified && (
+          <>
+            <Field className={withPrefix("mb-4 mt-4")}>
+              <Label className={withPrefix("text-sm font-semibold")}>
+                Enter the 6-digit code below
               </Label>
-            </RadioField>
-          </RadioGroup>
-          {error && (
-            <div className={withPrefix("text-red-600 mt-4")}>{error}</div>
-          )}
-        </div>
-      )}
+              <WrappedInput
+                showSearch={false}
+                invalid={
+                  showValidationError && validatedForm?.errors.includes("Email")
+                }
+                type="text"
+                name="verification_code"
+                placeholder={""}
+                value={verificationCode}
+                onChange={(e: any) => {
+                  setVerificationCode(e);
+                }}
+                clearAction={(e: any) => {
+                  setVerificationCode("");
+                }}
+              />
+            </Field>
+            {error && (
+              <div className={withPrefix("text-red-600 mt-4")}>{error}</div>
+            )}
+          </>
+        )}
 
-      {verificationCodeSent && !formData.code_verified && (
-        <>
-          <Field className={withPrefix("mb-4 mt-4")}>
-            <Label className={withPrefix("text-sm font-semibold")}>
-              Enter the 6-digit code below
-            </Label>
-            <WrappedInput
-              showSearch={false}
-              invalid={
-                showValidationError && validatedForm?.errors.includes("Email")
-              }
-              type="text"
-              name="verification_code"
-              placeholder={""}
-              value={verificationCode}
-              onChange={(e: any) => {
-                setVerificationCode(e);
-              }}
-              clearAction={(e: any) => {
-                setVerificationCode("");
-              }}
-            />
-          </Field>
-          {error && (
-            <div className={withPrefix("text-red-600 mt-4")}>{error}</div>
-          )}
-        </>
-      )}
-
-      {formData.code_verified && (
-        <div
-          className={withPrefix("text-green-600 font-semibold text-md mt-4")}
-        >
-          Your identity has been successfully verified.
-        </div>
-      )}
-      <AllFieldsRequiredMessage show={showValidationError} id="/page3" />
-
+        {formData.code_verified && (
+          <div
+            className={withPrefix("text-green-600 font-semibold text-md mt-4")}
+          >
+            Your identity has been successfully verified.
+          </div>
+        )}
+        <AllFieldsRequiredMessage
+          show={showValidationError}
+          id="/page3"
+          focusOnShow={true}
+        />
+      </main>
       <FooterWrapper>
         {(verificationCodeSent || formData.code_verified) && (
           <NavButton

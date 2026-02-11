@@ -58,7 +58,11 @@ function FormPage7() {
   if (!submitted && !error) {
     return (
       <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
-        <h2 className={withPrefix("py-4 text-2xl")}>Submitting Agreement...</h2>
+        <main>
+          <h2 className={withPrefix("py-4 text-2xl")}>
+            Submitting Agreement...
+          </h2>
+        </main>
       </div>
     );
   }
@@ -67,12 +71,14 @@ function FormPage7() {
     return (
       <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
         <h2 className={withPrefix("py-4 text-2xl")}>Submission Error</h2>
-        <div className={withPrefix("mb-4")}>
-          <div className={withPrefix("mt-4 mb-4")}>
-            There was a problem submitting your agreement. Please ensure that
-            all fields are filled out and try again.
+        <main>
+          <div className={withPrefix("mb-4")}>
+            <div className={withPrefix("mt-4 mb-4")}>
+              There was a problem submitting your agreement. Please ensure that
+              all fields are filled out and try again.
+            </div>
           </div>
-        </div>
+        </main>
 
         <FooterWrapper>
           <NavButton
@@ -92,36 +98,37 @@ function FormPage7() {
   return (
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
       <h2 className={withPrefix("py-4 text-2xl")}>Submission Complete</h2>
-      <div className={withPrefix("mb-4")}>
-        Thanks for completing the Move-out form with Provident Energy Management
-        Inc.
-      </div>
+      <main>
+        <div className={withPrefix("mb-4")}>
+          Thanks for completing the Move-out form with Provident Energy
+          Management Inc.
+        </div>
 
-      <div className={withPrefix("mt-8")}>
-        <Button
-          onClick={async () => {
-            setPdfDownloadError(null);
-            try {
-              // Check if we have a PDF blob from the new API response
-              if (submissionData && submissionData.submission_id) {
-                await requestPDF(submissionData.submission_id);
+        <div className={withPrefix("mt-8")}>
+          <Button
+            onClick={async () => {
+              setPdfDownloadError(null);
+              try {
+                // Check if we have a PDF blob from the new API response
+                if (submissionData && submissionData.submission_id) {
+                  await requestPDF(submissionData.submission_id);
+                }
+              } catch (error) {
+                const errorMessage =
+                  error instanceof Error ? error.message : String(error);
+                setPdfDownloadError(errorMessage);
               }
-            } catch (error) {
-              const errorMessage =
-                error instanceof Error ? error.message : String(error);
-              setPdfDownloadError(errorMessage);
-            }
-          }}
-        >
-          Download PDF
-        </Button>
-        {pdfDownloadError && (
-          <div className={withPrefix("text-(--validation-error-color)")}>
-            Error downloading PDF: {pdfDownloadError}
-          </div>
-        )}
-      </div>
-
+            }}
+          >
+            Download PDF
+          </Button>
+          {pdfDownloadError && (
+            <div className={withPrefix("text-(--validation-error-color)")}>
+              Error downloading PDF: {pdfDownloadError}
+            </div>
+          )}
+        </div>
+      </main>
       <FooterWrapper>
         <NavButton
           outline={true}

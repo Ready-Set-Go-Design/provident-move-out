@@ -31,185 +31,165 @@ function FormPage4() {
   return (
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
       <h2 className={withPrefix("py-4 text-2xl")}>Primary Account Holder</h2>
+      <main>
+        <Field className={withPrefix("mb-4")}>
+          <Label className={withPrefix("text-sm font-bold")}>First name</Label>
+          <WrappedInput
+            showSearch={false}
+            invalid={
+              showValidationError &&
+              validatedForm?.errors.includes("first_name")
+            }
+            type="text"
+            name="first_name"
+            placeholder={""}
+            value={formData.first_name}
+            onChange={(e: any) => {
+              dispatch(updateField({ field: "first_name", value: e }));
+            }}
+            clearAction={(e: any) => {
+              dispatch(updateField({ field: "first_name", value: "" }));
+            }}
+          />
+        </Field>
+        <Field className={withPrefix("mb-4")}>
+          <Label className={withPrefix("text-sm font-bold")}>Last name</Label>
 
-      <Field className={withPrefix("mb-4")}>
-        <Label className={withPrefix("text-sm font-bold")}>First name</Label>
-        <WrappedInput
-          showSearch={false}
-          invalid={
-            showValidationError && validatedForm?.errors.includes("first_name")
-          }
-          type="text"
-          name="first_name"
-          placeholder={""}
-          value={formData.first_name}
-          onChange={(e: any) => {
-            dispatch(updateField({ field: "first_name", value: e }));
-          }}
-          clearAction={(e: any) => {
-            dispatch(updateField({ field: "first_name", value: "" }));
-          }}
-        />
-      </Field>
-      <Field className={withPrefix("mb-4")}>
-        <Label className={withPrefix("text-sm font-bold")}>Last name</Label>
+          <WrappedInput
+            showSearch={false}
+            invalid={
+              showValidationError && validatedForm?.errors.includes("last_name")
+            }
+            type="text"
+            name="last_name"
+            placeholder={""}
+            value={formData.last_name}
+            onChange={(e: any) => {
+              dispatch(updateField({ field: "last_name", value: e }));
+            }}
+            clearAction={(e: any) => {
+              dispatch(updateField({ field: "last_name", value: "" }));
+            }}
+          />
+        </Field>
 
-        <WrappedInput
-          showSearch={false}
-          invalid={
-            showValidationError && validatedForm?.errors.includes("last_name")
-          }
-          type="text"
-          name="last_name"
-          placeholder={""}
-          value={formData.last_name}
-          onChange={(e: any) => {
-            dispatch(updateField({ field: "last_name", value: e }));
-          }}
-          clearAction={(e: any) => {
-            dispatch(updateField({ field: "last_name", value: "" }));
-          }}
-        />
-      </Field>
-      {/* <Field className={withPrefix("mb-4")}>
-        <Label className={withPrefix("text-sm font-bold")}>
-          Business name
-          <br />
-          <div className={withPrefix("font-normal text-gray-500 mb-1")}>
-            If you wish this account be under a business enter the name below
-          </div>
-        </Label>
-        <WrappedInput
-          showSearch={false}
-          invalid={
-            showValidationError &&
-            validatedForm?.errors.includes("business_name")
-          }
-          type="text"
-          name="business_name"
-          placeholder={""}
-          value={formData.business_name}
-          onChange={(e: any) => {
-            dispatch(updateField({ field: "business_name", value: e }));
-          }}
-          clearAction={(e: any) => {
-            dispatch(updateField({ field: "business_name", value: "" }));
-          }}
-        />
-      </Field> */}
-
-      <Field className={withPrefix("mt-8 mb-4")}>
-        <Label className={withPrefix("text-md font-bold")}>
+        <div className={withPrefix("text-md font-bold mt-8 mb-[-16px]")}>
           Forwarding Address
-        </Label>
-      </Field>
+        </div>
 
-      <Field className={withPrefix("mt-8 mb-4")}>
-        <Label className={withPrefix("text-sm font-bold")}>Address</Label>
-        <WrappedInput
-          showSearch={false}
-          invalid={
-            showValidationError &&
-            validatedForm?.errors.includes("forwarding_address")
-          }
-          type="text"
-          name="forwarding_address"
-          placeholder={""}
-          value={formData.forwarding_address}
-          onChange={(e: any) => {
-            dispatch(updateField({ field: "forwarding_address", value: e }));
-          }}
-          clearAction={(e: any) => {
-            dispatch(updateField({ field: "forwarding_address", value: "" }));
-          }}
-        />
-      </Field>
-      <Field className={withPrefix("mt-8 mb-4")}>
-        <Label className={withPrefix("text-sm font-bold")}>City</Label>
-        <WrappedInput
-          showSearch={false}
-          invalid={
-            showValidationError &&
-            validatedForm?.errors.includes("forwarding_city")
-          }
-          type="text"
-          name="forwarding_city"
-          placeholder={""}
-          value={formData.forwarding_city}
-          onChange={(e: any) => {
-            dispatch(updateField({ field: "forwarding_city", value: e }));
-          }}
-          clearAction={(e: any) => {
-            dispatch(updateField({ field: "forwarding_city", value: "" }));
-          }}
-        />
-      </Field>
-      <Field className={withPrefix("mt-8 mb-4")}>
-        <Label className={withPrefix("text-sm font-bold")}>Province</Label>
-        <WrappedInput
-          showSearch={false}
-          invalid={
-            showValidationError &&
-            validatedForm?.errors.includes("forwarding_province")
-          }
-          type="text"
-          name="forwarding_province"
-          placeholder={""}
-          value={formData.forwarding_province}
-          onChange={(e: any) => {
-            dispatch(updateField({ field: "forwarding_province", value: e }));
-          }}
-          clearAction={(e: any) => {
-            dispatch(updateField({ field: "forwarding_province", value: "" }));
-          }}
-        />
-      </Field>
-      <Field className={withPrefix("mt-8 mb-4")}>
-        <Label className={withPrefix("text-sm font-bold")}>Country</Label>
-        <WrappedInput
-          showSearch={false}
-          invalid={
-            showValidationError &&
-            validatedForm?.errors.includes("forwarding_country")
-          }
-          type="text"
-          name="forwarding_country"
-          placeholder={""}
-          value={formData.forwarding_country}
-          onChange={(e: any) => {
-            dispatch(updateField({ field: "forwarding_country", value: e }));
-          }}
-          clearAction={(e: any) => {
-            dispatch(updateField({ field: "forwarding_country", value: "" }));
-          }}
-        />
-      </Field>
-      <Field className={withPrefix("mt-8 mb-4")}>
-        <Label className={withPrefix("text-sm font-bold")}>Postal Code</Label>
-        <WrappedInput
-          showSearch={false}
-          invalid={
-            showValidationError &&
-            validatedForm?.errors.includes("forwarding_postal_code")
-          }
-          type="text"
-          name="forwarding_postal_code"
-          placeholder={""}
-          value={formData.forwarding_postal_code}
-          onChange={(e: any) => {
-            dispatch(
-              updateField({ field: "forwarding_postal_code", value: e }),
-            );
-          }}
-          clearAction={(e: any) => {
-            dispatch(
-              updateField({ field: "forwarding_postal_code", value: "" }),
-            );
-          }}
-        />
-      </Field>
+        <Field className={withPrefix("mt-8 mb-4")}>
+          <Label className={withPrefix("text-sm font-bold")}>Address</Label>
+          <WrappedInput
+            showSearch={false}
+            invalid={
+              showValidationError &&
+              validatedForm?.errors.includes("forwarding_address")
+            }
+            type="text"
+            name="forwarding_address"
+            placeholder={""}
+            value={formData.forwarding_address}
+            onChange={(e: any) => {
+              dispatch(updateField({ field: "forwarding_address", value: e }));
+            }}
+            clearAction={(e: any) => {
+              dispatch(updateField({ field: "forwarding_address", value: "" }));
+            }}
+          />
+        </Field>
+        <Field className={withPrefix("mt-8 mb-4")}>
+          <Label className={withPrefix("text-sm font-bold")}>City</Label>
+          <WrappedInput
+            showSearch={false}
+            invalid={
+              showValidationError &&
+              validatedForm?.errors.includes("forwarding_city")
+            }
+            type="text"
+            name="forwarding_city"
+            placeholder={""}
+            value={formData.forwarding_city}
+            onChange={(e: any) => {
+              dispatch(updateField({ field: "forwarding_city", value: e }));
+            }}
+            clearAction={(e: any) => {
+              dispatch(updateField({ field: "forwarding_city", value: "" }));
+            }}
+          />
+        </Field>
+        <Field className={withPrefix("mt-8 mb-4")}>
+          <Label className={withPrefix("text-sm font-bold")}>Province</Label>
+          <WrappedInput
+            showSearch={false}
+            invalid={
+              showValidationError &&
+              validatedForm?.errors.includes("forwarding_province")
+            }
+            type="text"
+            name="forwarding_province"
+            placeholder={""}
+            value={formData.forwarding_province}
+            onChange={(e: any) => {
+              dispatch(updateField({ field: "forwarding_province", value: e }));
+            }}
+            clearAction={(e: any) => {
+              dispatch(
+                updateField({ field: "forwarding_province", value: "" }),
+              );
+            }}
+          />
+        </Field>
+        <Field className={withPrefix("mt-8 mb-4")}>
+          <Label className={withPrefix("text-sm font-bold")}>Country</Label>
+          <WrappedInput
+            showSearch={false}
+            invalid={
+              showValidationError &&
+              validatedForm?.errors.includes("forwarding_country")
+            }
+            type="text"
+            name="forwarding_country"
+            placeholder={""}
+            value={formData.forwarding_country}
+            onChange={(e: any) => {
+              dispatch(updateField({ field: "forwarding_country", value: e }));
+            }}
+            clearAction={(e: any) => {
+              dispatch(updateField({ field: "forwarding_country", value: "" }));
+            }}
+          />
+        </Field>
+        <Field className={withPrefix("mt-8 mb-4")}>
+          <Label className={withPrefix("text-sm font-bold")}>Postal Code</Label>
+          <WrappedInput
+            showSearch={false}
+            invalid={
+              showValidationError &&
+              validatedForm?.errors.includes("forwarding_postal_code")
+            }
+            type="text"
+            name="forwarding_postal_code"
+            placeholder={""}
+            value={formData.forwarding_postal_code}
+            onChange={(e: any) => {
+              dispatch(
+                updateField({ field: "forwarding_postal_code", value: e }),
+              );
+            }}
+            clearAction={(e: any) => {
+              dispatch(
+                updateField({ field: "forwarding_postal_code", value: "" }),
+              );
+            }}
+          />
+        </Field>
 
-      <AllFieldsRequiredMessage show={showValidationError} id="/page4" />
+        <AllFieldsRequiredMessage
+          show={showValidationError}
+          id="/page4"
+          focusOnShow={true}
+        />
+      </main>
       <FooterWrapper>
         <NavButton
           label="Save and Continue"

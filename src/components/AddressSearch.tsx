@@ -148,6 +148,7 @@ function AddressSearch() {
       >
         <SearchIcon />
         <Input
+          aria-label="Enter your address to find your building"
           type="text"
           placeholder="Enter address"
           value={searchQuery}
@@ -211,6 +212,7 @@ function AddressSearch() {
             <Input
               type="text"
               placeholder=""
+              aria-label="Enter your suite or unit number"
               value={unitQuery}
               onChange={(e) => {
                 searchForUnits(e.target.value);
@@ -279,6 +281,7 @@ function AddressSearch() {
             <Input
               type="text"
               placeholder="Enter Number"
+              aria-label="Enter your customer number"
               value={formData.customer_number}
               readOnly={formData.code_verified}
               onChange={(e) => {
