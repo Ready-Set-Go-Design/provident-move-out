@@ -12,6 +12,7 @@ function FormPage2() {
   const navigate = useNavigate();
   const [showValidationError, setShowValidationError] =
     useState<boolean>(false);
+  const [announceKey, setAnnounceKey] = useState<number>(0);
   const pageIsValid = isPageValid("/page2");
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
@@ -30,28 +31,31 @@ function FormPage2() {
           This is the address you're leaving.
         </div>
         <AddressSearch />
-
+      </main>
+      <div className={withPrefix("mt-4")}>
         <AllFieldsRequiredMessage
           show={showValidationError}
           messageId={formErrorId}
           focusOnShow={true}
           id="/page2"
+          announceKey={announceKey}
         />
-      </main>
-      <FooterWrapper>
-        <NavButton
-          label="Save and Continue"
-          action={() => {
-            if (pageIsValid) {
-              navigate(from ? `/form_${from}` : "/form_page3");
-            } else {
-              setShowValidationError(true);
-            }
-          }}
-          currentPage="page2"
-          disabledButClickable={!pageIsValid}
-        />
-      </FooterWrapper>
+        <FooterWrapper>
+          <NavButton
+            label="Save and Continue"
+            action={() => {
+              if (pageIsValid) {
+                navigate(from ? `/form_${from}` : "/form_page3");
+              } else {
+                setShowValidationError(true);
+                setAnnounceKey((current) => current + 1);
+              }
+            }}
+            currentPage="page2"
+            disabledButClickable={!pageIsValid}
+          />
+        </FooterWrapper>
+      </div>
     </div>
   );
 }

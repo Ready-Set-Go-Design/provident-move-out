@@ -159,7 +159,7 @@ function FormPage1() {
             className={withPrefix(
               "inline-flex gap-2 w-full rounded-md overflow-hidden border-1 ",
               showValidationError && formData.user_type === ""
-                ? "border-red-500"
+                ? "border-(--validation-error-color)"
                 : "border-transparent",
             )}
           >
@@ -240,7 +240,7 @@ function FormPage1() {
               className={withPrefix(
                 "border-1 rounded-md pf:overflow-hidden p-2 mt-4",
                 showValidationError && formData.selling_or_renting === ""
-                  ? "border-red-500"
+                  ? "border-(--validation-error-color)"
                   : "border-transparent",
               )}
               name="selling_or_renting"
@@ -372,29 +372,30 @@ function FormPage1() {
             </Select>
           </div>
         </fieldset>
-
+      </main>
+      <div className={withPrefix("mt-4")}>
         <AllFieldsRequiredMessage
           show={showValidationError || isRenter === true}
           id="/"
           messageId={formErrorId}
           focusOnShow={false}
         />
-      </main>
-      <FooterWrapper>
-        <NavButton
-          label="Save and continue"
-          action={() => {
-            if (pageIsValid) {
-              navigate(from ? `/form_${from}` : "/form_page2");
-            } else {
-              setShowValidationError(true);
-              focusFirstInvalid();
-            }
-          }}
-          currentPage="page1"
-          disabledButClickable={!validatedForm.valid}
-        />
-      </FooterWrapper>
+        <FooterWrapper>
+          <NavButton
+            label="Save and continue"
+            action={() => {
+              if (pageIsValid) {
+                navigate(from ? `/form_${from}` : "/form_page2");
+              } else {
+                setShowValidationError(true);
+                focusFirstInvalid();
+              }
+            }}
+            currentPage="page1"
+            disabledButClickable={!validatedForm.valid}
+          />
+        </FooterWrapper>
+      </div>
     </div>
   );
 }

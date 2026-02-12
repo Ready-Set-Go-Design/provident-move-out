@@ -59,6 +59,7 @@ export const validationRequirements = [
     id: "/page6",
     fields: [
       { name: "verify_entered_information" },
+
       { name: "signature_image" },
     ],
   },

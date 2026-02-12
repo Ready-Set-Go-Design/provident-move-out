@@ -6,6 +6,7 @@ import { Input } from "./input";
 export const WrappedInput = ({
   showSearch,
   value,
+  id,
   onChange,
   clearAction,
   invalid,
@@ -21,6 +22,7 @@ export const WrappedInput = ({
   type: string;
   name: string;
   placeholder?: string;
+  id?: string;
 }) => {
   return (
     <div
@@ -34,6 +36,7 @@ export const WrappedInput = ({
         </div>
       )}
       <Input
+        id={id}
         invalid={invalid || false}
         type={type || "text"}
         name={name}

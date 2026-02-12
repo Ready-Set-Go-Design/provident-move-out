@@ -62,8 +62,11 @@ export function AllFieldsRequiredMessage({
 
   if (show) {
     if (errors.length > 0 || override) {
+      const announcementKey =
+        typeof announceKey === "number" ? announceKey : undefined;
       return (
         <div
+          key={announcementKey}
           id={messageId}
           role="alert"
           aria-live="assertive"

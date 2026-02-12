@@ -3,7 +3,6 @@ import { updateField } from "./store/formSlice";
 import { RootState } from "./store/store";
 import NavButton from "./components/NavButton";
 import { useLocation, useNavigate } from "react-router";
-import { Input } from "./components/input";
 import { withPrefix } from "./utils/withPrefix";
 import { isPageValid } from "./utils/isPageValid";
 import { AllFieldsRequiredMessage } from "./components/AllFieldsRequiredMessage";
@@ -19,6 +18,7 @@ function FormPage4() {
   const formData = useSelector((state: RootState) => state.form);
   const [showValidationError, setShowValidationError] =
     useState<boolean>(false);
+  const [announceKey, setAnnounceKey] = useState<number>(0);
   const pageIsValid = isPageValid("/page4");
   const validatedForm = validateForm(formData).find(
     (requirement: any) => requirement.id === "/page4",
@@ -183,27 +183,30 @@ function FormPage4() {
             }}
           />
         </Field>
-
+      </main>
+      <div className={withPrefix("mt-4")}>
         <AllFieldsRequiredMessage
           show={showValidationError}
           id="/page4"
           focusOnShow={true}
+          announceKey={announceKey}
         />
-      </main>
-      <FooterWrapper>
-        <NavButton
-          label="Save and Continue"
-          action={() => {
-            if (pageIsValid) {
-              navigate(from ? `/form_${from}` : "/form_page5");
-            } else {
-              setShowValidationError(true);
-            }
-          }}
-          currentPage="page4"
-          disabledButClickable={!pageIsValid}
-        />
-      </FooterWrapper>
+        <FooterWrapper>
+          <NavButton
+            label="Save and Continue"
+            action={() => {
+              if (pageIsValid) {
+                navigate(from ? `/form_${from}` : "/form_page5");
+              } else {
+                setShowValidationError(true);
+                setAnnounceKey((current) => current + 1);
+              }
+            }}
+            currentPage="page4"
+            disabledButClickable={!pageIsValid}
+          />
+        </FooterWrapper>
+      </div>
     </div>
   );
 }

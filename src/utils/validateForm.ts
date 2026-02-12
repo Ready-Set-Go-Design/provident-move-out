@@ -7,7 +7,8 @@ export const validateForm = (formData: FormState) => {
     const source = [
       { replace: "selected_unit", with: "suite_or_unit_number" },
       { replace: "selected_address", with: "address" },
-      { replace: "signature_image" },
+      { replace: "signature_image", with: "signature" },
+      { replace: "signature_text", with: "signature" },
     ];
 
     const substitution = source.find(
@@ -18,83 +19,108 @@ export const validateForm = (formData: FormState) => {
   };
 
   const pageValidations: any = [];
-  validationRequirements.forEach((requirement) => {
+  validationRequirements.forEach((requirement, index) => {
     const fieldErrors: Array<string> = JSON.parse("[]");
     let allFieldsValid: boolean = true;
-
     requirement.fields.forEach((field: any) => {
-      if (
-        !formData[field.name] ||
-        (formData[field.name] &&
-          formData[field.name] === "" &&
-          field.format === undefined)
-      ) {
-        let checkCondition = false;
+      if (field.conditional) {
+        if (formData[field.conditional] === field.value) {
+          const present =
+            field &&
+            field.id &&
+            formData &&
+            formData[field.id] &&
+            (formData[field.id] as any) > "";
 
-        if (field.conditional && field.conditional.id && field.conditional.is) {
-          if (formData[field.conditional.id] === field.conditional.is) {
-            checkCondition = true;
+          let length;
+          if (field && field.id && field.length) {
+            length =
+              field &&
+              field.id &&
+              field.length &&
+              formData &&
+              formData[field.id] &&
+              (formData[field.id] as any).length === field.length;
           }
-        }
-        if (
-          formData[field.name] !== field.must_be &&
-          formData[field.conditional?.id] === field.conditional?.is
+
+          if (field && field.id && !field.length) {
+            // length field is not required
+            length = true;
+          }
+
+          // check for empty string
+          if (!present || !length) {
+            fieldErrors.push(field.id);
+            allFieldsValid = false;
+          }
+
+          if (field.format) {
+            switch (field.format) {
+              case "email":
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(formData[field.id] as string)) {
+                  fieldErrors.push(field.id);
+                  allFieldsValid = false;
+                }
+                break;
+              case "phone":
+                const phoneRegex =
+                  /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
+                if (!phoneRegex.test(formData[field.id] as string)) {
+                  fieldErrors.push(field.id);
+                  allFieldsValid = false;
+                }
+                break;
+            }
+          }
+        } else if (
+          formData[field.conditional] &&
+          formData[field.conditional] !== field.value &&
+          field.value !== ""
         ) {
-          if (field.message) {
-            fieldErrors.push(field.message);
-          } else {
-            fieldErrors.push(field.name);
-          }
+          // allFieldsValid = true;
+        } else {
+          fieldErrors.push(field.id);
           allFieldsValid = false;
         }
       } else {
-        if (field.format) {
-          switch (field.format) {
-            case "email":
-              const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-              if (!emailRegex.test(formData[field.name] as string)) {
-                if (field.message) {
-                  fieldErrors.push(field.message);
-                } else {
-                  fieldErrors.push(field.name);
-                }
-                allFieldsValid = false;
-              }
-              break;
-          }
-        } else if (field.minLength) {
-          if ((formData[field.name] as string).length < field.minLength) {
-            if (field.message) {
-              fieldErrors.push(field.message);
-            } else {
-              fieldErrors.push(field.name);
-            }
+        if (field.name === "signature_image") {
+          const signaturePresent =
+            (formData.signature_image as string) > "" ||
+            (formData.signature_text as string) > "";
+
+          if (!signaturePresent) {
+            fieldErrors.push("signature");
             allFieldsValid = false;
           }
-        } else if (field.must_be) {
-          let checkCondition = false;
-
-          if (field.conditional) {
-            if (
-              formData[field.name] !== field.must_be &&
-              formData[field.conditional?.id] === field.conditional?.is
-            ) {
-              checkCondition = true;
-            }
-
-            if (
-              checkCondition == true &&
-              formData[field.name] !== field.must_be &&
-              formData[field.conditional?.id] === field.conditional?.is
-            ) {
-              if (field.message) {
-                if (field.message != " ") {
-                  fieldErrors.push(field.message);
+          return;
+        }
+        if (
+          !formData[field.name] ||
+          (formData[field.name] &&
+            formData[field.name] === "" &&
+            field.format === undefined)
+        ) {
+          fieldErrors.push(field.name);
+          allFieldsValid = false;
+        } else {
+          if (field.format) {
+            switch (field.format) {
+              case "email":
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(formData[field.name] as string)) {
+                  fieldErrors.push(field.name);
+                  allFieldsValid = false;
                 }
-              } else {
-                fieldErrors.push(field.name);
-              }
-              allFieldsValid = false;
+                break;
+              case "phone":
+                const phoneRegex =
+                  /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
+                if (!phoneRegex.test(formData[field.name] as string)) {
+                  fieldErrors.push(field.name);
+                  allFieldsValid = false;
+                }
+                break;
             }
           }
         }

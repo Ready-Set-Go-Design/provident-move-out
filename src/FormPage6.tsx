@@ -12,6 +12,7 @@ import { AllFieldsRequiredMessage } from "./components/AllFieldsRequiredMessage"
 import { Checkbox, CheckboxField } from "./components/checkbox";
 import { Button } from "./components/button";
 import { FooterWrapper } from "./components/FooterWrapper";
+import { WrappedInput } from "./components/WrappedInput";
 
 function FormPage6() {
   const dispatch = useDispatch();
@@ -21,6 +22,21 @@ function FormPage6() {
   const [showValidationError, setShowValidationError] =
     useState<boolean>(false);
   const pageIsValid = isPageValid("/page6");
+  const [announceKey, setAnnounceKey] = useState<number>(0);
+  const [signatureMethod, setSignatureMethod] = useState<"draw" | "type">(
+    formData.signature_method === "draw" || formData.signature_method === "type"
+      ? formData.signature_method
+      : formData.signature_text
+        ? "type"
+        : "draw",
+  );
+  useEffect(() => {
+    if (!formData.signature_method) {
+      dispatch(
+        updateField({ field: "signature_method", value: signatureMethod }),
+      );
+    }
+  }, [dispatch, formData.signature_method, signatureMethod]);
 
   const clearForm = () => {
     if (sigCanvas.current) {
@@ -60,17 +76,152 @@ function FormPage6() {
     <div className={withPrefix("p-4 w-full max-w-[400px] m-auto pb-24")}>
       <main>
         <div className={withPrefix("mb-4")}>
-          <h2>Signature</h2>
+          <h2 className={withPrefix("py-4 text-2xl")}>Signature</h2>
 
           <div>
-            By typing your name in the fields below, you are legally signing
+            By writing your name in the field below, you are legally signing
             this digital form.
           </div>
+
+          <div className={withPrefix("mt-4")}>
+            <fieldset>
+              <legend className={withPrefix("font-bold mb-2")}>
+                Signature method
+              </legend>
+              <div className={withPrefix("flex gap-4 text-sm")}>
+                <label className={withPrefix("inline-flex items-center gap-2")}>
+                  <input
+                    type="radio"
+                    name="signature-method"
+                    value="draw"
+                    checked={signatureMethod === "draw"}
+                    onChange={() => {
+                      setSignatureMethod("draw");
+                      dispatch(
+                        updateField({
+                          field: "signature_method",
+                          value: "draw",
+                        }),
+                      );
+                      dispatch(
+                        updateField({ field: "signature_text", value: "" }),
+                      );
+                    }}
+                  />
+                  Draw signature
+                </label>
+                <label className={withPrefix("inline-flex items-center gap-2")}>
+                  <input
+                    type="radio"
+                    name="signature-method"
+                    value="type"
+                    checked={signatureMethod === "type"}
+                    onChange={() => {
+                      setSignatureMethod("type");
+                      dispatch(
+                        updateField({
+                          field: "signature_method",
+                          value: "type",
+                        }),
+                      );
+                      sigCanvas.current?.clear();
+                      dispatch(
+                        updateField({ field: "signature_image", value: "" }),
+                      );
+                    }}
+                  />
+                  Type signature
+                </label>
+              </div>
+            </fieldset>
+          </div>
+
+          {signatureMethod === "type" && (
+            <div className={withPrefix("mt-4")}>
+              <label
+                htmlFor="typed-signature"
+                className={withPrefix("font-bold")}
+              >
+                Typed Signature
+              </label>
+              <WrappedInput
+                id="typed-signature"
+                showSearch={false}
+                invalid={
+                  showValidationError &&
+                  !formData.signature_text &&
+                  formData.signature_image === ""
+                }
+                type="text"
+                name="typed-signature"
+                placeholder="Type your full name"
+                value={formData.signature_text || ""}
+                onChange={(value: string) => {
+                  dispatch(updateField({ field: "signature_text", value }));
+                }}
+                clearAction={() => {
+                  dispatch(updateField({ field: "signature_text", value: "" }));
+                }}
+              />
+            </div>
+          )}
+          {signatureMethod === "draw" && (
+            <>
+              <p
+                id="signature-instructions"
+                className={withPrefix("mt-4 text-sm text-gray-600")}
+              >
+                Draw your signature using a mouse, trackpad, or touch.
+              </p>
+              <div
+                className={`${
+                  formData.signature_image === "" ? "sig-canvas" : ""
+                } ${withPrefix(
+                  `border-1 rounded p-4 mt-4 w-full h-full min-h-[130px] mb-4  `,
+                  showValidationError && formData.signature_image === ""
+                    ? "border-(--validation-error-color)"
+                    : "border-gray-300",
+                )} `}
+                ref={containerRef as unknown as React.RefObject<HTMLDivElement>}
+              >
+                <SignatureCanvas
+                  penColor="#26aae1"
+                  canvasProps={{
+                    width: width,
+                    height: "200px",
+                    className: "sigCanvas",
+                  }}
+                  onEnd={() => {
+                    const base64 = sigCanvas.current?.toDataURL();
+                    if (base64) {
+                      dispatch(
+                        updateField({
+                          field: "signature_image",
+                          value: base64 as string,
+                        }),
+                      );
+                    }
+                  }}
+                  ref={sigCanvas}
+                />
+              </div>
+              <Button color="white" onClick={clearForm}>
+                Clear
+              </Button>
+            </>
+          )}
+
+          <div className={withPrefix("mt-4")}>
+            Please note that completing this form does not signify that your
+            account has been formally closed. A Customer Service Representative
+            wil follow-up to request additional information. if required.
+          </div>
+
           <CheckboxField
             className={withPrefix(
               "border-1 rounded-md pf:overflow-hidden py-2 mt-4",
               showValidationError && formData.verify_entered_information === ""
-                ? "border-red-500"
+                ? "border-(--validation-error-color)"
                 : "border-transparent",
             )}
           >
@@ -90,74 +241,31 @@ function FormPage6() {
             />{" "}
             I verify that all information entered is correct
           </CheckboxField>
-          <div
-            className={`${
-              formData.signature_image === "" ? "sig-canvas" : ""
-            } ${withPrefix(
-              `border-1 rounded p-4 mt-4 w-full h-full min-h-[130px] mb-4  `,
-              showValidationError && formData.signature_image === ""
-                ? "border-red-500"
-                : "border-gray-300",
-            )} `}
-            ref={containerRef as unknown as React.RefObject<HTMLDivElement>}
-          >
-            <SignatureCanvas
-              penColor="#26aae1"
-              canvasProps={{
-                width: width,
-                height: "200px",
-                className: "sigCanvas",
-              }}
-              onEnd={() => {
-                const base64 = sigCanvas.current?.toDataURL();
-                if (base64) {
-                  dispatch(
-                    updateField({
-                      field: "signature_image",
-                      value: base64 as string,
-                    }),
-                  );
-                }
-              }}
-              ref={sigCanvas}
-            />
-          </div>
-          <Button color="white" onClick={clearForm}>
-            Clear
-          </Button>
-
-          <div className={withPrefix("mt-4")}>
-            Please note that completing this form does not signify that your
-            account has been formally closed. A Customer Service Representative
-            wil follow-up to request additional information. if required.
-          </div>
-
-          <div className={withPrefix("mt-4")}>
-            A copy of this contract will be emailed to{" "}
-            <strong>{formData.email || "placeholder@email.com"}</strong>
-          </div>
         </div>
-
+      </main>
+      <div className={withPrefix("mt-4")}>
         <AllFieldsRequiredMessage
           show={showValidationError}
           id="/page6"
           focusOnShow={true}
+          announceKey={announceKey}
         />
-      </main>
-      <FooterWrapper>
-        <NavButton
-          label="Submit"
-          action={() => {
-            if (pageIsValid) {
-              navigate("/form_page7");
-            } else {
-              setShowValidationError(true);
-            }
-          }}
-          currentPage="page6"
-          disabledButClickable={!pageIsValid}
-        />
-      </FooterWrapper>
+        <FooterWrapper>
+          <NavButton
+            label="Submit"
+            action={() => {
+              if (pageIsValid) {
+                navigate("/form_page7");
+              } else {
+                setShowValidationError(true);
+                setAnnounceKey((current) => current + 1);
+              }
+            }}
+            currentPage="page6"
+            disabledButClickable={!pageIsValid}
+          />
+        </FooterWrapper>
+      </div>
     </div>
   );
 }

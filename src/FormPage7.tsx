@@ -103,6 +103,10 @@ function FormPage7() {
           Thanks for completing the Move-out form with Provident Energy
           Management Inc.
         </div>
+        <div className={withPrefix("mb-4 mt-4")}>
+          A copy of this contract will be sent to{" "}
+          <strong>{formData.email}</strong>.
+        </div>
 
         <div className={withPrefix("mt-8")}>
           <Button
@@ -129,18 +133,20 @@ function FormPage7() {
           )}
         </div>
       </main>
-      <FooterWrapper>
-        <NavButton
-          outline={true}
-          action={() => {
-            dispatch(clearForm());
-            dispatch(clearSubmission());
-            navigate("/");
-          }}
-          label={"Start Over"}
-          currentPage=""
-        />
-      </FooterWrapper>
+      <div className={withPrefix("mt-4")}>
+        <FooterWrapper>
+          <NavButton
+            outline={true}
+            action={() => {
+              dispatch(clearForm());
+              dispatch(clearSubmission());
+              navigate("/");
+            }}
+            label={"Start Over"}
+            currentPage=""
+          />
+        </FooterWrapper>
+      </div>
     </div>
   );
 }

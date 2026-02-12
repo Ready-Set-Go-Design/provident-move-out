@@ -1,4 +1,5 @@
 import * as Headless from "@headlessui/react";
+import { useEffect } from "react";
 import type React from "react";
 import { Text } from "./text";
 import { withPrefix } from "../utils/withPrefix";
@@ -25,6 +26,39 @@ export function Alert({
   className?: string;
   children: React.ReactNode;
 } & Omit<Headless.DialogProps, "as" | "className">) {
+  const { open } = props;
+
+  useEffect(() => {
+    if (!open || typeof document === "undefined") {
+      return;
+    }
+    const labelFocusGuards = () => {
+      const focusGuards = document.querySelectorAll(
+        "[data-headlessui-focus-guard]",
+      );
+      focusGuards.forEach((el, index) => {
+        if (!el.getAttribute("aria-label")) {
+          el.setAttribute("aria-label", `Focus guard ${index + 1}`);
+        }
+      });
+    };
+
+    labelFocusGuards();
+
+    const observer = new MutationObserver(() => {
+      labelFocusGuards();
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [open]);
+
   return (
     <Headless.Dialog {...props}>
       <Headless.DialogBackdrop

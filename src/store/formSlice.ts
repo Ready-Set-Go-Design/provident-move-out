@@ -30,6 +30,8 @@ export interface FormState {
   email: string;
   phone_number: string;
   submission_id: string;
+  signature_text: string;
+  signature_method: "draw" | "type" | "";
 }
 
 export const emptyForm: FormState = {
@@ -51,6 +53,8 @@ export const emptyForm: FormState = {
   accept_terms_and_conditions: "",
   verify_entered_information: "",
   signature_image: "",
+  signature_text: "",
+  signature_method: "",
   pageVisited: [],
   forwarding_address: "",
   forwarding_city: "",

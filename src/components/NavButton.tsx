@@ -23,8 +23,7 @@ function NavButton({
 
   return (
     <Button
-      disabled={disabled}
-      color={disabledButClickable ? "disabled" : "brand"}
+      color={"brand"}
       {...((outline as any) && { outline })}
       onClick={() => {
         action();

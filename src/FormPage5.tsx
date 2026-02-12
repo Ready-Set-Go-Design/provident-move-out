@@ -19,6 +19,7 @@ function FormPage5() {
   const formData = useSelector((state: RootState) => state.form);
   const [showValidationError, setShowValidationError] =
     useState<boolean>(false);
+  const [announceKey, setAnnounceKey] = useState<number>(0);
   const pageIsValid = isPageValid("/page5");
   const validatedForm = validateForm(formData).find(
     (requirement: any) => requirement.id === "/page5",
@@ -101,27 +102,30 @@ function FormPage5() {
             }}
           />
         </Field>
-
+      </main>
+      <div className={withPrefix("mt-4")}>
         <AllFieldsRequiredMessage
           show={showValidationError}
           id="/page5"
           focusOnShow={true}
+          announceKey={announceKey}
         />
-      </main>
-      <FooterWrapper>
-        <NavButton
-          label="Save and Continue"
-          action={() => {
-            if (pageIsValid) {
-              navigate(from ? `/form_${from}` : "/form_page6");
-            } else {
-              setShowValidationError(true);
-            }
-          }}
-          currentPage="page5"
-          disabledButClickable={!pageIsValid}
-        />
-      </FooterWrapper>
+        <FooterWrapper>
+          <NavButton
+            label="Save and Continue"
+            action={() => {
+              if (pageIsValid) {
+                navigate(from ? `/form_${from}` : "/form_page6");
+              } else {
+                setShowValidationError(true);
+                setAnnounceKey((current) => current + 1);
+              }
+            }}
+            currentPage="page5"
+            disabledButClickable={!pageIsValid}
+          />
+        </FooterWrapper>
+      </div>
     </div>
   );
 }

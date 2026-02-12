@@ -31,6 +31,7 @@ function FormPage3() {
   );
   const [showValidationError, setShowValidationError] =
     useState<boolean>(false);
+  const [announceKey, setAnnounceKey] = useState<number>(0);
   const pageIsValid = isPageValid("/page3");
   const validatedForm = validateForm(formData).find(
     (requirement: any) => requirement.id === "/page3",
@@ -243,7 +244,7 @@ function FormPage3() {
               className={withPrefix(
                 "border-1 rounded-md pf:overflow-hidden p-2 mt-4",
                 showValidationError && formData.verificationMethod === ""
-                  ? "border-red-500"
+                  ? "border-(--validation-error-color)"
                   : "border-transparent",
               )}
               name="selling_or_renting"
@@ -326,46 +327,50 @@ function FormPage3() {
             Your identity has been successfully verified.
           </div>
         )}
+      </main>
+      <div className={withPrefix("mt-4")}>
         <AllFieldsRequiredMessage
           show={showValidationError}
           id="/page3"
           focusOnShow={true}
+          announceKey={announceKey}
         />
-      </main>
-      <FooterWrapper>
-        {(verificationCodeSent || formData.code_verified) && (
-          <NavButton
-            label={
-              !formData.code_verified ? "Verify Code" : "Save and Continue"
-            }
-            action={async () => {
-              if (!formData.code_verified && !pageIsValid) {
-                // submit code verification call
-                verifyCode();
-              } else {
-                if (pageIsValid) {
-                  navigate(from ? `/form_${from}` : "/form_page4");
-                } else {
-                  setShowValidationError(true);
-                }
+        <FooterWrapper>
+          {(verificationCodeSent || formData.code_verified) && (
+            <NavButton
+              label={
+                !formData.code_verified ? "Verify Code" : "Save and Continue"
               }
-            }}
-            currentPage="page3"
-            disabledButClickable={
-              !formData.code_verified && verificationCode.length != 6
-            }
-          />
-        )}
-        {!verificationCodeSent && !formData.code_verified && (
-          <NavButton
-            label="Send Code"
-            action={async () => {
-              sendVerificationCode();
-            }}
-            currentPage="page3"
-          />
-        )}
-      </FooterWrapper>
+              action={async () => {
+                if (!formData.code_verified && !pageIsValid) {
+                  // submit code verification call
+                  verifyCode();
+                } else {
+                  if (pageIsValid) {
+                    navigate(from ? `/form_${from}` : "/form_page4");
+                  } else {
+                    setShowValidationError(true);
+                    setAnnounceKey((current) => current + 1);
+                  }
+                }
+              }}
+              currentPage="page3"
+              disabledButClickable={
+                !formData.code_verified && verificationCode.length != 6
+              }
+            />
+          )}
+          {!verificationCodeSent && !formData.code_verified && (
+            <NavButton
+              label="Send Code"
+              action={async () => {
+                sendVerificationCode();
+              }}
+              currentPage="page3"
+            />
+          )}
+        </FooterWrapper>
+      </div>
     </div>
   );
 }

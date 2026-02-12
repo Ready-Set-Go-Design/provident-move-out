@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import "./App.css";
 import { Routes, Route } from "react-router";
@@ -27,43 +27,39 @@ import { clearSubmission } from "./store/submissionSlice";
 
 function App() {
   const [currentFormPage, setCurrentFormPage] = useState<string>("");
-  const [showResetMessage, setShowResetMessage] = useState<boolean>(false);
   const formData = useSelector((state: RootState) => state.form);
   const submission = useSelector((state: RootState) => state.submission);
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const startOverRef = useRef<HTMLButtonElement>(null);
+
+  const hasInProgress = (data: RootState["form"]) => {
+    for (const key in data) {
+      if (key !== "pageVisited" && data[key] !== "") {
+        return true;
+      } else if (key === "pageVisited") {
+        return data.pageVisited.length > 0;
+      }
+    }
+    return false;
+  };
+
+  const [showResetMessage, setShowResetMessage] = useState<boolean>(() =>
+    hasInProgress(formData),
+  );
 
   useEffect(() => {
     setCurrentFormPage(location.pathname);
   }, [location]);
 
   useEffect(() => {
-    // Check if any form fields have data
-    let applicationInProgress = false;
-    for (const key in formData) {
-      if (key !== "pageVisited" && formData[key] !== "") {
-        if (key === "code_verified") {
-        } else {
-          applicationInProgress = true;
-        }
-      } else if (key === "pageVisited") {
-        // If the pageVisited field is empty, it means the user is starting a new application
-        if (formData.pageVisited.length > 0) {
-          // If the pageVisited field has data, it means the user has visited pages
-          applicationInProgress = true;
-        }
-      }
-    }
-
     if (submission.submitted && location.pathname === "/") {
       dispatch(clearForm());
       dispatch(clearSubmission());
       setShowResetMessage(false);
-    } else {
-      setShowResetMessage(applicationInProgress);
     }
-  }, []); // Only run on mount
+  }, [submission.submitted, location.pathname, dispatch]);
 
   const handleStartOver = () => {
     dispatch(clearForm());
@@ -74,17 +70,28 @@ function App() {
 
   return (
     <>
-      <Alert open={showResetMessage} onClose={() => setShowResetMessage(false)}>
+      <Alert
+        open={showResetMessage}
+        onClose={() => setShowResetMessage(false)}
+        initialFocus={startOverRef}
+        role="alertdialog"
+      >
         <AlertTitle>You have an application in-progress</AlertTitle>
         <AlertDescription>
           If you start a new application, all your progress will be lost. Are
           you sure you want to start over?
         </AlertDescription>
         <AlertActions>
-          <Button plain onClick={() => setShowResetMessage(false)}>
-            Close
+          <Button plain onClick={() => setShowResetMessage(false)} tabIndex={1}>
+            Continue
           </Button>
-          <Button onClick={() => handleStartOver()}>Start Over</Button>
+          <Button
+            ref={startOverRef}
+            onClick={() => handleStartOver()}
+            tabIndex={0}
+          >
+            Start Over
+          </Button>
         </AlertActions>
       </Alert>
 
