@@ -21,7 +21,7 @@ export const validationRequirements = [
     fields: [
       { name: "selected_address" },
       { name: "selected_unit" },
-      { name: "customer_number" },
+      { name: "customer_number", length: 6 },
     ],
   },
   {
@@ -51,7 +51,7 @@ export const validationRequirements = [
       },
       {
         name: "lawyer_phone_number",
-        minLength: 10,
+        format: "phone",
       },
     ],
   },
