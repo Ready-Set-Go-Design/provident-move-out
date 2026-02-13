@@ -24,6 +24,13 @@ export const validateForm = (formData: FormState) => {
     let allFieldsValid: boolean = true;
     requirement.fields.forEach((field: any) => {
       if (field.conditional) {
+        console.log("conditional field", field);
+        console.log(
+          field.conditional.is,
+          formData[field.conditional.id],
+          field.must_be,
+          "|",
+        );
         if (
           field.conditional.is === formData[field.conditional.id] &&
           formData[field.name] !== field.must_be
@@ -53,6 +60,7 @@ export const validateForm = (formData: FormState) => {
 
           // check for empty string
           if (!present || !length) {
+            console.log("2 here");
             fieldErrors.push(field.message || field.conditional.id);
             allFieldsValid = false;
           }
@@ -81,7 +89,14 @@ export const validateForm = (formData: FormState) => {
           formData[field.name] === field.must_be
         ) {
           // allFieldsValid = true;
+        } else if (
+          field.conditional.is !== formData[field.conditional.id] &&
+          formData[field.conditional.id] &&
+          formData[field.conditional.id] !== ""
+        ) {
+          console.log("validate here?");
         } else {
+          console.log("here");
           fieldErrors.push(field.id);
           allFieldsValid = false;
         }
